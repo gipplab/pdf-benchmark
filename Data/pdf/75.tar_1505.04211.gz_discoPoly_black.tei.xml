@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xml:space="preserve" xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 https://raw.githubusercontent.com/kermitt2/grobid/master/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">Device Modeling Using Discontinuous Galerkin Methods for Fluid Plasmas</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher>American Institute of Aeronautics and Astronautics</publisher>
+				<availability status="unknown"><p>Copyright American Institute of Aeronautics and Astronautics</p>
+				</availability>
+				<date type="published" when="2009-06-22">2009-06-22</date>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct>
+					<analytic>
+						<author role="corresp">
+							<persName><forename type="first">John</forename><surname>Loverich</surname></persName>
+							<email>john.loverich@gmail.com</email>
+							<affiliation key="aff0">
+								<orgName type="institution">N Infinity Computational Sciences</orgName>
+								<address>
+									<addrLine>638 Beauprez Avenue</addrLine>
+									<postCode>80026</postCode>
+									<settlement>Lafayette</settlement>
+									<region>CO</region>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">Ammar</forename><surname>Hakim</surname></persName>
+						</author>
+						<title level="a" type="main">Device Modeling Using Discontinuous Galerkin Methods for Fluid Plasmas</title>
+					</analytic>
+					<monogr>
+						<title level="m">40th AIAA Plasmadynamics and Lasers Conference</title>
+						<imprint>
+							<publisher>American Institute of Aeronautics and Astronautics</publisher>
+							<date type="published" when="2009-06-22" />
+						</imprint>
+					</monogr>
+					<idno type="DOI">10.2514/6.2009-3834</idno>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<encodingDesc>
+			<appInfo>
+				<application version="0.6.2" ident="GROBID" when="2021-07-12T14:37+0000">
+					<desc>GROBID - A machine learning software for extracting information from scholarly documents</desc>
+					<ref target="https://github.com/kermitt2/grobid"/>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<profileDesc>
+			<textClass>
+				<keywords>
+					<term>artificial neural network</term>
+					<term>piecewise polynomial</term>
+					<term>discontinuous</term>
+					<term>high order</term>
+					<term>autoencoder</term>
+				</keywords>
+			</textClass>
+			<abstract>
+				<p>An artificial neural network is presented where each link is represented by a grid of weights defining a series of piecewise polynomial functions with discontinuities between each polynomial. The polynomial order ranges from first to fifth order. The unit averages the input values from each link. A back propagation technique that works with discontinuous link functions and activation functions is presented. The use of discontinuous links function means that only a subset of the network is active for a given input and so only a subset of the network is trained for a particular training example. Unit dropout is used for regularization and a parameter free weight update is used. Better performance is obtained by moving from piecewise linear links to piecewise quadratic and higher order links. The algorithm is tested on the MNIST data set, using multiple autoencoders, with good results.</p>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+	</text>
+</TEI>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xml:space="preserve" xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 https://raw.githubusercontent.com/kermitt2/grobid/master/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">Complex Block Floating-Point Format with Box Encoding For Wordlength Reduction in Communication Systems</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct>
+					<analytic>
+						<author>
+							<persName><forename type="first">Yeong</forename><surname>Foong Choo</surname></persName>
+							<email>yeongfoong.choo@utexas.edu</email>
+							<affiliation key="aff0">
+								<orgName type="laboratory">Wireless Networking and Communications Group</orgName>
+								<orgName type="institution">The University of Texas at Austin</orgName>
+								<address>
+									<settlement>Austin</settlement>
+									<region>TX</region>
+									<country key="US">USA</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">Brian</forename><forename type="middle">L</forename><surname>Evans</surname></persName>
+							<email>bevans@ece.utexas.edu</email>
+							<affiliation key="aff0">
+								<orgName type="laboratory">Wireless Networking and Communications Group</orgName>
+								<orgName type="institution">The University of Texas at Austin</orgName>
+								<address>
+									<settlement>Austin</settlement>
+									<region>TX</region>
+									<country key="US">USA</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">Alan</forename><surname>Gatherer</surname></persName>
+							<email>alan.gatherer@huawei.com</email>
+							<affiliation key="aff1">
+								<orgName type="laboratory">Wireless Access Laboratory</orgName>
+								<orgName type="institution">Huawei Technologies</orgName>
+								<address>
+									<settlement>Plano</settlement>
+									<region>TX</region>
+									<country key="US">USA</country>
+								</address>
+							</affiliation>
+						</author>
+						<title level="a" type="main">Complex Block Floating-Point Format with Box Encoding For Wordlength Reduction in Communication Systems</title>
+					</analytic>
+					<monogr>
+						<imprint>
+							<date/>
+						</imprint>
+					</monogr>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<encodingDesc>
+			<appInfo>
+				<application version="0.6.2" ident="GROBID" when="2021-07-12T14:37+0000">
+					<desc>GROBID - A machine learning software for extracting information from scholarly documents</desc>
+					<ref target="https://github.com/kermitt2/grobid"/>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<profileDesc>
+			<abstract>
+				<p>We propose a new complex block floating-point format to reduce implementation complexity. The new format achieves wordlength reduction by sharing an exponent across the block of samples, and uses box encoding for the shared exponent to reduce quantization error. Arithmetic operations are performed on blocks of samples at time, which can also reduce implementation complexity. For a case study of a baseband quadrature amplitude modulation (QAM) transmitter and receiver, we quantify the tradeoffs in signal quality vs. implementation complexity using the new approach to represent IQ samples. Signal quality is measured using error vector magnitude (EVM) in the receiver, and implementation complexity is measured in terms of arithmetic complexity as well as memory allocation and memory input/output rates. The primary contributions of this paper are (1) a complex block floating-point format with box encoding of the shared exponent to reduce quantization error, (2) arithmetic operations using the new complex block floatingpoint format, and (3) a QAM transceiver case study to quantify signal quality vs. implementation complexity tradeoffs using the new format and arithmetic operations. Index Terms-Complex block floating-point, discrete-time baseband QAM.</p>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+	</text>
+</TEI>

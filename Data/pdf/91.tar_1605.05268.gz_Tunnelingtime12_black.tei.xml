@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xml:space="preserve" xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 https://raw.githubusercontent.com/kermitt2/grobid/master/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">Planck star tunneling time: An astrophysically relevant observable from background-free quantum gravity</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher>American Physical Society (APS)</publisher>
+				<availability status="unknown"><p>Copyright American Physical Society (APS)</p>
+				</availability>
+				<date type="published" when="2020-05-29">May 29, 2020</date>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct>
+					<analytic>
+						<author>
+							<persName><forename type="first">Marios</forename><surname>Christodoulou</surname></persName>
+						</author>
+						<author>
+							<persName><forename type="first">Carlo</forename><surname>Rovelli</surname></persName>
+						</author>
+						<author>
+							<persName><forename type="first">Simone</forename><surname>Speziale</surname></persName>
+						</author>
+						<author>
+							<persName><forename type="first">Ilya</forename><surname>Vilensky</surname></persName>
+						</author>
+						<title level="a" type="main">Planck star tunneling time: An astrophysically relevant observable from background-free quantum gravity</title>
+					</analytic>
+					<monogr>
+						<title level="j" type="main">Physical Review D</title>
+						<title level="j" type="abbrev">Phys. Rev. D</title>
+						<idno type="ISSN">2470-0010</idno>
+						<idno type="eISSN">2470-0029</idno>
+						<imprint>
+							<publisher>American Physical Society (APS)</publisher>
+							<biblScope unit="volume">94</biblScope>
+							<biblScope unit="issue">8</biblScope>
+							<date type="published" when="2020-05-29">May 29, 2020</date>
+						</imprint>
+					</monogr>
+					<idno type="DOI">10.1103/physrevd.94.084035</idno>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<encodingDesc>
+			<appInfo>
+				<application version="0.6.2" ident="GROBID" when="2021-07-12T14:37+0000">
+					<desc>GROBID - A machine learning software for extracting information from scholarly documents</desc>
+					<ref target="https://github.com/kermitt2/grobid"/>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<profileDesc>
+			<abstract>
+				<p>A gravitationally collapsed object can bounce-out from its horizon via a tunnelling process that violates the classical equations in a finite region. Since tunnelling is a non-perturbative phenomenon, it cannot be described in terms of quantum fluctuations around a classical solution and a backgroundfree formulation of quantum gravity is needed to analyze it. Here we use Loop Quantum Gravity to compute the amplitude for this process, in a first approximation. The amplitude determines the tunnelling time as a function of the mass. This is the key information to evaluate the relevance of this process for the interpretation of Fast Radio Bursts or high-energy cosmic rays. The calculation offers a template and a concrete example of how a background-free quantum theory of gravity can be used to compute a realistical observable quantity.</p>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+	</text>
+</TEI>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xml:space="preserve" xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 https://raw.githubusercontent.com/kermitt2/grobid/master/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">ChemInform Abstract: Multipolar Phases and Magnetically Hidden Order: Review of the Heavy-Fermion Compound Ce1-xLaxB6</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher>Wiley</publisher>
+				<availability status="unknown"><p>Copyright Wiley</p>
+				</availability>
+				<date type="published" when="2016-07">2016-07</date>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct>
+					<analytic>
+						<author>
+							<persName><forename type="first">Alistair</forename><forename type="middle">S</forename><surname>Cameron</surname></persName>
+							<affiliation key="aff0">
+								<orgName type="department">Institut für Festkörperphysik</orgName>
+								<address>
+									<postCode>D-01069</postCode>
+									<settlement>Dresden, Dresden</settlement>
+									<region>TU</region>
+									<country key="DE">Germany</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">Gerd</forename><surname>Friemel</surname></persName>
+							<affiliation key="aff1">
+								<orgName type="department">Max-Planck-Institut für Festkörperforschung</orgName>
+								<address>
+									<addrLine>Heisenbergstr. 1</addrLine>
+									<postCode>70569</postCode>
+									<settlement>Stuttgart</settlement>
+									<country key="DE">Germany</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">Dmytro</forename><forename type="middle">S</forename><surname>Inosov</surname></persName>
+							<affiliation key="aff0">
+								<orgName type="department">Institut für Festkörperphysik</orgName>
+								<address>
+									<postCode>D-01069</postCode>
+									<settlement>Dresden, Dresden</settlement>
+									<region>TU</region>
+									<country key="DE">Germany</country>
+								</address>
+							</affiliation>
+						</author>
+						<title level="a" type="main">ChemInform Abstract: Multipolar Phases and Magnetically Hidden Order: Review of the Heavy-Fermion Compound Ce1-xLaxB6</title>
+					</analytic>
+					<monogr>
+						<title level="j" type="main">ChemInform</title>
+						<title level="j" type="abbrev">ChemInform</title>
+						<idno type="ISSN">0931-7597</idno>
+						<imprint>
+							<publisher>Wiley</publisher>
+							<biblScope unit="volume">47</biblScope>
+							<biblScope unit="issue">33</biblScope>
+							<date type="published" when="2016-07" />
+						</imprint>
+					</monogr>
+					<idno type="DOI">10.1002/chin.201633201</idno>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<encodingDesc>
+			<appInfo>
+				<application version="0.6.2" ident="GROBID" when="2021-07-12T14:37+0000">
+					<desc>GROBID - A machine learning software for extracting information from scholarly documents</desc>
+					<ref target="https://github.com/kermitt2/grobid"/>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<profileDesc>
+			<textClass>
+				<keywords>
+					<term>multipolar ordering</term>
+					<term>magnetically hidden order</term>
+					<term>heavy fermions</term>
+					<term>cerium hexaboride</term>
+				</keywords>
+			</textClass>
+			<abstract>
+				<p>Cerium hexaboride is a cubic f-electron heavy-fermion compound that displays a rich array of low-temperature magnetic ordering phenomena which have been the subject of investigation for more than 50 years. Its complex behaviour is the result of competing interactions, with both itinerant and local electrons playing important roles. Investigating this material has proven to be a substantial challenge, in particular because of the appearance of a &quot;magnetically hidden order&quot; phase, which remained elusive to neutron-scattering investigations for many years. It was not until the development of modern x-ray scattering techniques that the long suspected multipolar origin of this phase was confirmed. Doping with non-magnetic lanthanum dilutes the magnetic cerium sublattice and reduces the f-electron count, bringing about substantial changes to the ground state with the emergence of new phases and quantum critical phenomena. To this day, Ce 1−x La x B 6 and its related compounds remain a subject of intense interest. Despite the substantial progress in understanding their behaviour, they continue to reveal new and unexplained physical phenomena. Here we present a review of the accumulated body of knowledge on this family of materials in order to provide a firm standpoint for future investigations.</p>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+	</text>
+</TEI>
