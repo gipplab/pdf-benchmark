@@ -6,7 +6,7 @@ import pandas as pd
 from similarity.damerau import Damerau
 from similarity.jaccard import Jaccard
 from similarity.jarowinkler import JaroWinkler
-from MetadataExtraction.CERMINE.cermine_test import parse_metadata_cermine, extract_cermine_metadata
+from MetadataExtraction.CERMINE.cermine_parse_xml import parse_metadata_cermine, extract_cermine_metadata
 from MetadataExtraction.GROBID.grobid_metadata_extract import parse_metadata, create_pdfmetadata_obj, grobid_extract
 from Table_Extraction.genrateGT import load_data
 from scipy.spatial.distance import cdist

@@ -60,5 +60,5 @@ def parse_metadata(dir):
 
 def grobid_extract(dir, extract_param):
     client = GrobidClient(config_path="./config.json")
-    client.process(extract_param, dir, n=20)
+    client.process(extract_param, dir, n=15)
 
