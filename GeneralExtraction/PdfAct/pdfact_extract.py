@@ -86,8 +86,8 @@ def crop_pdf(pdfpath,pdfname, pagenumber):
     return cropped_file
 
 def extract_label_pdfact(dir):
-    #label_array=['caption','author','title', 'abstract','section', 'footer','table','reference']
-    label_array=['equation']
+    #label_array=['caption','author','title', 'abstract','section', 'footer','table','reference', 'body']
+    label_array=['table']
     for label in label_array:
         PDFlist=load_data(dir, label)
         for pdf in PDFlist:
@@ -103,6 +103,9 @@ def extract_label_pdfact(dir):
             elif label == 'equation':
                 subprocess.call(["./pdfact/bin/pdfact", "--include-roles", 'formula', croppedfile, outputfile])
                 os.remove(croppedfile)
+            elif label == 'paragraph':
+                subprocess.call(["./pdfact/bin/pdfact", "--include-roles", 'body', croppedfile, outputfile])
+                os.remove(croppedfile)
             else:
                 subprocess.call(["./pdfact/bin/pdfact", "--include-roles", label, croppedfile, outputfile])
                 os.remove(croppedfile)
@@ -116,5 +119,8 @@ def extract_label_pdfact(dir):
                 print(f1,pre, recall, lavsim)
 
 
+def main():
+    extract_label_pdfact("/home/apurv/Thesis/DocBank/DocBank_samples/DocBank_samples")
 
-extract_label_pdfact("/home/apurv/Thesis/DocBank/DocBank_samples/DocBank_samples")
+if __name__ == "__main__":
+    main()

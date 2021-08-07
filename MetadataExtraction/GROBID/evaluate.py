@@ -233,7 +233,7 @@ def main():
     MetaObjList = create_pdfmetadata_obj(metadir, resultdf)
 
     # Clean-up the sorted files directory
-    shutil.rmtree(metadir, ignore_errors=True)
+    #shutil.rmtree(metadir, ignore_errors=True)
 
     # Process Every extracted metadata field(Title, Abstract, Author) and compute the metrics.
     for MetaObj in MetaObjList:

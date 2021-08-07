@@ -2,8 +2,6 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/BibExtraction/parscit/ParsCit" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/GeneralExtraction/PDFExtract/TEI-P5-Java-model" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/GeneralExtraction/PdfAct/pdfact" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/MetadataExtraction/GROBID/grobid_client_python" vcs="Git" />
   </component>
