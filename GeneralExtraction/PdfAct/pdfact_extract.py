@@ -97,6 +97,7 @@ def extract_label_pdfact(dir):
             outputfile= pdf.filepath + os.sep + os.path.splitext(os.path.basename(pdf.pdf_name))[0] + "_extracted_" + label + ".txt"
             if label == 'title' or label == 'abstract' or label == 'author' or label == 'reference':
                 subprocess.call(["./pdfact/bin/pdfact", "--include-roles", label, pdfpath, outputfile])
+                os.remove(croppedfile)
             elif label == 'section':
                 subprocess.call(["./pdfact/bin/pdfact", "--include-roles", 'heading', croppedfile, outputfile])
                 os.remove(croppedfile)
