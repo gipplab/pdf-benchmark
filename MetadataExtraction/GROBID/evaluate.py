@@ -240,7 +240,6 @@ def main():
         # GT DFs
         titlegt, absgt, autgt = get_gt_metadata(MetaObj,MetaObj.filepath, False)
         # One Row Consolidation
-
         finadf = process_tokens(MetaObj.abstract, MetaObj.authors, MetaObj.title, absgt[['token']], autgt[['token']],
                                 titlegt[['token']], MetaObj.pdf_name, 'CERMINE')
         # Evaluate every metadata label.
