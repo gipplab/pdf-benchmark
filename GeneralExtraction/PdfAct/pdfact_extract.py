@@ -87,7 +87,7 @@ def crop_pdf(pdfpath,pdfname, pagenumber):
 
 def extract_label_pdfact(dir):
     #label_array=['caption','author','title', 'abstract','section', 'footer','table','reference', 'body']
-    label_array=['table']
+    label_array=['title']
     for label in label_array:
         PDFlist=load_data(dir, label)
         for pdf in PDFlist:

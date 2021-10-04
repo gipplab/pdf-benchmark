@@ -233,7 +233,7 @@ def main():
     MetaObjList = create_pdfmetadata_obj(metadir, resultdf)
 
     # Clean-up the sorted files directory
-    #shutil.rmtree(metadir, ignore_errors=True)
+    shutil.rmtree(metadir, ignore_errors=True)
 
     # Process Every extracted metadata field(Title, Abstract, Author) and compute the metrics.
     for MetaObj in MetaObjList:
@@ -241,7 +241,7 @@ def main():
         titlegt, absgt, autgt = get_gt_metadata(MetaObj,MetaObj.filepath, False)
         # One Row Consolidation
         finadf = process_tokens(MetaObj.abstract, MetaObj.authors, MetaObj.title, absgt[['token']], autgt[['token']],
-                                titlegt[['token']], MetaObj.pdf_name, 'CERMINE')
+                                titlegt[['token']], MetaObj.pdf_name, 'GROBID')
         # Evaluate every metadata label.
         if len(absgt) != 0:
             similarity_df, no_of_gt_tok, no_of_ex_tok, df_ex, lavsim = similarity_index(finadf, 'abstract')
