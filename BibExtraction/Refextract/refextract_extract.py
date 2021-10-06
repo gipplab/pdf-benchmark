@@ -1,4 +1,5 @@
 import os
+import shutil
 from pathlib import Path
 from shutil import copy
 import pandas as pd
@@ -80,6 +81,7 @@ def main():
             print(lavsim, f1)
         else:
             print(0,0)
+    shutil.rmtree(refdir)
 
 if __name__ == "__main__":
     main()

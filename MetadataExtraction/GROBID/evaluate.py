@@ -258,6 +258,8 @@ def main():
             f1, pre, recall = eval_metrics(similarity_df, no_of_gt_tok, no_of_ex_tok)
             print('Author', f1, pre, recall, lavsim)
 
+    shutil.rmtree(metadir)
+
 
 if __name__ == "__main__":
     main()

@@ -1,4 +1,5 @@
 import os
+import shutil
 from pathlib import Path
 from shutil import copy
 from xml.dom.minidom import parseString
@@ -109,13 +110,14 @@ def extract_tika_metadata(metadir, label):
                 similarity_df1, no_of_gt_tok1, no_of_ex_tok1, df_ex1, lavsim1 = similarity_index(final_df1, label)
                 f1, pre, recall = eval_metrics(similarity_df, no_of_gt_tok, no_of_ex_tok)
                 f11, pre1, recall1 = eval_metrics(similarity_df1, no_of_gt_tok1, no_of_ex_tok1)
-                print(PDF.pdf_name, lavsim1)
+                print(PDF.pdf_name, lavsim1, lavsim)
             #print(parsed["content"].encode('ascii', errors='ignore'))
     return
 
 def main():
     metadir = sort_metadata("/home/apurv/Thesis/DocBank/DocBank_samples/DocBank_samples", "paragraph")
     extract_tika_metadata(metadir, 'paragraph')
+    shutil.rmtree(metadir)
 
 if __name__ == "__main__":
     main()
