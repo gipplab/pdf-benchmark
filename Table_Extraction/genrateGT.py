@@ -43,7 +43,7 @@ def load_data(dir):
         if os.path.isfile(pdfn):
             pdf_name=os.path.basename(pdfn)
             txt_name=os.path.basename(txt)
-            txtdf=pd.read_csv(txt,sep='\t',usecols=[0,1,2,3,4,9], names=["token", "x0", "y0", "x1", "y1","label"])
+            txtdf=pd.read_csv(txt,sep='\t',quoting=csv.QUOTE_NONE,usecols=[0,1,2,3,4,9], names=["token", "x0", "y0", "x1", "y1","label"])
             PDFlist.append(PDF(page_number,pdf_name,dir,txt_name,txtdf))
     return PDFlist
 

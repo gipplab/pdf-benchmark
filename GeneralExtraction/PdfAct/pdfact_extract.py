@@ -1,3 +1,4 @@
+import csv
 import os
 import shutil
 import subprocess
@@ -28,7 +29,7 @@ def load_data(dir, labe):
         if os.path.isfile(pdfn):
             pdf_name=os.path.basename(pdfn)
             txt_name=os.path.basename(txt)
-            txtdf=pd.read_csv(txt,sep='\t',usecols=[0,1,2,3,4,9], names=["token", "x0", "y0", "x1", "y1","label"])
+            txtdf=pd.read_csv(txt,sep='\t',quoting=csv.QUOTE_NONE,usecols=[0,1,2,3,4,9], names=["token", "x0", "y0", "x1", "y1","label"])
             found = txtdf[txtdf['label']==labe].index.tolist()
             if len(found) != 0:
                 PDFlist.append(PDF(page_number,pdf_name,dir,txt_name,txtdf))
@@ -121,7 +122,7 @@ def extract_label_pdfact(dir):
 
 
 def main():
-    extract_label_pdfact("/home/apurv/Thesis/DocBank/DocBank_samples/DocBank_samples")
+    extract_label_pdfact("/home/apurv/Thesis/testd/docbank")
 
 if __name__ == "__main__":
     main()
