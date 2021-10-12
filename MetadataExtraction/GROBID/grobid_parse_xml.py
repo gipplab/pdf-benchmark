@@ -99,6 +99,11 @@ class TEIFile(object):
         result = self.text
         return result
 
+    @property
+    def parastring(self):
+        result = self.text
+        return result
+
 
 def read_tei(tei_file):
     with open(tei_file, 'r') as tei:
@@ -131,6 +136,11 @@ def tei_to_csv_entry_ref(tei_file):
     base_name = basename_without_ext(tei_file)
     return base_name, tei.refstring
 
+def tei_to_csv_entry_para(tei_file):
+    tei = TEIFile(tei_file)
+    base_name = basename_without_ext(tei_file)
+    return base_name, tei.parastring
+
 def parse_extracted_metadata(dir):
     papers = sorted(Path(dir).glob('*.tei.xml'))
     pool = Pool()
@@ -143,4 +153,11 @@ def parse_extracted_references(dir):
     pool = Pool()
     csv_entries = pool.map(tei_to_csv_entry_ref, papers)
     result_csv = pd.DataFrame(csv_entries, columns=['ID','refstring'])
+    return result_csv
+
+def parse_extracted_paragraphs(dir):
+    papers = sorted(Path(dir).glob('*.tei.xml'))
+    pool = Pool()
+    csv_entries = pool.map(tei_to_csv_entry_para, papers)
+    result_csv = pd.DataFrame(csv_entries, columns=['ID','parastring'])
     return result_csv
