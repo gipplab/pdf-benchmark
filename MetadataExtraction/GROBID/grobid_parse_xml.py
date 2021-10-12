@@ -94,6 +94,12 @@ class TEIFile(object):
             self._text = plain_text
         return self._text
 
+    @property
+    def refstring(self):
+        result = self.text
+        return result
+
+
 def read_tei(tei_file):
     with open(tei_file, 'r') as tei:
         soup = BeautifulSoup(tei, 'lxml')
@@ -120,9 +126,21 @@ def tei_to_csv_entry(tei_file):
     base_name = basename_without_ext(tei_file)
     return base_name, tei.title, tei.abstract, tei.authors
 
+def tei_to_csv_entry_ref(tei_file):
+    tei = TEIFile(tei_file)
+    base_name = basename_without_ext(tei_file)
+    return base_name, tei.refstring
+
 def parse_extracted_metadata(dir):
     papers = sorted(Path(dir).glob('*.tei.xml'))
     pool = Pool()
     csv_entries = pool.map(tei_to_csv_entry, papers)
     result_csv = pd.DataFrame(csv_entries, columns=['ID','Title', 'Abstract', 'Authors'])
+    return result_csv
+
+def parse_extracted_references(dir):
+    papers = sorted(Path(dir).glob('*.tei.xml'))
+    pool = Pool()
+    csv_entries = pool.map(tei_to_csv_entry_ref, papers)
+    result_csv = pd.DataFrame(csv_entries, columns=['ID','refstring'])
     return result_csv
