@@ -4,6 +4,8 @@ from pathlib import Path
 from shutil import copy
 import pandas as pd
 from refextract import extract_references_from_file
+from tqdm import tqdm
+
 from GROBID.evaluate import similarity_index, eval_metrics
 from Tabula_Camelot.genrateGT import load_data
 
@@ -70,7 +72,8 @@ def process_for_spec_ref(gt_ref, ex_references):
 def main():
     refdir=sort_ref_files("/home/apurv/Thesis/DocBank/DocBank_samples/DocBank_samples")
     PDFlist=load_data(refdir)
-    for pdf in PDFlist:
+    resultdata=[]
+    for pdf in tqdm(PDFlist):
         file=pdf.filepath + os.sep + pdf.pdf_name
         ex_references = extract_references_from_file(file)
         gt_ref = get_gt_ref(pdf, refdir, retflag=False)
@@ -78,9 +81,11 @@ def main():
             final_df=process_for_spec_ref(gt_ref, ex_references)
             similarity_df, no_of_gt_tok, no_of_ex_tok, ef_ex, lavsim = similarity_index(final_df, 'ref')
             f1, pre, recall = eval_metrics(similarity_df, no_of_gt_tok, no_of_ex_tok)
-            print(lavsim, f1)
+            resultdata.append(['RefExtract', pdf.pdf_name, pdf.page_number, 'references', f1, lavsim])
         else:
-            print(0,0)
+            resultdata.append(['RefExtract', pdf.pdf_name, pdf.page_number, 'references', 0, 0])
+    resultdf = pd.DataFrame(resultdata, columns=['Tool', 'ID', 'Page', 'Label', 'F1', 'SpatialDist'])
+    resultdf.to_csv('refextract_extract.csv', index=False)
     shutil.rmtree(refdir)
 
 if __name__ == "__main__":

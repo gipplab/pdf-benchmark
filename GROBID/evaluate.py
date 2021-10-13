@@ -6,6 +6,7 @@ import pandas as pd
 from similarity.damerau import Damerau
 from similarity.jaccard import Jaccard
 from similarity.jarowinkler import JaroWinkler
+from tqdm import tqdm
 
 from CERMINE.cermine_parse_xml import extract_cermine_metadata, parse_metadata_cermine
 from GROBID.grobid_metadata_extract import parse_metadata, create_pdfmetadata_obj, grobid_extract
@@ -236,7 +237,8 @@ def main():
     #shutil.rmtree(metadir, ignore_errors=True)
 
     # Process Every extracted metadata field(Title, Abstract, Author) and compute the metrics.
-    for MetaObj in MetaObjList:
+    resultdata=[]
+    for MetaObj in tqdm(MetaObjList):
         # GT DFs
         titlegt, absgt, autgt = get_gt_metadata(MetaObj,MetaObj.filepath, False)
         # One Row Consolidation
@@ -246,18 +248,25 @@ def main():
         if len(absgt) != 0:
             similarity_df, no_of_gt_tok, no_of_ex_tok, df_ex, lavsim = similarity_index(finadf, 'abstract')
             f1, pre, recall = eval_metrics(similarity_df, no_of_gt_tok, no_of_ex_tok)
-            print('Abstract', f1, pre, recall, lavsim)
+            #print('Abstract', f1, pre, recall, lavsim)
+            resultdata.append(['GROBID', MetaObj.pdf_name, MetaObj.page_number, 'abstract', f1, lavsim])
             #lavsim is a cdist computed. Which gives both dataframe's similarity as a whole index. hence, there Reading order is not considered.
             # This helps to distinguish when DocBank has hyphanated words in the ground truth.
         if len(titlegt) != 0:
             similarity_df, no_of_gt_tok, no_of_ex_tok, df_ex, lavsim = similarity_index(finadf, 'title')
             f1, pre, recall = eval_metrics(similarity_df, no_of_gt_tok, no_of_ex_tok)
-            print('Title', f1, pre, recall, lavsim)
+            #print('Title', f1, pre, recall, lavsim)
+            resultdata.append(['GROBID', MetaObj.pdf_name, MetaObj.page_number, 'title', f1, lavsim])
         if len(autgt) != 0:
             similarity_df, no_of_gt_tok, no_of_ex_tok, ef_ex, lavsim = similarity_index(finadf, 'author')
             f1, pre, recall = eval_metrics(similarity_df, no_of_gt_tok, no_of_ex_tok)
-            print('Author', f1, pre, recall, lavsim)
+            #print('Author', f1, pre, recall, lavsim)
+            resultdata.append(['GROBID', MetaObj.pdf_name, MetaObj.page_number, 'author', f1, lavsim])
+        if (len(absgt) == 0 and len(titlegt) == 0 and len(autgt) == 0) or (len(finadf) == 0):
+            resultdata.append(['GROBID', MetaObj.pdf_name, MetaObj.page_number, 'author', 0, 0])
 
+    resultdf = pd.DataFrame(resultdata, columns=['Tool', 'ID', 'Page', 'Label', 'F1', 'SpatialDist'])
+    resultdf.to_csv('grobid_extract.csv', index=False)
     shutil.rmtree(metadir)
 
 

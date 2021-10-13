@@ -86,6 +86,7 @@ def crop_pdf(pdfpath,pdfname, pagenumber):
 def extract_label_pdfact(dir):
     #label_array=['caption','author','title', 'abstract','section', 'footer','table','reference', 'body']
     label_array=['title']
+    resultdata=[]
     for label in label_array:
         PDFlist=load_data(dir, label)
         for pdf in PDFlist:
@@ -110,16 +111,19 @@ def extract_label_pdfact(dir):
                 os.remove(croppedfile)
 
             if os.path.getsize(outputfile) == 0:
-                print("0,0,0,0")
+                resultdata.append(['PdfAct', pdf.pdf_name, pdf.page_number, label, 0, 0])
                 os.remove(outputfile)
             else:
                 f1,pre,recall, lavsim=compute_metrics(pdf, outputfile, label)
+                resultdata.append(['PdfAct', pdf.pdf_name, pdf.page_number, label, f1, lavsim])
                 os.remove(outputfile)
-                print(f1,pre, recall, lavsim)
-
+    resultdf = pd.DataFrame(resultdata, columns=['Tool', 'ID', 'Page', 'Label', 'F1', 'SpatialDist'])
+    return resultdf
 
 def main():
-    extract_label_pdfact("/home/apurv/Thesis/testd/docbank")
+    resultdf=extract_label_pdfact("/home/apurv/Thesis/testd/docbank")
+    resultdf.to_csv('pdfact_extract.csv', index=False)
+
 
 if __name__ == "__main__":
     main()

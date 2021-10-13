@@ -3,6 +3,8 @@ import shutil
 import subprocess
 from pathlib import Path
 import pandas as pd
+from tqdm import tqdm
+
 from PdfAct.pdfact_extract import  crop_pdf
 import zipfile
 from GROBID.evaluate import fix_hyphanated_tokens, similarity_index, eval_metrics
@@ -86,7 +88,8 @@ def process_df(ex_df, gt_df):
 def extract_table_adobe(dir):
     PDFlist=load_data(dir)
     Path(dir + "/output").mkdir(parents=True, exist_ok=True)
-    for pdf in PDFlist:
+    resultdata=[]
+    for pdf in tqdm(PDFlist):
         croppedfile = crop_pdf(pdf.filepath, pdf.pdf_name, pdf.page_number)
 
         outputfile = pdf.filepath + os.sep + "output" + os.sep + os.path.splitext(os.path.basename(pdf.pdf_name))[0]+ "_subset_" + pdf.page_number + "_extract.zip"
@@ -102,17 +105,19 @@ def extract_table_adobe(dir):
             final_df=process_df(extracted_df, groundt_df)
             similarity_df, no_of_gt_tok, no_of_ex_tok, df_ex, lavsim = similarity_index(final_df, 'table')
             f1, pre, recall = eval_metrics(similarity_df, no_of_gt_tok, no_of_ex_tok)
-            print(f1,pre,recall, lavsim)
-            #return f1,pre,recall, lavsim
+            resultdata.append(['AdobeExtract',pdf.pdf_name,pdf.page_number, 'table', f1, lavsim])
         else:
-            print('0,0,0,0')
-            #return 0,0,0,0
-    return
+            resultdata.append(['AdobeExtract', pdf.pdf_name,pdf.page_number, 'table', 0, 0])
+
+    resultdf = pd.DataFrame(resultdata, columns=['Tool', 'ID', 'Page' ,'Label','F1','SpatialDist'])
+
+    return resultdf
 
 
 def main():
     tabledir = sort_table_files("/home/apurv/Thesis/PDF-Information-Extraction-Benchmark/Data/pdf")
-    extract_table_adobe(tabledir)
+    resultdf=extract_table_adobe(tabledir)
+    resultdf.to_csv('adobe_extract.csv', index=False)
     shutil.rmtree(tabledir, ignore_errors=True)
 
 if __name__ == "__main__":

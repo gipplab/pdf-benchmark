@@ -1,7 +1,9 @@
 import os
 import pathlib
 
+import pandas as pd
 from science_parse_api.api import parse_pdf
+from tqdm import tqdm
 
 from PdfAct.pdfact_extract import load_data, crop_pdf, compute_metrics
 
@@ -42,11 +44,11 @@ def extract_scienceparse(dir):
     port = '8080'
     #label_array=['author','title', 'abstract','section','reference', 'paragraph']
     label_array=['reference']
+    resultdata=[]
     for label in label_array:
+        print(label)
         PDFlist=load_data(dir, label)
-        for pdf in PDFlist:
-            print(pdf.pdf_name, label)
-
+        for pdf in tqdm(PDFlist):
             pdfpath=pathlib.Path(pdf.filepath + os.sep + pdf.pdf_name)
             page = int(pdf.page_number) - 1
             croppedfile=crop_pdf(pdf.filepath, pdf.pdf_name, str(page))
@@ -108,19 +110,23 @@ def extract_scienceparse(dir):
                 print('cannot process the label')
 
             if os.path.getsize(outputfile) == 0 or not os.path.isfile(outputfile):
-                print("0,0,0,0")
+                resultdata.append(['ScienceParse', pdf.pdf_name, pdf.page_number, label, 0, 0])
                 os.remove(outputfile)
             else:
                 f1,pre,recall, lavsim=compute_metrics(pdf, outputfile, label)
+                resultdata.append(['ScienceParse', pdf.pdf_name, pdf.page_number, label, f1, label])
                 os.remove(outputfile)
-                print(f1,pre, recall, lavsim)
 
+    resultdf = pd.DataFrame(resultdata, columns=['Tool', 'ID', 'Page', 'Label', 'F1', 'SpatialDist'])
+
+    return resultdf
 
 
 
 
 def main():
-    extract_scienceparse("/home/apurv/Thesis/DocBank/DocBank_samples/DocBank_samples")
+    resultdf=extract_scienceparse("/home/apurv/Thesis/DocBank/DocBank_samples/DocBank_samples")
+    resultdf.to_csv('scienceparse_extract.csv', index=False)
 
 if __name__ == "__main__":
     main()
