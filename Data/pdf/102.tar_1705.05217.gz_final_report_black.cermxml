@@ -1,0 +1,672 @@
+<!DOCTYPE article PUBLIC "-//NLM//DTD JATS (Z39.96) Journal Archiving and Interchange DTD v1.0 20120330//EN" "JATS-archivearticle1.dtd">
+<article xmlns:xlink="http://www.w3.org/1999/xlink">
+  <front>
+    <journal-meta />
+    <article-meta>
+      <title-group>
+        <article-title>Complex Block Floating-Point Format with Box Encoding For Wordlength Reduction in Communication Systems</article-title>
+      </title-group>
+      <contrib-group>
+        <aff id="aff0">
+          <label>0</label>
+          <institution>Yeong Foong Choo</institution>
+          ,
+          <addr-line>Brian L. Evans and Alan Gatherer</addr-line>
+        </aff>
+      </contrib-group>
+      <abstract>
+        <p>- We propose a new complex block floating-point format to reduce implementation complexity. The new format achieves wordlength reduction by sharing an exponent across the block of samples, and uses box encoding for the shared exponent to reduce quantization error. Arithmetic operations are performed on blocks of samples at time, which can also reduce implementation complexity. For a case study of a baseband quadrature amplitude modulation (QAM) transmitter and receiver, we quantify the tradeoffs in signal quality vs. implementation complexity using the new approach to represent IQ samples. Signal quality is measured using error vector magnitude (EVM) in the receiver, and implementation complexity is measured in terms of arithmetic complexity as well as memory allocation and memory input/output rates. The primary contributions of this paper are (1) a complex block floating-point format with box encoding of the shared exponent to reduce quantization error, (2) arithmetic operations using the new complex block floatingpoint format, and (3) a QAM transceiver case study to quantify signal quality vs. implementation complexity tradeoffs using the new format and arithmetic operations. Index Terms-Complex block floating-point, discrete-time baseband QAM.</p>
+      </abstract>
+    </article-meta>
+  </front>
+  <body>
+    <sec id="sec-1">
+      <title>I. INTRODUCTION</title>
+      <p>
+        Energy-efficient data representation in application specific
+baseband transceiver hardware are in demand resulting from
+energy costs involved in baseband signal processing [
+        <xref ref-type="bibr" rid="ref1">1</xref>
+        ]. In
+macrocell base stations, about ten percent of energy cost
+contribute towards digital signal processing (DSP) modules
+while power amplification and cooling processes consume
+more than 70% of total energy [
+        <xref ref-type="bibr" rid="ref2">2</xref>
+        ]. The energy consumption
+by DSP modules relative to power amplification and cooling
+will increase in future designs of small cell systems because
+low-powered cellular radio access nodes handle a shorter radio
+range [
+        <xref ref-type="bibr" rid="ref2">2</xref>
+        ]. The design of energy-efficient number
+representation will reduce overall energy consumption in base stations.
+      </p>
+      <p>
+        In similar paper, baseband signal compression techniques
+have been researched for both uplink and downlink. The
+methods in [
+        <xref ref-type="bibr" rid="ref3">3</xref>
+        ], [
+        <xref ref-type="bibr" rid="ref4">4</xref>
+        ], and [
+        <xref ref-type="bibr" rid="ref5">5</xref>
+        ] suggest resampling baseband signals
+to Nyquist rate, block scaling, and non-linear quantization.
+All three papers report transport data rate gain of 3x to 5x
+with less than 2% EVM loss. In [
+        <xref ref-type="bibr" rid="ref5">5</xref>
+        ], cyclic prefix replacement
+technique is used to counter the effect of resampling, which
+would add processing overhead to the system. In [
+        <xref ref-type="bibr" rid="ref4">4</xref>
+        ] and
+[
+        <xref ref-type="bibr" rid="ref6">6</xref>
+        ], noise shaping technique shows improvement of in-band
+signal-to-noise ratio (SNR). In [
+        <xref ref-type="bibr" rid="ref7">7</xref>
+        ], transform coding technique
+is suggested for block compression of baseband signals in
+Fig. 1. 32-bit equivalent SIMD ALU in Exponent Box Encoding format
+the settings of multiple users and multi-antenna base station.
+Transform coding technique reports potential of 8x transport
+data rate gain with less than 3% EVM loss. The above methods
+achieve end-to-end compression in a transport link and incur
+delay and energy cost for the compression and decompression
+at the entry and exit points, respectively. The overall energy
+cost reduction is not well quantified. This motivates the design
+of energy-efficient data representation and hardware arithmetic
+units with low implementation complexity.
+      </p>
+      <p>
+        In [
+        <xref ref-type="bibr" rid="ref8">8</xref>
+        ], Common Exponent Encoding is proposed to
+represent 32-bit complex floating-point data by only 29-bit
+wordlength in hardware to achieve 3-bit savings. The method
+in [
+        <xref ref-type="bibr" rid="ref8">8</xref>
+        ] shows 10% reduction of registers and memory footprints
+with a tradeoff of 10% increase in arithmetic units. In [
+        <xref ref-type="bibr" rid="ref9">9</xref>
+        ],
+exponential coefficient scaling is proposed to allocate 6 bits
+to represent real-valued floating-point data. The method in [
+        <xref ref-type="bibr" rid="ref9">9</xref>
+        ]
+achieves 37x reduction in quantization errors, 1.2x reduction in
+logic gates, and 1.4x reduction in energy per cycle compared
+to 6-bit fixed-point representation. Both papers report less than
+2 dB of signal-to-quantization-noise ratio (SQNR).
+      </p>
+      <p>
+        Contributions: Our method applies the Common Exponent
+Encoding proposed by [
+        <xref ref-type="bibr" rid="ref8">8</xref>
+        ] and adds a proposed Exponent
+Box Encoding to retain high magnitude-phase resolution. This
+paper identifies the computational complexity of complex
+block addition, multiplication, and convolution and computes
+reference EVM on the arithmetic output. We apply the new
+complex block floating-point format to case study of baseband
+QAM transmitter chain and receiver chain. We also reduce
+implementation complexity in terms of memory reads/writes
+rates, and multiply-accumulate operations. We base the
+sig
+      </p>
+      <p>
+        This section describes the data structure used in new
+representation of complex block floating-point [
+        <xref ref-type="bibr" rid="ref8">8</xref>
+        ] and suggests a
+new mantissa scaling method in reducing quantization error. In
+IEEE 754 format, the exponents of complex-valued
+floatingpoint data are separately encoded. Common Exponent
+Encoding technique [
+        <xref ref-type="bibr" rid="ref8">8</xref>
+        ] allows common exponent sharing that has
+weak encoding of phase resolution.
+      </p>
+      <p>A. Common Exponent Encoding Technique
+the oversampled complex block floating-point data. This
+assumption allows common exponent be jointly encoded across
+complex block floating-point of Nv samples defined in Table
+II. The implied leading bit of 1 of each floating-point data
+is first uncovered. The common exponent is selected from
+the largest unsigned exponent across the complex block. All
+mantissa values are successively scaled down by the
+difference between common exponent and its original exponent.
+Therefore, each floating-point data with smaller exponents
+value loses leading bit of 1. The leading bit of complex block
+floating-point is explicitly coded as Nl, using Bl-bit. The sign
+bits are left unchanged. A complex block floating-point of Nv
+samples requires f2Nv(Bs + Bl + Bm) + Beg-bit.</p>
+      <p>We derive the maximum allowed exponent difference under
+Common Exponent Encoding in Appendix . Mantissa values
+could be reduced to zero as a result of large phase difference.
+Figure 2 shows the Effective Encoding Region (EER) under
+Common Exponent Encoding technique ( ). Exponent pairs
+outside the EER will have corresponding mantissa values
+reduce to zero.</p>
+      <p>B. Exponent Box Encoding Technique</p>
+      <p>The Common Exponent Encoding technique suffers high
+quantization and phase error in the complex block
+floatingpoint of high dynamic range. Exponent Box Encoding is
+suggested to reduce quantization error of complex-valued
+floating-point pairs by allocating 2Nv-bit per complex block.
+Figure 2 shows the Effective Encoding Region under Exponent
+Box Encoding technique ( ) which has four times larger the
+area of EER of Common Exponent Encoding technique ( ).</p>
+      <p>The use of 2-bit per complex sample replaces the mantissas
+rescaling operation with exponents addition/ subtraction. We
+are able to preserve more leading bits of mantissas values
+which improve the accuracy of complex block multiplication
+and complex block convolution results. A complex block
+floating-point of Nv samples requires f2Nv(Bs + Bl + Bx +
+Bm) + Beg-bit.</p>
+      <p>Arithmetic Logic Unit (ALU) hardware is designed to
+perform Single-Instruction Multiple-Data (SIMD) operation
+on complex block floating-point data. The Exponent Box
+Encoding is performed when converting to Exponent Box
+Encoding format. The Exponent Box Decoding is performed
+at the pre-processing of mantissas in Complex Block Addition
+and pre-processing of exponents in Complex Block Multiply.</p>
+      <p>Table IV summarizes the wordlength analysis required by
+complex block floating-point of Bv samples. The Exponent</p>
+      <p>We identify the arithmetic units predominantly used on
+complex block floating-point data. Complex-valued
+multiplication and addition are two primary ALU required in
+convolution operation. This section identifies the complexity of
+pre-processing and post-processing mantissas and exponents
+in the complex block addition, multiplication, and
+convolution arithmetic. Table V describes the worst-case complexity
+analysis of complex block ALU on encoding format described
+in Section .</p>
+      <p>A. Complex Block Addition</p>
+      <p>In IEEE-754 encoding format, complex block addition is
+implemented as two real-valued addition. There are four
+exponents to the two complex inputs and two exponents to the
+complex output. Each real-valued addition block requires one
+mantissa pre-scaling, one mantissa post-scaling, and one
+exponent arithmetic. Therefore, complex block addition requires
+two mantissas pre-scaling, two mantissas post-scaling, and two
+exponents arithmetic per sample.</p>
+      <p>In Common Exponent and Exponent Box Encoding, there
+are two shared exponents to the two complex block inputs and
+one shared exponent to the complex block output. Complexity
+on shared exponent arithmetic is O(1). We pre-scale the
+mantissas corresponding to the smaller exponent and post-scale
+the mantissas of the complex block output. With Exponent
+Box Encoding in the worst case, we require two mantissas
+pre-scaling and one mantissas post-scaling.</p>
+      <p>B. Complex Block Multiplication</p>
+      <p>In IEEE-754 encoding format, complex block multiplication
+is implemented as four real-valued multiplication and two
+real-valued addition. Each real-valued multiplication requires
+one mantissa post-scaling and one exponent arithmetic. Each
+real-valued addition requires one mantissa pre-scaling, one
+mantissa post-scaling, and one exponent arithmetic. Complex
+block multiply requires two mantissas pre-scaling, six
+mantissas post-scaling, and six exponent arithmetic per sample.</p>
+      <p>In Common Exponent and Exponent Box Encoding, we
+need two exponent arithmetic for multiply and normalization</p>
+      <p>Let X1 2 C1 N1 , X2 2 C1 N2 , and Y 2 C1 (N1+N2 1)
+be complex-valued row vectors, where denotes convolution,
+such that,
+&lt;fY g = &lt;fX1
+=fY g = =fX1</p>
+      <p>X2g
+X2g
+(3)</p>
+      <p>We assume N1 &lt; N2 for practical reason where the model
+of channel impulse response has shorter sequence than the
+discrete-time samples. Each term in the complex block output
+is complex inner product of two complex block input of
+varying length between 1 and minfN1; N2g. Complex
+convolution is implemented as complex block multiplication and
+accumulation of intermediate results. We derive the processing
+complexity of mantissas and exponents in Appendix .</p>
+      <p>IV. SYSTEM MODEL</p>
+      <p>We apply Exponent Box Encoding to represent IQ
+components in baseband QAM transmitter in Figure 5 and baseband
+QAM receiver in Figure 6. The simulated channel model is
+Additive White Gaussian Noise (AWGN). Table VI contains
+the parameter definitions and values used in MATLAB
+simulation and Table VII summarizes the memory input/output rates
+(bits/sec) and multiply-accumulate rates required by
+discretetime complex QAM transmitter and receiver chains.
+A. Discrete-time Complex Baseband QAM Transmitter</p>
+      <p>We encode complex block IQ samples in Exponent Box
+Encoding and retain the floating-point resolution in 32-bit
+IEEE-754 precision in our model. For simplicity, we select
+block size to be, Nv = LT X fsym. The symbol mapper
+generates a LT X fsym-size of complex block IQ samples that
+shares common exponent. Pulse shape filter is implemented
+as Finite Impulse Response (FIR) filter of N T X -order and
+requires complex convolution on the upsampled complex block
+IQ samples.</p>
+      <p>Due to the channel effect such as fading in practice, the
+received signals will have larger span in magnitude-phase
+response. The Common Exponent Encoding applied on sampled
+complex block IQ samples is limited to selecting window
+size of minimum phase difference. The Common Exponent
+Encoding must update its block size at the update rate of gain
+by the Automatic Gain Control (AGC). Instead, our Exponent
+Box Encoding could lift the constraint and selects fixed block
+size, Nv = LRX fsym in this simulation. We simulate matched
+filter of N RX -order.</p>
+      <p>V. SIMULATION RESULTS</p>
+      <p>Fig. 6. Block diagram of discrete-time complex baseband QAM receiver
+Transmitter Chain
+Symbol Mapper</p>
+      <p>Upsampler
+Pulse Shape Filter
+Receiver Chain
+Matched Filter</p>
+      <p>Downsampler
+Symbol Demapper
+Memory Reads Rate (bits/sec)</p>
+      <p>Jfsym
+2fsym(Nw + Nl + Nb Ne) + Ne
+(3LT xNgT x + 1)(LT xfsym)(Nw + Nl + Nb Ne) + 2Ne</p>
+      <p>Memory Reads Rate (bits/sec)
+(3LRxNgRx + 1)(LRxfsym)(Nw + Nl + Nb Ne) + 2Ne
+2LRxfsym(Nw + Nl Ne) + Ne + (Nw + Nl + Nb)
+2fsym(Nw + Nl Ne) + Ne + J2 (Nw + Nl)</p>
+      <p>Memory Writes Rate (bits/sec)
+2fsym(Nw + Nl + Nb Ne) + Ne
+2LT xfsym(Nw + Nl + Nb Ne) + Ne
+2LT xfsym(Nw + Nl + Nb Ne) + Ne</p>
+      <p>Memory Writes Rate (bits/sec)
+2LRxfsym(Nw + Nl + Nb Ne) + Ne
+2fsym(Nw + Nl + Nb Ne) + Ne</p>
+      <p>Jfsym</p>
+      <p>MACs / sec
+0
+0
+(LT x)2NgT xfsym</p>
+      <p>MACs / sec
+(LRx)2NgRxfsym
+0
+0</p>
+      <p>Let X; X 2 C1 N be complex-valued row vectors, such
+that X is the reference results in IEEE-754 Encoding and X
+is the simulated results in Complex Block Encoding.</p>
+      <p>The signal quality is measured on the complex block
+arithmetic results. We truncate the arithmetic results to
+32bit precision to make fair comparison. We use the
+RootMean-Squared (RMS) EVM measurement as described in the
+following, with k k2 as the Euclidean Norm,</p>
+      <p>EV M = k X
+k X k2</p>
+      <p>X k2
+100
+(4)</p>
+      <p>Figure 8 shows the dynamic range of Root-Raised Cosine
+(RRC) filter at transmitter and receiver and overall pulse
+shape response as a function of . Figure 9 shows the
+EVM introduced by Complex Block Encoding under system
+model defined in Section . The EVM plot is indistinguishable
+between IEEE-754 Encoding and Complex Block Encoding.
+The reasons are the selection of RRC Roll-off factor and
+energy-normalized constellation map.</p>
+      <p>Our work has identified the processing overhead of the
+mantissas and shared exponent in complex block floating-point
+arithmetic. The common exponent encoding would slightly
+lower the overhead in complex-valued arithmetic. The box
+encoding of the shared exponent gives the same quantization
+errors as common exponent encoding in our case study,
+which is a 32-bit complex baseband transmitter and receiver.
+Our work has also quantified memory read/write rates and
+multiply-accumulate rates in our case study. Future work could
+extend a similar approach to representing and processing IQ
+samples in multi-carrier and multi-antenna communication
+systems.</p>
+      <p>Let i; j be two bounded positive real numbers, representable
+in floating point precision. Assume that i has larger magnitude
+than j, jjj &lt; jij. Define Efkg as exponent and M fkg as
+mantissa to k, and F (k) = 2Efkg 1 1 as exponent offset,
+g be the difference between two
+(1:M fjg</p>
+      <p>j &lt; i
+(1:M fjg</p>
+      <p>2Efjg F (j)) &lt; (1:M fig
+(1:M fjg</p>
+      <p>2Efjg) &lt; (1:M fig
+2Efjg Efig+Efig) &lt; (1:M fig
+(1:M fjg</p>
+      <p>2Efjg Efig) &lt; (1:M fig)
+(1:M fjg 2 Ef g) &lt; (1:M fig)</p>
+      <p>(0:M fj0g) &lt; (1:M fig)
+where</p>
+      <p>M fj0g =
+1:M fjg
+2Ef g
+2Efig F (i))</p>
+      <sec id="sec-1-1">
+        <title>2Efig)</title>
+      </sec>
+      <sec id="sec-1-2">
+        <title>2Efig)</title>
+        <p>(5)</p>
+        <p>The mantissa bits in M (j0) are truncated in practice,
+therefore, Ef g must be less than M (j). The quantization error is
+the largest when the M (j0) gets zero when M (j) is nonzero.</p>
+      </sec>
+    </sec>
+    <sec id="sec-2">
+      <title>APPENDIX B</title>
+      <p>DERIVATION OF PRE / POST PROCESSING COMPLEXITY OF</p>
+    </sec>
+    <sec id="sec-3">
+      <title>COMPLEX-VALUED CONVOLUTION</title>
+      <p>Let Nmmualntt; Namdadnt; N mexuplt; Naedxdp be processing complexity
+2
+1
+2
+1
+2
+1)
+1)
+(6)
+(7)
+(N1)(N1 + 1) + (N2</p>
+      <p>N1)(N1) +
+(N1
+1)(N1)</p>
+    </sec>
+    <sec id="sec-4">
+      <title>Overall Addition Requirement (Nadd):</title>
+      <p>ment is (N mexuplt)(N2N1) + (Naedxdp)(N1</p>
+      <p>Mantissa processing requirement is (Nmmualntt)(N2N1) +
+1)(N2 1) and exponent processing
+require</p>
+      <p>1)(N2 1).</p>
+    </sec>
+  </body>
+  <back>
+    <ref-list>
+      <ref id="ref1">
+        <mixed-citation>
+          [1]
+          <string-name>
+            <given-names>G.</given-names>
+            <surname>Fettweis</surname>
+          </string-name>
+          and E. Zimmermann, “
+          <article-title>ICT energy consumption-trends and challenges</article-title>
+          ,”
+          <source>in Proc. Int. Symposium on Wireless Personal Multimedia Communications</source>
+          , vol.
+          <volume>2</volume>
+          , no.
+          <issue>4</issue>
+          ,
+          <issue>2008</issue>
+          , p.
+          <fpage>6</fpage>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref2">
+        <mixed-citation>
+          [2]
+          <string-name>
+            <given-names>O.</given-names>
+            <surname>Blume</surname>
+          </string-name>
+          ,
+          <string-name>
+            <given-names>D.</given-names>
+            <surname>Zeller</surname>
+          </string-name>
+          , and U. Barth, “
+          <article-title>Approaches to energy efficient wireless access networks</article-title>
+          ,
+          <source>” in Int. Symposium on Communications, Control and Signal Processing, March</source>
+          <year>2010</year>
+          , pp.
+          <fpage>1</fpage>
+          -
+          <lpage>5</lpage>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref3">
+        <mixed-citation>
+          [3]
+          <string-name>
+            <given-names>D.</given-names>
+            <surname>Samardzija</surname>
+          </string-name>
+          ,
+          <string-name>
+            <given-names>J.</given-names>
+            <surname>Pastalan</surname>
+          </string-name>
+          , M. MacDonald, S. Walker, and
+          <string-name>
+            <given-names>R.</given-names>
+            <surname>Valenzuela</surname>
+          </string-name>
+          , “
+          <article-title>Compressed Transport of Baseband Signals in Radio Access Networks</article-title>
+          ,
+          <source>” IEEE Transactions on Wireless Communications</source>
+          , vol.
+          <volume>11</volume>
+          , no.
+          <issue>9</issue>
+          , pp.
+          <fpage>3216</fpage>
+          -
+          <lpage>3225</lpage>
+          ,
+          <year>September 2012</year>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref4">
+        <mixed-citation>
+          [4]
+          <string-name>
+            <given-names>K. F.</given-names>
+            <surname>Nieman</surname>
+          </string-name>
+          and
+          <string-name>
+            <given-names>B. L.</given-names>
+            <surname>Evans</surname>
+          </string-name>
+          , “
+          <article-title>Time-domain compression of complexbaseband LTE signals for cloud radio access networks,”</article-title>
+          <source>in Proc. IEEE Global Conference on Signal and Information Processing</source>
+          ,
+          <year>Dec 2013</year>
+          , pp.
+          <fpage>1198</fpage>
+          -
+          <lpage>1201</lpage>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref5">
+        <mixed-citation>
+          [5]
+          <string-name>
+            <surname>D.</surname>
+          </string-name>
+          <article-title>Peng-ren and</article-title>
+          <string-name>
+            <surname>Z. Can</surname>
+          </string-name>
+          , “
+          <article-title>Compressed transport of baseband signals in cloud radio access networks,”</article-title>
+          <source>in Proc. Int. Conf. Communications and Networking in China (CHINACOM)</source>
+          ,
+          <year>Aug 2014</year>
+          , pp.
+          <fpage>484</fpage>
+          -
+          <lpage>489</lpage>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref6">
+        <mixed-citation>
+          [6]
+          <string-name>
+            <given-names>L. S.</given-names>
+            <surname>Wong</surname>
+          </string-name>
+          ,
+          <string-name>
+            <given-names>G. E.</given-names>
+            <surname>Allen</surname>
+          </string-name>
+          , and
+          <string-name>
+            <given-names>B. L.</given-names>
+            <surname>Evans</surname>
+          </string-name>
+          , “
+          <article-title>Sonar data compression using non-uniform quantization and noise shaping</article-title>
+          ,
+          <source>” in Asilomar Conference on Signals, Systems and Computers, Nov</source>
+          <year>2014</year>
+          , pp.
+          <fpage>1895</fpage>
+          -
+          <lpage>1899</lpage>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref7">
+        <mixed-citation>
+          [7]
+          <string-name>
+            <given-names>J.</given-names>
+            <surname>Choi</surname>
+          </string-name>
+          ,
+          <string-name>
+            <given-names>B. L.</given-names>
+            <surname>Evans</surname>
+          </string-name>
+          ,
+          <article-title>and</article-title>
+          <string-name>
+            <given-names>A.</given-names>
+            <surname>Gatherer</surname>
+          </string-name>
+          , “
+          <article-title>Space-time fronthaul compression of complex baseband uplink LTE signals,”</article-title>
+          <source>in Proc. IEEE Int. Conference on Communications, May</source>
+          <year>2016</year>
+          , pp.
+          <fpage>1</fpage>
+          -
+          <lpage>6</lpage>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref8">
+        <mixed-citation>
+          [8]
+          <string-name>
+            <given-names>N.</given-names>
+            <surname>Cohen</surname>
+          </string-name>
+          and
+          <string-name>
+            <given-names>S.</given-names>
+            <surname>Weiss</surname>
+          </string-name>
+          , “
+          <article-title>Complex Floating Point A Novel Data Word Representation for DSP Processors,”</article-title>
+          <source>IEEE Transactions on Circuits and Systems I: Regular Papers</source>
+          , vol.
+          <volume>59</volume>
+          , no.
+          <issue>10</issue>
+          , pp.
+          <fpage>2252</fpage>
+          -
+          <lpage>2262</lpage>
+          ,
+          <year>Oct 2012</year>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref9">
+        <mixed-citation>
+          [9]
+          <string-name>
+            <given-names>Z.</given-names>
+            <surname>Wang</surname>
+          </string-name>
+          ,
+          <string-name>
+            <given-names>J.</given-names>
+            <surname>Zhang</surname>
+          </string-name>
+          , and
+          <string-name>
+            <given-names>N.</given-names>
+            <surname>Verma</surname>
+          </string-name>
+          , “
+          <article-title>Reducing quantization error in lowenergy FIR filter accelerators</article-title>
+          ,”
+          <source>in Proc. IEEE Int. Conf. on Acoustics, Speech and Signal Processing</source>
+          ,
+          <year>April 2015</year>
+          , pp.
+          <fpage>1032</fpage>
+          -
+          <lpage>1036</lpage>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref10">
+        <mixed-citation>
+          [10]
+          <article-title>“IEEE Standard for Floating-Point Arithmetic,”</article-title>
+          <source>IEEE Std 754-2008</source>
+          , pp.
+          <fpage>1</fpage>
+          -
+          <lpage>70</lpage>
+          ,
+          <year>Aug 2008</year>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref11">
+        <mixed-citation>
+          [11]
+          <string-name>
+            <given-names>N.</given-names>
+            <surname>McGowan</surname>
+          </string-name>
+          ,
+          <string-name>
+            <given-names>B.</given-names>
+            <surname>Morris</surname>
+          </string-name>
+          , and E. Mah, “
+          <article-title>Compact floating point delta encoding for complex data</article-title>
+          ,
+          <source>” Mar. 3</source>
+          <year>2015</year>
+          , US Patent 8,
+          <issue>972</issue>
+          ,
+          <fpage>359</fpage>
+          . [Online]. Available: https://www.google.com/patents/US8972359
+        </mixed-citation>
+      </ref>
+    </ref-list>
+  </back>
+</article>

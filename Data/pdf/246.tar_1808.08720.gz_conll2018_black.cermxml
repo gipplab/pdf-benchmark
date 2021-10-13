@@ -1,0 +1,1481 @@
+<!DOCTYPE article PUBLIC "-//NLM//DTD JATS (Z39.96) Journal Archiving and Interchange DTD v1.0 20120330//EN" "JATS-archivearticle1.dtd">
+<article xmlns:xlink="http://www.w3.org/1999/xlink">
+  <front>
+    <journal-meta />
+    <article-meta>
+      <title-group>
+        <article-title>Predefined Sparseness in Recurrent Sequence Models</article-title>
+      </title-group>
+      <contrib-group>
+        <contrib contrib-type="author">
+          <string-name>Thomas Demeester</string-name>
+          <xref ref-type="aff" rid="aff0">0</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <string-name>Johannes Deleu</string-name>
+          <xref ref-type="aff" rid="aff0">0</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <string-name>Fre´deric Godin</string-name>
+          <xref ref-type="aff" rid="aff0">0</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <string-name>Chris Develder</string-name>
+          <xref ref-type="aff" rid="aff0">0</xref>
+        </contrib>
+        <aff id="aff0">
+          <label>0</label>
+          <institution>Ghent University - imec Ghent</institution>
+          ,
+          <country country="BE">Belgium</country>
+        </aff>
+      </contrib-group>
+      <abstract>
+        <p>Inducing sparseness while training neural networks has been shown to yield models with a lower memory footprint but similar effectiveness to dense models. However, sparseness is typically induced starting from a dense model, and thus this advantage does not hold during training. We propose techniques to enforce sparseness upfront in recurrent sequence models for NLP applications, to also benefit training. First, in language modeling, we show how to increase hidden state sizes in recurrent layers without increasing the number of parameters, leading to more expressive models. Second, for sequence labeling, we show that word embeddings with predefined sparseness lead to similar performance as dense embeddings, at a fraction of the number of trainable parameters.</p>
+      </abstract>
+    </article-meta>
+  </front>
+  <body>
+    <sec id="sec-1">
+      <title>1 Introduction</title>
+      <p>Many supervised learning problems today are
+solved with deep neural networks exploiting
+largescale labeled data. The computational and
+memory demands associated with the large amount of
+parameters of deep models can be alleviated by
+using sparse models. Applying sparseness can be
+seen as a form of regularization, as it leads to a
+reduced amount of model parameters1, for given
+layer widths or representation sizes. Current
+successful approaches gradually induce sparseness
+during training, starting from densely initialized
+networks, as detailed in Section . However, we
+propose that models can also be built with
+predefined sparseness, i.e., such models are already
+sparse by design and do not require sparseness
+inducing training schemes.</p>
+      <p>1The sparseness focused on in this work, occurs on the
+level of trainable parameters, i.e., we do not consider data
+sparsity.</p>
+      <p>The main benefit of such an approach is
+memory efficiency, even at the start of training.
+Especially in the area of natural language processing, in
+line with the hypothesis by Yang et al. (2017) that
+natural language is “high-rank”, it may be useful
+to train larger sparse representations, even when
+facing memory restrictions. For example, in order
+to train word representations for a large
+vocabulary using limited computational resources,
+predefined sparseness would allow training larger
+embeddings more effectively compared to strategies
+inducing sparseness from dense models.</p>
+      <p>The contributions of this paper are (i) a
+predefined sparseness model for recurrent
+neural networks, (ii) as well as for word
+embeddings, and (iii) proof-of-concept experiments on
+part-of-speech tagging and language modeling,
+including an analysis of the memorization
+capacity of dense vs. sparse networks. An overview
+of related work is given in the next Section . We
+subsequently present predefined sparseness in
+recurrent layers (Section ), as well as embedding
+layers (Section ), each illustrated by
+experimental results. This is followed by an empirical
+investigation of the memorization capacity of
+language models with predefined sparseness
+(Section ). Section summarizes the results, and points
+out potential areas of follow-up research.</p>
+      <p>The code for running the presented experiments
+is publically available.2</p>
+    </sec>
+    <sec id="sec-2">
+      <title>2 Related Work</title>
+      <p>
+        A substantial body of work has explored the
+benefits of using sparse neural networks. In deep
+convolutional networks, common approaches
+include sparseness regularization, e.g., using
+decomposition
+        <xref ref-type="bibr" rid="ref16">(Liu et al., 2015)</xref>
+        or variational
+dropout
+        <xref ref-type="bibr" rid="ref24">(Molchanov et al., 2017)</xref>
+        ), pruning of
+connections
+        <xref ref-type="bibr" rid="ref6 ref7 ref8">(Han et al., 2016, 2015; Guo et al., 2016)</xref>
+        2https://github.com/tdmeeste/SparseSeqModels
+and low rank approximations
+        <xref ref-type="bibr" rid="ref11 ref28">(Jaderberg et al.,
+2014; Tai et al., 2016)</xref>
+        . Regularization and
+pruning often lead to mostly random connectivity, and
+therefore to irregular memory accesses, with
+little practical effect in terms of hardware speedup.
+Low rank approximations are structured and thus
+do achieve speedups, with as notable examples the
+works of Wen et al. (2016) and Lebedev and
+Lempitsky (2016).
+      </p>
+      <p>Whereas above-cited papers specifically
+explored convolutional networks, our work focuses
+on recurrent neural networks (RNNs). Similar
+ideas have been applied there, e.g., see Lu et al.
+(2016) for a systematic study of various new
+compact architectures for RNNs, including low-rank
+models, parameter sharing mechanisms and
+structured matrices. Also pruning approaches have
+been shown to be effective for RNNs, e.g., by
+Narang et al. (2017). Notably, in the area of audio
+synthesis, Kalchbrenner et al. (2018) showed that
+large sparse networks perform better than small
+dense networks. Their sparse models were
+obtained by pruning, and importantly, a significant
+speedup was achieved through an efficient
+implementation.</p>
+      <p>For the domain of natural language processing
+(NLP), recent work by Wang et al. (2016)
+provides an overview of sparse learning approaches,
+and in particular noted that “application of sparse
+coding in language processing is far from
+extensive, when compared to speech processing”. Our
+current work attempts to further fill that gap. In
+contrast to aforementioned approaches (that either
+rely on inducing sparseness starting from a denser
+model, or rather indirectly try to impose
+sparseness by enforcing constraints), we explore ways to
+predefine sparseness.</p>
+      <p>
+        In the future, we aim to design models where
+predefined sparseness will allow using very large
+representation sizes at a limited computational
+cost. This could be interesting for training
+models on very large datasets
+        <xref ref-type="bibr" rid="ref2 ref27">(Chelba et al., 2013;
+Shazeer et al., 2017)</xref>
+        , or for more complex
+applications such as joint or multi-task prediction
+scenarios
+        <xref ref-type="bibr" rid="ref1 ref14 ref17 ref23 ref30 ref5 ref6 ref7 ref9">(Miwa and Bansal, 2016; Bekoulis et al., 2018;
+Hashimoto et al., 2017)</xref>
+        .
+      </p>
+    </sec>
+    <sec id="sec-3">
+      <title>3 Predefined Sparseness in RNNs</title>
+      <p>Our first objective is designing a recurrent
+network cell with fewer trainable parameters than a
+standard cell, with given input dimension i and
+hidden state size h. In Section , we describe one
+way to do this, while still allowing the use of fast
+RNN libraries in practice. This is illustrated for
+the task of language modeling in Section .</p>
+      <sec id="sec-3-1">
+        <title>3.1 Sparse RNN Composed of Dense RNNs</title>
+        <p>
+          The weight matrices in RNN cells can be
+divided into input-to-hidden matrices Whi 2 Rh i
+and hidden-to-hidden matrices Whh 2 Rh h
+(assuming here the output dimension corresponds to
+the hidden state size h), adopting the terminology
+used in
+          <xref ref-type="bibr" rid="ref5">(Goodfellow et al., 2016)</xref>
+          . A sparse RNN
+cell can be obtained by introducing sparseness in
+Whh and Whi. Note that our experiments make
+use of the Long Short-Term Memory (LSTM) cell
+          <xref ref-type="bibr" rid="ref10">(Hochreiter and Schmidhuber, 1997)</xref>
+          , but our
+discussion should hold for any type of recurrent
+network cell. For example, an LSTM contains 4
+matrices Whh and Whi, whereas the Gated
+Recurrent Unit (GRU)
+          <xref ref-type="bibr" rid="ref4">(Chung et al., 2014)</xref>
+          only has 3.
+        </p>
+        <p>We first propose to organize the hidden
+dimensions in several disjoint groups, i.e, N segments
+with lengths sn (n = 1; : : : ; N ), with Pn sn = h.</p>
+        <p>We therefore reduce Whh to a block-diagonal
+matrix. For example, a uniform segmentation
+would reduce the number of trainable parameters
+in Whh to a fraction 1=N . Figure 1 illustrates an
+example Whh for N = 3. One would expect that
+this simplification has a significant regularizing
+effect, given that the number of possible interactions
+between hidden dimensions is strongly reduced.
+However, our experiments (see Section ) show that
+a larger sparse model may still be more expressive
+than its dense counterpart with the same number
+of parameters. Yet, Merity et al. (2017) showed
+that applying weight dropping (i.e., DropConnect,
+Wan et al. (2013)) in an LSTM’s Whh matrices
+has a stronger positive effect on language models
+than other ways to regularize them. Sparsifying
+Whh upfront can hence be seen as a similar way
+to avoid the model’s ‘over-expressiveness’ in its
+recurrent weights.</p>
+        <p>As a second way to sparsify the RNN cell, we
+propose to not provide all hidden dimensions with
+explicit access to each input dimension. In each
+row of Whi we limit the number of trainable
+parameters to a fraction 2 ]0; 1]. Practically, we
+choose to organize the i trainable parameters in
+each row within a window that gradually moves
+from the first to the last input dimension, when
+advancing in the hidden (i.e., row) dimension.
+Furthermore, we segment the hidden dimension of
+Whi according to the segmentation of Whh, and
+Whh
+(b)
+h</p>
+        <p>Whi
+i
+move the window of i trainable parameters
+discretely per segment, as illustrated in Fig. 1(b).</p>
+        <p>
+          Because of the proposed practical arrangement
+of sparse and dense blocks in Whh and Whi,
+the sparse RNN cell is equivalent to a
+composition of smaller dense RNN’s operating in
+parallel on (partly) overlapping input data segments,
+with concatenation of the individual hidden states
+at the output. This will be illustrated at the end of
+Section . As a result, fast libraries like CuDNN
+          <xref ref-type="bibr" rid="ref3">(Chetlur et al., 2014)</xref>
+          can be used directly.
+Further research is required to investigate the
+potential benefit in terms of speed and total cell
+capacity, of physically distributing computations for the
+individual dense recurrent cells.
+        </p>
+        <p>Note that this is only possible because of the
+initial requirement that the output dimensions are
+divided into disjoint segments. Whereas inputs can
+be shared entirely between different components,
+joining overlapping segments in the h dimension
+would need to be done within the cell, before
+applying the gating and output non-linearities. This
+would make the proposed model less interesting
+for practical use.</p>
+        <p>We point out two special cases: (i) dense Whi
+matrices ( = 1) lead to N parallel RNNs that
+share the inputs but with separate contributions to
+the output, and (ii) organizing Whi as a block
+matrix (e.g., = 1=N for N same-length segments),
+leads to N isolated parallel RNNs. In the latter
+case, the reduction in trainable parameters is
+highest, for a given number of segments, but there is
+no more influence from any input dimension in a
+given segment to output dimensions in
+non-corresponding segments. We recommend option (i)
+as the most rational way to apply our ideas: the
+sparse RNN output is a concatenation of
+individual outputs of a number of RNN components
+connected in parallel, all sharing the entire input.</p>
+      </sec>
+      <sec id="sec-3-2">
+        <title>3.2 Language Modeling with Sparse RNNs</title>
+        <p>
+          We apply predefined sparse RNNs to
+language modeling. Our baseline approach is the
+AWD-LSTM model introduced by Merity et al.
+(2017). The recurrent unit consists of a three-layer
+stacked LSTM (Long Short-Term Memory
+network
+          <xref ref-type="bibr" rid="ref10">(Hochreiter and Schmidhuber, 1997)</xref>
+          ), with
+400-dimensional inputs and outputs, and
+intermediate hidden state sizes of 1150. Since the
+vocabulary contains only 10k words, most trainable
+parameters are in the recurrent layer (20M out of
+a total of 24M). In order to cleanly measure the
+impact of predefined sparseness in the recurrent
+layer, we maintain the original word embedding
+layer dimensions, and sparsify the recurrent layer.3
+In this example, we experiment with increasing
+dimensions in the recurrent layer while
+maintaining the number of trainable parameters, whereas in
+Section we increase sparseness while maintaining
+dimensions.
+        </p>
+        <p>Specifically, each LSTM layer is made sparse
+in such a way that the hidden dimension 1150 is
+increased by a factor 1.5 (chosen ad hoc) to 1725,
+but the embedding dimensions and total number of
+parameters remain the same (within error margins
+from rounding to integer dimensions for the dense
+blocks). We use uniform segments. The number
+of parameters for the middle LSTM layer can be
+calculated as:4
+# params. LSTM layer 2
+= 4(hd id + h2d + 2hd)
+= 4N ( hs is + Nhs22 + 2 hs )</p>
+        <p>
+          N N
+(dense)
+(sparse)
+in which the first expression represents the
+general case (e.g., the dense case has input and state
+sizes id = hd = 1150), and the second part is
+the sparse case composed of N parallel LSTMs
+with input size is, and state size hs=N (with
+3Alternative models could be designed for comparison,
+with modifications in both the embedding and output layer.
+Straightforward ideas include an ensemble of smaller
+independent models, or a mixture-of-softmaxes output layer to
+combine hidden states of the parallel LSTM components,
+inspired by
+          <xref ref-type="bibr" rid="ref32">(Yang et al., 2017)</xref>
+          .
+        </p>
+        <p>
+          4This follows from an LSTM’s 4 Whh and 4 Whi
+matrices, as well as bias vectors. However, depending on the
+implementation the equations may differ slightly in the
+contribution from the bias terms. We assume the standard
+Pytorch implementation
+          <xref ref-type="bibr" rid="ref26">(Paszke et al., 2017)</xref>
+          .
+test perplexity
+          <xref ref-type="bibr" rid="ref21">(Merity et al., 2017)</xref>
+          baseline
+sparse LSTM
+          <xref ref-type="bibr" rid="ref21">(Merity et al., 2017)</xref>
+          baseline
+sparse LSTM
+no
+no
+no
+yes
+yes
+yes
+is = hs = 1725). Dense and sparse variants have
+the same number of parameters for N = 3 and
+= 0:555. These values are obtained by
+identifying both expressions. Note that the equality in
+model parameters for the dense and sparse case
+holds only approximately due to rounding errors
+in ( is) and (hs=N ).
+        </p>
+        <p>Figure 1 displays Whh and Whi for the
+middle layer, which has close to 11M parameters out
+of the total of 24M in the whole model. A dense
+model with hidden size h = 1725 would require
+46M parameters, with 24M in the middle LSTM
+alone.</p>
+        <p>
+          Given the strong hyperparameter dependence
+of the AWD-LSTM model, and the known
+issues in objectively evaluating language models
+          <xref ref-type="bibr" rid="ref20">(Melis et al., 2017)</xref>
+          , we decided to keep all
+hyperparameters (i.e., dropout rates and
+optimization scheme) as in the implementation from
+Merity et al. (2017)5, including the weight dropping
+with p = 0:5 in the sparse Whh matrices.
+Table 1 shows the test perplexity on a processed
+version
+          <xref ref-type="bibr" rid="ref22">(Mikolov et al., 2010)</xref>
+          of the Penn
+Treebank (PTB)
+          <xref ref-type="bibr" rid="ref19">(Marcus et al., 1993)</xref>
+          , both with and
+without the ‘finetune’ step6, displaying mean and
+standard deviation over 5 different runs.
+Without finetuning, the sparse model consistently
+performs around 1 perplexity point better, whereas
+after finetuning, the original remains slightly better,
+although less consistently so over different
+random seeds. We observed that the sparse model
+overfits more strongly than the baseline, especially
+during the finetune step. We hypothesize that the
+regularization effect of a priori limiting
+interac5Our implementation extends https://github.
+com/salesforce/awd-lstm-lm.
+        </p>
+        <p>
+          6The ‘finetune’ step indicates hot-starting the Averaged
+Stochastic Gradient Descent optimization once more, after
+convergence in the initial optimization step
+          <xref ref-type="bibr" rid="ref21">(Merity et al.,
+2017)</xref>
+          .
+tions between dimensions does not compensate for
+the increased expressiveness of the model due to
+the larger hidden state size. Further
+experimentation, with tuned hyperparameters, is needed to
+determine the actual benefits of predefined
+sparseness, in terms of model size, resulting perplexity,
+and sensitivity to the choice of hyperparameters.
+        </p>
+      </sec>
+    </sec>
+    <sec id="sec-4">
+      <title>4 Sparse Word Embeddings</title>
+      <p>Given a vocabulary with V words, we want to
+construct vector representations of length k for
+each word such that the total number of
+parameters needed (i.e., non-zero entries), is smaller than
+k V . We introduce one way to do this based on
+word frequencies (Section ), and present
+part-ofspeech tagging experiments (Section ).</p>
+      <sec id="sec-4-1">
+        <title>4.1 Word-Frequency based Embedding Size</title>
+        <p>
+          Predefined sparseness in word embeddings
+amounts to deciding which positions in the word
+embedding matrix E 2 RV k should be fixed to
+zero, prior to training. We define the fraction of
+trainable entries in E as the embedding density E .
+We hypothesize that rare words can be represented
+with fewer parameters than frequent words, since
+they only appear in very specific contexts. This
+will be investigated experimentally in Section .
+Word occurrence frequencies have a typical
+Zipfian nature
+          <xref ref-type="bibr" rid="ref18">(Manning et al., 2008)</xref>
+          , with many rare
+and few highly frequent terms. Thus, representing
+the long tail of rare terms with short embeddings
+should greatly reduce memory requirements.
+        </p>
+        <p>In the case of a low desired embedding density
+E , we want to save on the rare words, in terms of
+assigning trainable parameters, and focus on the
+fewer more popular words. An exponential decay
+in the number of words that are assigned longer
+representations is one possible way to implement
+this. In other words, we propose to have the
+number of words that receive a trainable parameter at
+dimension j decrease with a factor j ( 2 ]0; 1]).
+For a given fraction E , the parameter can be
+determined from requiring the total number of
+nonzero embedding parameters to amount to a given
+fraction E of all parameters:
+k 1
+# embedding params. = X j V = E k V
+j=0
+and numerically solving for .</p>
+        <p>Figure 2 gives examples of embedding matrices
+with varying E . For a vocabulary of 44k terms
+40k
+HF
+1
+and maximum embedding length k = 20, the
+density E = 0:2 leads to 25% of the words with
+embedding length 1 (corresponding = 0:75),
+only 7.6% with length of 10 or higher, and with
+the maximum length 20 for only the 192 most
+frequent terms. The particular configurations shown
+in Fig. 2 are used for the experiments in Section .</p>
+        <p>In order to set a minimum embedding length for
+the rarest words, as well as for computational
+efficiency, we note that this strategy can also be
+applied on M bins of embedding dimensions, rather
+than per individual dimensions. The width of
+the first bin then indicates the minimum
+embedding length. Say bin m has width m (for m =
+0; : : : ; M 1, and Pm m = k). The
+multiplicative decay factor can then be obtained by solving
+E =
+while numerically compensating for rounding
+errors in the number V m of words that are
+assigned trainable parameters in the mth bin.
+4.2</p>
+      </sec>
+      <sec id="sec-4-2">
+        <title>Part-of-Speech Tagging Experiments</title>
+        <p>
+          We now study the impact of sparseness in word
+embeddings, for a basic POS tagging model, and
+report results on the PTB Wall Street Journal data.
+We embed 43,815 terms in 20-dimensional space,
+as input for a BiLSTM layer with hidden state
+size 10 for both forward and backward directions.
+The concatenated hidden states go into a fully
+connected layer with tanh non-linearity (down
+to dimension 10), followed by a softmax
+classification layer with 49 outputs (i.e., the number
+of POS tags). The total number of parameters
+is 880k, of which 876k in the embedding layer.
+Although character-based models are known to
+outperform pure word embedding based models
+          <xref ref-type="bibr" rid="ref15">(Ling et al., 2015)</xref>
+          , we wanted to investigate the
+effect of sparseness in word embeddings, rather than
+creating more competitive but larger or complex
+models, risking a smaller resolution in the effect of
+changing individual building blocks. To this end
+we also limited the dimensions, and hence the
+expressiveness, of the recurrent layer.7 Our model is
+similar to but smaller than the ‘word lookup’
+baseline by Ling et al. (2015).
+        </p>
+        <p>Figure 3 compares the accuracy for variable
+densities E (for k = 20) vs. different embedding
+sizes (with E = 1). For easily comparing sparse
+and dense models with the same number of
+embedding parameters, we scale E , the x-axis for
+the sparse case, to the average embedding size of
+20 E .</p>
+        <p>Training models with shorter dense embeddings
+appeared more difficult. In order to make a fair
+comparison, we therefore tuned the models over a
+7With LSTM state sizes of 50, the careful tuning of
+dropout parameters gave an accuracy of 94.7% when
+reducing the embedding size to k = 2, a small gap compared to
+96.8% for embedding size 50. The effect of larger sparse
+embeddings was therefore much smaller in absolute value than
+the one visualized in Fig. 3, because of the much more
+expressive recurrent layer.
+range of regularization hyperparameters, provided
+in Table 2.</p>
+        <p>We observe that the sparse embedding layer
+allows lowering the number of parameters in
+E down to a fraction of 15% of the original
+amount, with little impact on the effectiveness,
+provided E is sparsified rather than reduced in
+size. The reason for that is that with sparse
+20dimensional embeddings, the BiLSTM still
+receives 20-dimensional inputs, from which a
+significant subset only transmits signals from a small set
+of frequent terms. In the case of smaller dense
+embeddings, information from all terms is uniformly
+present over fewer dimensions, and needs to be
+processed with fewer parameters at the encoder
+input.</p>
+        <p>Finally, we verify the validity of our
+hypothesis from Section that frequent terms need to be
+embedded with more parameters than rare words.
+Indeed, one could argue in favor of the opposite
+strategy. It would be computationally more
+efficient if the terms most often encountered had
+the smallest representation. Also, stop words are
+the most frequent ones but are said to carry little
+information content. However, Table 3 confirms
+our initial hypothesis. Applying the introduced
+strategy to sparsify embeddings on randomly
+ordered words (‘no sorting’) leads to a significant
+decrease in accuracy compared to the proposed
+sorting strategy (‘up’). When the most frequent words
+are encoded with the shortest embeddings (‘down’
+in the table), the accuracy goes down even further.
+5</p>
+      </sec>
+    </sec>
+    <sec id="sec-5">
+      <title>Learning To Recite</title>
+      <p>From the language modeling experiments in
+Section , we hypothesized that an RNN layer
+becomes more expressive, when the dense layer is
+replaced by a larger layer with predefined
+sparseness and the same number of model parameters.
+In this section, we design an experiment to further
+investigate this claim. One way of quantifying an
+RNN’s capacity is in measuring how much
+information it can memorize. We name our
+experimental setup learning to recite: we investigate to what
+extent dense vs. sparse models are able to learn an
+entire corpus by heart in order to recite it
+afterwards. We note that this toy problem could have
+interesting applications, such as the design of
+neural network components that keep entire texts or
+even knowledge bases available for later retrieval,
+encoded in the component’s weight matrices.8</p>
+      <sec id="sec-5-1">
+        <title>5.1 Experimental Results</title>
+        <p>
+          The initial model for our learning to recite
+experiment is the baseline language model used in
+Section
+          <xref ref-type="bibr" rid="ref21">(Merity et al., 2017)</xref>
+          , with the PTB data.
+We set all regularization parameters to zero, to
+focus on memorizing the training data. During
+training, we measure the ability of the model to
+correctly predict the next token at every position in
+the training data, by selecting the token with
+highest predicted probability. When the model reaches
+an accuracy of 100%, it is able to recite the entire
+training corpus. We propose the following
+optimization setup (tuned and tested on dense models
+with different sizes): minibatch SGD (batch size
+20, momentum 0.9, and best initial learning rate
+among 5 or 10). An exponentially decaying
+learning rate factor (0.97 every epoch) appeared more
+suitable for memorization than other learning rate
+scheduling strategies, and we report the highest
+accuracy in 150 epochs.
+        </p>
+        <p>We compare the original model (in terms of
+network dimensions) with versions that have less
+parameters, by either reducing the RNN hidden state
+size h or by sparsifying the RNN, and similarly
+for the embedding layer. For making the
+embedding matrix sparse, M = 10 equal-sized segments
+are used (as in eq. 1). Table 4 lists the results.
+The dense model with the original dimensions has
+24M parameters to memorize a sequence of in
+total ‘only’ 930k tokens, and is able to do so. When
+the model’s embedding size and intermediate
+hidden state size are halved, the number of parameters
+drops to 7M, and the resulting model now makes
+67 mistakes out of 10k predictions. If h is kept,
+but the recurrent layers are made sparse to yield
+the same number of parameters, only 5 mistakes
+are made for every 10k predictions. Making the
+embedding layer sparse as well introduces new
+errors. If the dimensions are further reduced to a
+third the original size, the memorization capacity
+goes down strongly, with less than 4M trainable
+parameters. In this case, sparsifying both the
+recurrent and embedding layer yields the best
+result, whereas the dense model works better than
+the model with sparse RNNs only. A possible
+explanation for that is the strong sparseness in the
+RNNs. For example, in the middle layer only 1
+8It is likely that recurrent networks are not the best choice
+for this purpose, but here we only wanted to measure the
+LSTM-based model’s capacity to memorize with and
+without predefined sparseness.
+hyperparameter
+optimizer
+learning rate
+epochs
+word level embedding dropout y
+variational embedding dropout y
+DropConnect on Whh y
+batch size
+value(s)
+out of 10 recurrent connections is non-zero. In this
+case, increasing the size of the word embeddings
+(at least, for the frequent terms) could provide an
+alternative for the model to memorize parts of the
+data, or maybe it makes the optimization process
+more robust.</p>
+      </sec>
+      <sec id="sec-5-2">
+        <title>5.2 Visualization</title>
+        <p>Finally, we provide an illustration of the
+highlevel composition of the recurrent layers in two of
+the models used for this experiment. Figure 4(a)
+sketches the stacked 3-layer LSTM network from
+the ‘dense RNN’ model (see Table 4) with k =
+200 and h = 575. As already mentioned, our
+proposed sparse LSTMs are equivalent to a
+wellchosen composition of smaller dense LSTM
+components with overlapping inputs and disjoint
+outputs. This composition is shown in Fig. 4(b) for
+the model ‘sparse RNN’ (see Table 4), which in
+every layer has the same number of parameters as
+the dense model with reduced dimensions.</p>
+      </sec>
+    </sec>
+    <sec id="sec-6">
+      <title>6 Conclusion and Future Work</title>
+      <p>This paper introduces strategies to design word
+embedding layers and recurrent networks with
+predefined sparseness. Effective sparse word
+representations can be constructed by encoding less
+frequent terms with smaller embeddings and vice
+versa. A sparse recurrent neural network layer can
+be constructed by applying multiple smaller
+recurrent cells in parallel, with partly overlapping
+inputs and concatenated outputs.</p>
+      <p>The presented ideas can be applied to build
+models with larger representation sizes for a given
+number of parameters, as illustrated with a
+language modeling example. Alternatively, they can
+be used to reduce the number of parameters for
+given representation sizes, as investigated with a
+part-of-speech tagging model.</p>
+      <p>We introduced ideas on predefined sparseness in
+sequence models, as well as proof-of-concept
+experiments, and analysed the memorization
+capacity of sparse networks in the ‘learning to recite’
+toy problem.</p>
+      <p>More elaborate experimentation is required to</p>
+      <p>investigate the benefits of predefined sparseness
+on more competitive tasks and datasets in NLP.
+For example, language modeling results on the
+Penn Treebank rely on heavy regularization due
+to the small corpus. Follow-up work could
+therefore investigate to what extent language models
+for large corpora can be trained with limited
+computational resources, based on predefined
+sparseness. Other ideas for future work include the use
+of predefined sparseness for pretraining word
+embeddings, or other neural network components
+besides recurrent models, as well as their use in
+alternative applications such as sequence-to-sequence
+tasks or in multi-task scenarios.</p>
+    </sec>
+    <sec id="sec-7">
+      <title>Acknowledgments</title>
+      <p>We thank the anonymous reviewers for their
+time and effort, and the valuable feedback.</p>
+    </sec>
+  </body>
+  <back>
+    <ref-list>
+      <ref id="ref1">
+        <mixed-citation>
+          <string-name>
+            <given-names>Giannis</given-names>
+            <surname>Bekoulis</surname>
+          </string-name>
+          , Johannes Deleu, Thomas Demeester, and
+          <string-name>
+            <given-names>Chris</given-names>
+            <surname>Develder</surname>
+          </string-name>
+          .
+          <year>2018</year>
+          .
+          <article-title>Joint entity recognition and relation extraction as a multi-head selection problem</article-title>
+          .
+          <source>Expert Systems with Applications</source>
+          ,
+          <volume>114</volume>
+          :
+          <fpage>34</fpage>
+          -
+          <lpage>45</lpage>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref2">
+        <mixed-citation>
+          <string-name>
+            <given-names>Ciprian</given-names>
+            <surname>Chelba</surname>
+          </string-name>
+          , Tomas Mikolov, Mike Schuster, Qi Ge, Thorsten Brants, Phillipp Koehn, and
+          <string-name>
+            <given-names>Tony</given-names>
+            <surname>Robinson</surname>
+          </string-name>
+          .
+          <year>2013</year>
+          .
+          <article-title>One billion word benchmark for measuring progress in statistical language modeling</article-title>
+          .
+          <source>Technical report</source>
+          , Google.
+        </mixed-citation>
+      </ref>
+      <ref id="ref3">
+        <mixed-citation>
+          <string-name>
+            <given-names>Sharan</given-names>
+            <surname>Chetlur</surname>
+          </string-name>
+          , Cliff Woolley, Philippe Vandermersch, Jonathan Cohen, John Tran, Bryan Catanzaro, and
+          <string-name>
+            <given-names>Evan</given-names>
+            <surname>Shelhamer</surname>
+          </string-name>
+          .
+          <year>2014</year>
+          . cuDNN:
+          <article-title>Efficient primitives for deep learning</article-title>
+          .
+          <source>arXiv:1410</source>
+          .
+          <fpage>0759</fpage>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref4">
+        <mixed-citation>
+          <string-name>
+            <given-names>Junyoung</given-names>
+            <surname>Chung</surname>
+          </string-name>
+          ,
+          <string-name>
+            <surname>C¸</surname>
+          </string-name>
+          <article-title>ag˘lar Gu¨lc¸ehre, Kyunghyun Cho</article-title>
+          , and
+          <string-name>
+            <given-names>Yoshua</given-names>
+            <surname>Bengio</surname>
+          </string-name>
+          .
+          <year>2014</year>
+          .
+          <article-title>Empirical evaluation of gated recurrent neural networks on sequence modeling</article-title>
+          .
+          <source>arXiv:1412.3555. Deep Learning workshop at NIPS</source>
+          <year>2014</year>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref5">
+        <mixed-citation>
+          <string-name>
+            <given-names>Ian</given-names>
+            <surname>Goodfellow</surname>
+          </string-name>
+          , Yoshua Bengio, and
+          <string-name>
+            <given-names>Aaron</given-names>
+            <surname>Courville</surname>
+          </string-name>
+          .
+          <year>2016</year>
+          .
+          <article-title>Deep Learning</article-title>
+          . MIT Press. http://www. deeplearningbook.org.
+        </mixed-citation>
+      </ref>
+      <ref id="ref6">
+        <mixed-citation>
+          <string-name>
+            <given-names>Yiwen</given-names>
+            <surname>Guo</surname>
+          </string-name>
+          , Anbang Yao, and
+          <string-name>
+            <given-names>Yurong</given-names>
+            <surname>Chen</surname>
+          </string-name>
+          .
+          <year>2016</year>
+          .
+          <article-title>Dynamic network surgery for efficient DNNs</article-title>
+          .
+          <source>In Proc. 30th International Conference on Neural Information Processing Systems (NIPS</source>
+          <year>2016</year>
+          ),
+          <source>NIPS'16</source>
+          , pages
+          <fpage>1387</fpage>
+          -
+          <lpage>1395</lpage>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref7">
+        <mixed-citation>
+          <string-name>
+            <surname>Song</surname>
+            <given-names>Han</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <given-names>Huizi</given-names>
+            <surname>Mao</surname>
+          </string-name>
+          , and
+          <string-name>
+            <given-names>William J.</given-names>
+            <surname>Dally</surname>
+          </string-name>
+          .
+          <year>2016</year>
+          .
+          <article-title>Deep compression: Compressing deep neural networks with pruning, trained quantization and Huffman coding</article-title>
+          .
+          <source>In Proc. 4th International Conference on Learning Representations (ICLR</source>
+          <year>2016</year>
+          ).
+        </mixed-citation>
+      </ref>
+      <ref id="ref8">
+        <mixed-citation>
+          <string-name>
+            <surname>Song</surname>
+            <given-names>Han</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <given-names>Jeff</given-names>
+            <surname>Pool</surname>
+          </string-name>
+          , John Tran, and
+          <string-name>
+            <given-names>William J.</given-names>
+            <surname>Dally</surname>
+          </string-name>
+          .
+          <year>2015</year>
+          .
+          <article-title>Learning Both Weights and Connections for Efficient Neural Networks</article-title>
+          .
+          <source>In Proc. 28th International Conference on Neural Information Processing Systems (NIPS</source>
+          <year>2015</year>
+          ),
+          <source>NIPS'15</source>
+          , pages
+          <fpage>1135</fpage>
+          -
+          <lpage>1143</lpage>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref9">
+        <mixed-citation>
+          <string-name>
+            <given-names>Kazuma</given-names>
+            <surname>Hashimoto</surname>
+          </string-name>
+          , Caiming Xiong, Yoshimasa Tsuruoka, and Richard Socher.
+          <year>2017</year>
+          .
+          <article-title>A joint many-task model: Growing a neural network for multiple nlp tasks</article-title>
+          .
+          <source>In Proc. Conference on Empirical Methods in Natural Language Processing (EMNLP)</source>
+          , pages
+          <fpage>1923</fpage>
+          -
+          <lpage>1933</lpage>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref10">
+        <mixed-citation>
+          <string-name>
+            <given-names>Sepp</given-names>
+            <surname>Hochreiter</surname>
+          </string-name>
+          and Ju¨rgen Schmidhuber.
+          <year>1997</year>
+          .
+          <article-title>Long short-term memory</article-title>
+          .
+          <source>Neural computation</source>
+          ,
+          <volume>9</volume>
+          (
+          <issue>8</issue>
+          ):
+          <fpage>1735</fpage>
+          -
+          <lpage>1780</lpage>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref11">
+        <mixed-citation>
+          <string-name>
+            <given-names>Max</given-names>
+            <surname>Jaderberg</surname>
+          </string-name>
+          , Andrea Vedaldi, and
+          <string-name>
+            <given-names>Andrew</given-names>
+            <surname>Zisserman</surname>
+          </string-name>
+          .
+          <year>2014</year>
+          .
+          <article-title>Speeding up convolutional neural networks with low rank expansions</article-title>
+          .
+          <source>In Proc. 27th British Machine Vision Conference (BMVC</source>
+          <year>2014</year>
+          ). ArXiv:
+          <volume>1405</volume>
+          .
+          <fpage>3866</fpage>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref12">
+        <mixed-citation>
+          <string-name>
+            <given-names>Nal</given-names>
+            <surname>Kalchbrenner</surname>
+          </string-name>
+          , Erich Elsen, Karen Simonyan, Seb Noury, Norman Casagrande, Edward Lockhart, Florian Stimberg, Aa¨ron van den Oord, Sander Dieleman, and
+          <string-name>
+            <given-names>Koray</given-names>
+            <surname>Kavukcuoglu</surname>
+          </string-name>
+          .
+          <year>2018</year>
+          .
+          <article-title>Efficient neural audio synthesis</article-title>
+          .
+          <source>ArXiv</source>
+          :
+          <year>1802</year>
+          .08435.
+        </mixed-citation>
+      </ref>
+      <ref id="ref13">
+        <mixed-citation>
+          <string-name>
+            <given-names>Diederik</given-names>
+            <surname>Kingma</surname>
+          </string-name>
+          and
+          <string-name>
+            <given-names>Jimmy</given-names>
+            <surname>Ba</surname>
+          </string-name>
+          .
+          <year>2015</year>
+          .
+          <article-title>Adam: A method for stochastic optimization</article-title>
+          .
+          <source>In International Conference on Learning Representations</source>
+          , San Diego, USA.
+        </mixed-citation>
+      </ref>
+      <ref id="ref14">
+        <mixed-citation>
+          <string-name>
+            <given-names>V.</given-names>
+            <surname>Lebedev</surname>
+          </string-name>
+          and
+          <string-name>
+            <given-names>V.</given-names>
+            <surname>Lempitsky</surname>
+          </string-name>
+          .
+          <year>2016</year>
+          .
+          <article-title>Fast ConvNets using group-wise brain damage</article-title>
+          .
+          <source>In Proc. 29th IEEE Conference on Computer Vision and Pattern Recognition (CVPR</source>
+          <year>2016</year>
+          ), pages
+          <fpage>2554</fpage>
+          -
+          <lpage>2564</lpage>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref15">
+        <mixed-citation>
+          <string-name>
+            <given-names>Wang</given-names>
+            <surname>Ling</surname>
+          </string-name>
+          , Chris Dyer, Alan W Black, Isabel Trancoso, Ramon Fermandez, Silvio Amir, Luis Marujo, and
+          <string-name>
+            <given-names>Tiago</given-names>
+            <surname>Luis</surname>
+          </string-name>
+          .
+          <year>2015</year>
+          .
+          <article-title>Finding function in form: Compositional character models for open vocabulary word representation</article-title>
+          .
+          <source>In Proceedings of the 2015 Conference on Empirical Methods in Natural Language Processing</source>
+          , pages
+          <fpage>1520</fpage>
+          -
+          <lpage>1530</lpage>
+          , Lisbon, Portugal. Association for Computational Linguistics.
+        </mixed-citation>
+      </ref>
+      <ref id="ref16">
+        <mixed-citation>
+          <string-name>
+            <given-names>Baoyuan</given-names>
+            <surname>Liu</surname>
+          </string-name>
+          ,
+          <string-name>
+            <given-names>Min</given-names>
+            <surname>Wang</surname>
+          </string-name>
+          ,
+          <string-name>
+            <given-names>H.</given-names>
+            <surname>Foroosh</surname>
+          </string-name>
+          ,
+          <string-name>
+            <given-names>M.</given-names>
+            <surname>Tappen</surname>
+          </string-name>
+          , and
+          <string-name>
+            <given-names>M.</given-names>
+            <surname>Penksy</surname>
+          </string-name>
+          .
+          <year>2015</year>
+          .
+          <article-title>Sparse convolutional neural networks</article-title>
+          .
+          <source>In Proc. 28th IEEE Conference on Computer Vision and Pattern Recognition (CVPR</source>
+          <year>2015</year>
+          ), pages
+          <fpage>806</fpage>
+          -
+          <lpage>814</lpage>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref17">
+        <mixed-citation>
+          <string-name>
+            <given-names>Zhiyun</given-names>
+            <surname>Lu</surname>
+          </string-name>
+          , Vikas Sindhwani, and
+          <string-name>
+            <surname>Tara</surname>
+            <given-names>N.</given-names>
+          </string-name>
+          <string-name>
+            <surname>Sainath</surname>
+          </string-name>
+          .
+          <year>2016</year>
+          .
+          <article-title>Learning compact recurrent neural networks</article-title>
+          .
+          <source>In Proc. 41st IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP</source>
+          <year>2016</year>
+          ).
+        </mixed-citation>
+      </ref>
+      <ref id="ref18">
+        <mixed-citation>
+          <string-name>
+            <surname>Christopher D. Manning</surname>
+          </string-name>
+          , Prabhakar Raghavan, and Hinrich Schu¨tze.
+          <year>2008</year>
+          . Introduction to Information Retrieval. Cambridge University Press, New York, NY, USA.
+        </mixed-citation>
+      </ref>
+      <ref id="ref19">
+        <mixed-citation>
+          <string-name>
+            <given-names>Mitchell P.</given-names>
+            <surname>Marcus</surname>
+          </string-name>
+          , Beatrice Santorini, and Mary Ann Marcinkiewicz.
+          <year>1993</year>
+          .
+          <article-title>Building a large annotated corpus of english: The penn treebank</article-title>
+          .
+          <source>Computational Linguistics</source>
+          ,
+          <volume>19</volume>
+          (
+          <issue>2</issue>
+          ):
+          <fpage>313</fpage>
+          -
+          <lpage>330</lpage>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref20">
+        <mixed-citation>
+          <article-title>Ga´bor Melis, Chris Dyer</article-title>
+          , and
+          <string-name>
+            <given-names>Phil</given-names>
+            <surname>Blunsom</surname>
+          </string-name>
+          .
+          <year>2017</year>
+          .
+          <article-title>On the state of the art of evaluation in neural language models</article-title>
+          .
+          <source>In Proc. 6th International Conference on Learning Representations (ICLR</source>
+          <year>2017</year>
+          ).
+        </mixed-citation>
+      </ref>
+      <ref id="ref21">
+        <mixed-citation>
+          <string-name>
+            <given-names>Stephen</given-names>
+            <surname>Merity</surname>
+          </string-name>
+          , Nitish Shirish Keskar, and Richard Socher.
+          <year>2017</year>
+          .
+          <article-title>Regularizing and optimizing LSTM language models</article-title>
+          .
+          <source>arXiv:1708</source>
+          .
+          <fpage>02182</fpage>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref22">
+        <mixed-citation>
+          <string-name>
+            <given-names>Tomas</given-names>
+            <surname>Mikolov</surname>
+          </string-name>
+          , Martin Karafia´t, Luka´s Burget, Jan Cernocky´, and
+          <string-name>
+            <given-names>Sanjeev</given-names>
+            <surname>Khudanpur</surname>
+          </string-name>
+          .
+          <year>2010</year>
+          .
+          <article-title>Recurrent neural network based language model</article-title>
+          .
+          <source>In INTERSPEECH</source>
+          , pages
+          <fpage>1045</fpage>
+          -
+          <lpage>1048</lpage>
+          . ISCA.
+        </mixed-citation>
+      </ref>
+      <ref id="ref23">
+        <mixed-citation>
+          <string-name>
+            <given-names>Makoto</given-names>
+            <surname>Miwa</surname>
+          </string-name>
+          and
+          <string-name>
+            <given-names>Mohit</given-names>
+            <surname>Bansal</surname>
+          </string-name>
+          .
+          <year>2016</year>
+          .
+          <article-title>End-to-end relation extraction using LSTMs on sequences and tree structures</article-title>
+          .
+          <source>In Proc. 54th Annual Meeting of the Association for Computational Linguistics</source>
+          , pages
+          <fpage>1105</fpage>
+          -
+          <lpage>1116</lpage>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref24">
+        <mixed-citation>
+          <string-name>
+            <given-names>Dmitry</given-names>
+            <surname>Molchanov</surname>
+          </string-name>
+          , Arsenii Ashukha, and
+          <string-name>
+            <given-names>Dmitry</given-names>
+            <surname>Vetrov</surname>
+          </string-name>
+          .
+          <year>2017</year>
+          .
+          <article-title>Variational dropout sparsifies deep neural networks</article-title>
+          .
+          <source>In Proc. 35th International Conference on Machine Learning (ICML</source>
+          <year>2017</year>
+          ). ArXiv:
+          <volume>1701</volume>
+          .
+          <fpage>05369</fpage>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref25">
+        <mixed-citation>
+          <string-name>
+            <given-names>Sharan</given-names>
+            <surname>Narang</surname>
+          </string-name>
+          , Erich Elsen, Gregory Diamos, and
+          <string-name>
+            <given-names>Shubho</given-names>
+            <surname>Sengupta</surname>
+          </string-name>
+          .
+          <year>2017</year>
+          .
+          <article-title>Exploring sparsity in recurrent neural networks</article-title>
+          .
+          <source>In Proc. 5th International Conference on Learning Representations (ICLR</source>
+          <year>2017</year>
+          ).
+        </mixed-citation>
+      </ref>
+      <ref id="ref26">
+        <mixed-citation>
+          <string-name>
+            <given-names>Adam</given-names>
+            <surname>Paszke</surname>
+          </string-name>
+          , Sam Gross, Soumith Chintala, Gregory Chanan, Edward Yang,
+          <string-name>
+            <surname>Zachary</surname>
+            <given-names>DeVito</given-names>
+          </string-name>
+          , Zeming Lin, Alban Desmaison, Luca Antiga, and
+          <string-name>
+            <given-names>Adam</given-names>
+            <surname>Lerer</surname>
+          </string-name>
+          .
+          <year>2017</year>
+          .
+          <article-title>Automatic differentiation in pytorch</article-title>
+          .
+          <source>In Proceedings of the Workshop on The future of gradient-based machine learning software and techniques, co-located with the 31st Annual Conference on Neural Information Processing Systems (NIPS</source>
+          <year>2017</year>
+          ).
+        </mixed-citation>
+      </ref>
+      <ref id="ref27">
+        <mixed-citation>
+          <string-name>
+            <given-names>Noam</given-names>
+            <surname>Shazeer</surname>
+          </string-name>
+          , Azalia Mirhoseini, Krzysztof Maziarz, Andy Davis, Quoc Le,
+          <string-name>
+            <given-names>Geoffrey</given-names>
+            <surname>Hinton</surname>
+          </string-name>
+          , and
+          <string-name>
+            <given-names>Jeff</given-names>
+            <surname>Dean</surname>
+          </string-name>
+          .
+          <year>2017</year>
+          .
+          <article-title>Outrageously large neural networks: The sparsely-gated mixture-of-experts layer</article-title>
+          .
+          <source>In Proc. International Conference on Learning Representations (ICLR).</source>
+        </mixed-citation>
+      </ref>
+      <ref id="ref28">
+        <mixed-citation>
+          <string-name>
+            <surname>Cheng</surname>
+            <given-names>Tai</given-names>
+          </string-name>
+          , Tong Xiao, Yi Zhang, Xiaogang Wang, and
+          <string-name>
+            <surname>Weinan E.</surname>
+          </string-name>
+          <year>2016</year>
+          .
+          <article-title>Convolutional neural networks with low-rank regularization</article-title>
+          .
+          <source>In Proc. 4th International Conference on Learning Representations (ICLR</source>
+          <year>2016</year>
+          ). ArXiv:
+          <volume>1511</volume>
+          .
+          <fpage>06067</fpage>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref29">
+        <mixed-citation>
+          <string-name>
+            <given-names>Li</given-names>
+            <surname>Wan</surname>
+          </string-name>
+          , Matthew Zeiler, Sixin Zhang, Yann LeCun, and
+          <string-name>
+            <given-names>Rob</given-names>
+            <surname>Fergus</surname>
+          </string-name>
+          .
+          <year>2013</year>
+          .
+          <article-title>Regularization of neural networks using dropconnect</article-title>
+          .
+          <source>In Proc. 30th International Conference on International Conference on Machine Learning (ICML 2013)</source>
+          , pages
+          <fpage>III</fpage>
+          -1058
+          <string-name>
+            <surname>-</surname>
+            III-1066, Atlanta,
+            <given-names>GA</given-names>
+          </string-name>
+          , USA.
+        </mixed-citation>
+      </ref>
+      <ref id="ref30">
+        <mixed-citation>
+          <string-name>
+            <given-names>Dong</given-names>
+            <surname>Wang</surname>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Qiang Zhou</surname>
+            , and
+            <given-names>Amir</given-names>
+          </string-name>
+          <string-name>
+            <surname>Hussain</surname>
+          </string-name>
+          .
+          <year>2016</year>
+          .
+          <article-title>Deep and sparse learning in speech and language processing: An overview</article-title>
+          .
+          <source>In Proc. 8th International Conference on (BICS2016)</source>
+          , pages
+          <fpage>171</fpage>
+          -
+          <lpage>183</lpage>
+          . Springer, Cham.
+        </mixed-citation>
+      </ref>
+      <ref id="ref31">
+        <mixed-citation>
+          <string-name>
+            <surname>Wei</surname>
+            <given-names>Wen</given-names>
+          </string-name>
+          , Chunpeng Wu, Yandan Wang,
+          <string-name>
+            <surname>Yiran Chen</surname>
+            , and
+            <given-names>Hai</given-names>
+          </string-name>
+          <string-name>
+            <surname>Li</surname>
+          </string-name>
+          .
+          <year>2016</year>
+          .
+          <article-title>Learning structured sparsity in deep neural networks</article-title>
+          .
+          <source>In Proc. 30th International Conference on Neural Information Processing Systems (NIPS</source>
+          <year>2016</year>
+          ),
+          <source>NIPS'16</source>
+          , pages
+          <fpage>2082</fpage>
+          -
+          <lpage>2090</lpage>
+          , USA.
+        </mixed-citation>
+      </ref>
+      <ref id="ref32">
+        <mixed-citation>
+          <string-name>
+            <given-names>Zhilin</given-names>
+            <surname>Yang</surname>
+          </string-name>
+          , Zihang Dai, Ruslan Salakhutdinov, and William W. Cohen.
+          <year>2017</year>
+          .
+          <article-title>Breaking the softmax bottleneck: A high-rank rnn language model</article-title>
+          .
+          <source>ArXiv: 1711</source>
+          .
+          <fpage>03953</fpage>
+          .
+        </mixed-citation>
+      </ref>
+    </ref-list>
+  </back>
+</article>

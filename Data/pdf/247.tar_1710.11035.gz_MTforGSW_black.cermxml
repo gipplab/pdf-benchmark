@@ -1,0 +1,1968 @@
+<!DOCTYPE article PUBLIC "-//NLM//DTD JATS (Z39.96) Journal Archiving and Interchange DTD v1.0 20120330//EN" "JATS-archivearticle1.dtd">
+<article xmlns:xlink="http://www.w3.org/1999/xlink">
+  <front>
+    <journal-meta />
+    <article-meta>
+      <title-group>
+        <article-title>Machine Translation of Low-Resource Spoken Dialects: Strategies for Normalizing Swiss German</article-title>
+      </title-group>
+      <contrib-group>
+        <contrib contrib-type="author">
+          <string-name>Pierre-Edouard Honnet</string-name>
+          <xref ref-type="aff" rid="aff1">1</xref>
+          <xref ref-type="aff" rid="aff2">2</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <string-name>Andrei Popescu-Belis</string-name>
+          <xref ref-type="aff" rid="aff2">2</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <string-name>Claudiu Musat</string-name>
+          <email>claudiu.musat@swisscom.com</email>
+          <xref ref-type="aff" rid="aff0">0</xref>
+          <xref ref-type="aff" rid="aff2">2</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <string-name>Michael Baeriswyl</string-name>
+          <email>michael.baeriswyl@swisscom.com</email>
+          <xref ref-type="aff" rid="aff0">0</xref>
+          <xref ref-type="aff" rid="aff2">2</xref>
+        </contrib>
+        <contrib contrib-type="author">
+          <string-name>HEIG-VD / HES-SO Route de Cheseaux</string-name>
+          <xref ref-type="aff" rid="aff1">1</xref>
+          <xref ref-type="aff" rid="aff2">2</xref>
+        </contrib>
+        <aff id="aff0">
+          <label>0</label>
+          <institution>Swisscom (Schweiz) AG Genfergasse 14</institution>
+          <addr-line>CH-3011 Bern</addr-line>
+          <country country="CH">Switzerland</country>
+        </aff>
+        <aff id="aff1">
+          <label>1</label>
+          <institution>Telepathy Labs Schu ̈ tzengasse 25 CH-8001 Zu ̈ rich Switzerland pierre-edouard.honnet @telepathy.ai</institution>
+        </aff>
+        <aff id="aff2">
+          <label>2</label>
+          <institution>Work conducted while the first and second authors were at the Idiap Research Institute</institution>
+          ,
+          <addr-line>Martigny</addr-line>
+          ,
+          <country country="CH">Switzerland</country>
+        </aff>
+      </contrib-group>
+      <abstract>
+        <p>The goal of this work is to design a machine translation (MT) system for a low-resource family of dialects, collectively known as Swiss German, which are widely spoken in Switzerland but seldom written. We collected a significant number of parallel written resources to start with, up to a total of about 60k words. Moreover, we identified several other promising data sources for Swiss German. Then, we designed and compared three strategies for normalizing Swiss German input in order to address the regional diversity. We found that character-based neural MT was the best solution for text normalization. In combination with phrase-based statistical MT, our solution reached 36% BLEU score when translating from the Bernese dialect. This value, however, decreases as the testing data becomes more remote from the training one, geographically and topically. These resources and normalization techniques are a first step towards full MT of Swiss German dialects.</p>
+      </abstract>
+      <kwd-group>
+        <kwd>machine translation</kwd>
+        <kwd>low-resource languages</kwd>
+        <kwd>spoken dialects</kwd>
+        <kwd>Swiss German</kwd>
+        <kwd>character-based neural MT</kwd>
+      </kwd-group>
+    </article-meta>
+  </front>
+  <body>
+    <sec id="sec-1">
+      <title>-</title>
+      <p>In the era of social media, more and more people make
+online contributions in their own language. The diversity
+of these languages is however a barrier to information
+access or aggregation across languages. Machine translation
+(MT) can now overcome this limitation with considerable
+success for well-resourced languages, i.e. language pairs
+which are endowed with large enough parallel corpora to
+enable the training of neural or statistical MT systems. This
+is not the case, though, for many low-resourced languages
+which have been traditionally considered as oral rather than
+written means of communication, and which often lack
+standardized spelling and/or exhibit significant variations
+across dialects. Such languages have an increasing
+presence in written communication, especially through social
+media, while remaining inaccessible to non-speakers.
+This paper presents a written MT system for a mostly
+spoken family of dialects: Swiss German. Although spoken
+in a technologically developed country by around five
+million native speakers, Swiss German has never been
+significantly used in writing – with the exception of folklore or
+children books – before the advent of social media. Rather,
+from primary school, speakers of Swiss German are taught
+to use High German in writing, more precisely a variety
+known to linguists as Swiss Standard German, which is one
+of the three official federal languages along with French and
+Italian. Swiss German is widely used in social media, but
+foreigners or even Swiss speakers of the other official
+languages cannot understand it.</p>
+      <p>In this paper, we describe the first end-to-end MT system
+from Swiss German to High German. In Section , we
+present the Swiss German dialects and review the scarce
+monolingual and even scarcer parallel language resources
+that can be used for training MT. In Section , we review
+previous work on Swiss German and on MT of low-resource
+languages. In Section , we address the major issue of
+dialectal variation and lack of standard spelling – which
+affects many other regional and/or spoken languages as well –
+through three solutions: explicit conversion rules, phonetic
+representations, and character-based neural MT. These
+solutions are combined with phrase-based statistical MT to
+provide a standalone translation system, as explained in
+Section . In Section we present evaluation results. We
+first find that the similarity between the regions of
+training vs. test data has a stronger effect on performance than
+the similarity of text genre. Moreover, the results show that
+character-based NMT is beneficial for dealing with spelling
+variation. Our system is thus an initial general purpose MT
+system making Swiss German accessible to non-speakers,
+and can serve as a benchmark for future, better-resourced
+attempts.</p>
+      <p>2.</p>
+    </sec>
+    <sec id="sec-2">
+      <title>Collecting Swiss German Resources</title>
+      <sec id="sec-2-1">
+        <title>2.1. A Heterogeneous Family of Dialects</title>
+        <p>
+          Definition. Swiss German
+          <xref ref-type="bibr" rid="ref22 ref7">(Russ, 1990; Christen et al.,
+2013)</xref>
+          is a family of dialects used mainly for spoken
+communication by about two thirds of the population of
+Switzerland (i.e. over five million speakers). Swiss German
+is typically learned at home as a first language, but is
+substituted starting from primary school by High German for
+all written forms, as well as for official spoken discourse,
+for instance in politics or the media. Linguistically, the
+variety of High German written and spoken in Switzerland
+is referred to as Swiss Standard German (see
+          <xref ref-type="bibr" rid="ref23">Russ (1994)</xref>
+          ,
+Chapter 4, p. 76–99) and is almost entirely intelligible to
+German or Austrian speakers. On the contrary, Swiss
+German is generally not intelligible outside Switzerland.
+        </p>
+        <p>
+          In fact, Swiss German constitutes a group of heterogeneous
+dialects, which exhibit strong local variations. Due to their
+spoken nature, they have no standardized written form: for
+instance, the word kleine (meaning small’ in Standard
+German) could be written as chlyni, chliini, chline, chli or chlii
+in Swiss German. Linguistic studies of the Swiss
+German dialects (see
+          <xref ref-type="bibr" rid="ref22">Russ (1990)</xref>
+          or
+          <xref ref-type="bibr" rid="ref7">Christen et al. (2013)</xref>
+          )
+generally focus on the phonetic, lexical or syntactic
+variations and their geographical distribution, often concluding
+that such variations are continuous and non-correlated with
+each other. Finally, little teaching material in Swiss
+German is available to foreigners.
+        </p>
+        <p>Divisions. The areas where each dialect is spoken are
+influenced both by the administrative divisions (cantons and
+communes) and by natural borders (topography). Within
+the large group of Germanic languages, the dialects of
+Switzerland belong to the Alemannic group. However,
+while a majority of dialects are High Alemannic (yellow
+area on map in Figure 1), those spoken in the city of Basel
+and in the Canton of Valais belong respectively to the Low
+Alemannic and the Highest Alemannic groups. Within the
+High Alemannic group, a multitude of divisions have been
+proposed. One of the most consistent ones is the
+BrunigNapf-Reuss line between the eastern and western groups
+(red line in Fig. 1). A fine-grained approach could easily
+identify one or more dialects for each canton.</p>
+        <p>For the purpose of this study, we distinguish only two
+additional sub-groups on each side of the Brunig-Napf-Reuss
+line, and refer to them using the largest canton in which
+they are spoken. Westwards, we distinguish the Bernese
+group from the group spoken around Basel (cantons of
+Basel-Country, Solothurn and parts of Aargau). Eastwards,
+we distinguish the Zu¨rich group from the easternmost group
+around St. Gallen. Therefore, for training and testing MT
+on various dialects, we consider in what follows six main
+variants of Swiss German, represented on the map in
+Figure 1.</p>
+        <p>Notations. We refer to Swiss German as ‘GSW’
+(abbreviation from ISO 639-2) followed by the indication of the
+variant: GSW-BS (city of Basel), GSW-BL (regions of
+Basel, Solothurn, parts of Aargau), GSW-BE (mainly
+canton of Bern), GSW-ZH (canton of Zurich and neighbors),
+GSW-SG (St. Gallen and easternmost part of
+Switzerland), GSW-VS (the German-speaking part of the canton
+of Valais/Wallis). These groups correspond to the dialect
+labels used in the Alemannic Wikipedia (see Section
+below): Basel, Baselbieter, Bern, Zurich, U` nderto`ggeborg,
+and Wallis (Valais). In contrast, Swiss Standard German is
+referred to as ‘DE-CH’, a qualified abbreviation from IETF.
+Moreover, below, we will append the genre of the training
+data to the dialect abbreviation.</p>
+        <p>
+          Usage and Need for MT. Swiss German is primarily
+used for spoken communication, but the widespread
+adoption of social media in Switzerland has significantly
+increased its written use for informal exchanges on social
+platforms or in text messages. No standardized spelling has
+emerged yet, a fact related to the lack of GSW teaching as a
+second language. GSW is still written partly with reference
+to High German and partly using a phonetic transcription,
+also inspired from German pronunciation. Access to such
+content in social media is nearly impossible to foreigners,
+and even to speakers of different dialects, e.g. Valaisan
+content to Bernese speakers. Our goal is to design an MT
+system translating all varieties of GSW (with their currently
+observed spelling) towards High German, taking advantage
+of the relative similarity of these languages. By pivoting
+through High German, other target languages can then be
+supported. Moreover, if a speech-to-text system existed for
+Swiss German
+          <xref ref-type="bibr" rid="ref10">(Garner et al., 2014)</xref>
+          , our system would also
+enable spoken translation.
+2.2.
+        </p>
+      </sec>
+      <sec id="sec-2-2">
+        <title>Parallel Resources</title>
+        <p>Despite attempts to use comparable corpora or even
+monolingual data only (reviewed in Section ), parallel corpora
+aligned at the sentence level are essential resources for
+training statistical MT systems. In our case, while
+written resources in Swiss German are to some extent available
+(as reviewed in Section ), it is rare to find their translations
+into High German or vice-versa. When these are available,
+the two documents are often not available in electronic
+version, which requires a time-consuming digitization effort to
+make them usable for MT.1
+One of our goals is to collect the largest possible set of
+parallel GSW/DE texts, in a first stage regardless of their
+licensing status. We include among such resources parallel
+lexicons (“dictionaries”), and show that they are helpful for
+training MT. We summarize in Table 1 the results of our
+data collection effort, providing brief descriptions of each
+resource with especially their variant of GSW and their
+domain. We describe in detail each resource hereafter.
+GSW-BE-Novel. Translations of books from DE into</p>
+        <p>GSW are non-existent. We thus searched for books
+1Many of them are children books, such as Pitschi by Hans
+Fischer, The Gruffalo by Julia Donaldson, or The Little Prince by
+Antoine de Saint-Exupe´ry. Other examples include transcripts of
+Mani Matter’s songs, or several Asterix comics in Bernese.</p>
+        <sec id="sec-2-2-1">
+          <title>Dataset</title>
+          <p>GSW-BE-Novel
+GSW-BE-Wikipedia
+GSW-VS-Radio
+GSW-ZH-Wikipedia
+GSW-BE-Bible
+GSW-Archimob
+GSW-ZH-Lexicon1
+GSW-BE-Lexicon2</p>
+          <p>written originally in GSW and then translated into DE.
+Among the growing body of literature published in
+Swiss German, we found only one volume translated
+into High German and available in electronic form:
+Der Goalie bin ig (in English: I am the Keeper),
+written in Bernese by Pedro Lenz in 2010. The DE
+translation stays close to the original GSW-BE text, therefore
+sentence-level alignment was straightforward,
+resulting in 3,251 pairs of sentences with 37,240 words in
+GSW-BE and 37,725 words in DE.</p>
+        </sec>
+      </sec>
+      <sec id="sec-2-3">
+        <title>GSW-BE-Wikipedia and GSW-ZH-Wikipedia. The</title>
+        <p>
+          Alemannic version of Wikipedia2 appeared initially
+as a promising source of data. However, its articles
+are written not only in Swiss German, but also in
+other Alemannic dialects such as Alsatian, Badisch
+and Swabian. As its contributors are encouraged to
+write in their own dialects, only a few articles are
+homogeneous and have an explicit indication of their
+dialect, using an Infobox with one of the six labels
+indicated above. Among them, even fewer have an
+explicit statement indicating that they have been
+translated from High German (which would make the
+useful as parallel texts). We identified two such pages
+and sentence-aligned them to serve as test data: “Hans
+Martin Sutermeister” translated from DE into
+GSWBE and “Wa¨denswil” from DE into GSW-ZH.3
+GSW-VS-Radio. A small corpus of Valaisan Swiss
+German (also called Wallisertiitsch) has been collected at
+the Idiap Research Institute
+          <xref ref-type="bibr" rid="ref10">(Garner et al., 2014)</xref>
+          .4 The
+corpus consists of transcriptions of a local radio
+broadcast5 translated into High German.
+        </p>
+        <p>GSW-BE-Bible. The Bible has been translated in several
+2http://als.wikipedia.org
+3These pages are respectively available at https://de.
+wikipedia.org/wiki/Hans_Martin_Sutermeister
+(High German), https://als.wikipedia.org/wiki/
+Hans_Martin_Sutermeister (Bernese), https://de.
+wikipedia.org/wiki/W%E4denswil (High German), and
+https://als.wikipedia.org/wiki/W%E4denswil
+(Zurich Swiss German).</p>
+        <p>4www.idiap.ch/dataset/walliserdeutsch
+5Radio Rottu, http://www.rro.ch.</p>
+        <p>GSW dialects, but the only electronic version available
+to us were online excerpts in Bernese.6 However, this
+is not translated from High German but from a Greek
+text, hence the alignment with any of the German
+Bibles is problematic.7 We selected the contemporary
+Gute Nachricht Bibel (1997) for its modern
+vocabulary, and generated parallel data from four excerpts
+of the Old and New Testament, while
+acknowledging their particular style and vocabulary. The
+following excerpts were aligned: U¨ se Vatter, D
+Wienachtsgschicht, Der barmha¨rzig Samaritaner and D Wa¨lt
+wird erschaffe.</p>
+        <p>GSW-Archimob. Archimob is a corpus of standardized
+Swiss German (Samardzˇic´ et al., 2016), consisting
+of transcriptions of interviewees speaking Swiss
+German, with a word-align normalized version in High
+German.8 The interviews record memories of WW II,
+and all areas of Switzerland are represented. In most
+cases, the normalization provides the corresponding
+High German word or group of words, but in other
+cases it is Swiss German with a standardized
+orthography devised by the annotators. Using a vocabulary
+of High German, we filtered out all sentences whose
+normalizations included words outside this
+vocabulary. In other words, we kept only truly High
+German sentences, along with their original Swiss
+German counterparts, resulting in about 45,000 GSW/DE
+word-aligned sentence pairs.</p>
+      </sec>
+      <sec id="sec-2-4">
+        <title>GSW-ZH-Lexicon and GSW-BE-Lexicon. The last two</title>
+        <p>parallel resources are vocabularies, i.e. lists of GSW
+words with their DE translation. As such, they are
+useful for training our research systems, but not for
+testing them. The first one is based on Hoi Za¨me,
+a manual of Zu¨rich Swiss German intended for High
+German speakers. The data was obtained by scanning
+the printed version, performing OCR9 and manually
+aligning the result. Although the book contains also
+parallel sentences, only the bilingual dictionary was
+used in our study, resulting in 1,527 words with their
+translations. A similar dictionary for Bernese
+(GSWBE vs. DE) was found online10 with 1,224 words for
+which we checked and corrected the alignments.
+2.3.</p>
+      </sec>
+      <sec id="sec-2-5">
+        <title>Monolingual Resources</title>
+        <p>The Phonolex dictionary, a phonetic dictionary of High
+German,11 was used for training our grapheme-to-phoneme
+converter (see Section ). It contains High German words
+with their phonetic transcriptions.</p>
+        <p>6www.edimuster.ch/baernduetsch/bibel.htm
+7 www.die-bibel.de/bibeln/online-bibeln/
+8http://www.spur.uzh.ch/en/departments/
+korpuslab/ArchiMob.html
+9Tesseract: https://github.com/tesseract-ocr/
+10www.edimuster.ch/baernduetsch/
+woerterbuechli.htm</p>
+        <p>11www.bas.uni-muenchen.de/forschung/Bas/
+BasPHONOLEXeng.html. We also use it to find OOV words.
+About 75 pages from the Alemannic Wikipedia mentioned
+above have been collected and used to derive orthographic
+normalization rules in Section . To build language models
+(see Section ) we used the News Crawls 2007–2015 from
+the Workshop on MT.12</p>
+      </sec>
+    </sec>
+    <sec id="sec-3">
+      <title>Previous Work on Swiss German and the</title>
+    </sec>
+    <sec id="sec-4">
+      <title>MT of Low-Resource Languages</title>
+      <p>
+        The variability of Swiss German dialects has been
+investigated in a number of studies, such as those by
+        <xref ref-type="bibr" rid="ref22">Russ (1990)</xref>
+        ,
+Scherer (2012a), and
+        <xref ref-type="bibr" rid="ref7">Christen et al. (2013)</xref>
+        . This
+variability was illustrated in a system for generating Swiss German
+text, with fine-grained parameters for each region on a map
+        <xref ref-type="bibr" rid="ref27 ref28">(Scherrer, 2012b)</xref>
+        .
+      </p>
+      <p>
+        Language resources for Swiss German are extremely rare.
+The ArchiMob corpus (Samardzˇic´ et al., 2016) is quite
+unique, as it provides transcripts of spoken GSW
+narratives, along with their normalization, as presented above
+(
+        <xref ref-type="bibr" rid="ref24">Samardzˇic´ et al., 2015</xref>
+        ). First performed manually – thus
+generating ground-truth data – the normalization was then
+performed automatically using character-based statistical
+MT
+        <xref ref-type="bibr" rid="ref13 ref25 ref26 ref9">(Scherrer and Ljubesˇic´, 2016)</xref>
+        .
+      </p>
+      <p>
+        Initial attempts for MT of GSW include the
+abovementioned system for generating GSW texts from DE
+        <xref ref-type="bibr" rid="ref14 ref27 ref28">(Scherrer, 2012a)</xref>
+        , and a system combining ASR and MT
+of Swiss German from Valais
+        <xref ref-type="bibr" rid="ref10">(Garner et al., 2014)</xref>
+        . A
+normalization attempt for MT, on a different Germanic dialect,
+has been proposed for Viennese
+        <xref ref-type="bibr" rid="ref11">(Hildenbrandt et al., 2013)</xref>
+        .
+The MT of low-resource languages or dialects has been
+studied on many other important cases, in particular for
+Arabic dialects which are also predominantly used for
+spoken communication
+        <xref ref-type="bibr" rid="ref31">(Zbib et al., 2012)</xref>
+        . The lack of a
+normalized spelling of dialects has for instance an impact on
+training and evaluation of automatic speech recognition:
+a solution is to address spelling variation by mining text
+from social networks
+        <xref ref-type="bibr" rid="ref1">(Ali et al., 2017)</xref>
+        . Other strategies
+are the crowdsourcing of additional parallel data, or the
+use of large monolingual and comparable corpora to
+perform bilingual lexicon induction before training an MT
+system
+        <xref ref-type="bibr" rid="ref12 ref13 ref14 ref26 ref9">(Klementiev et al., 2012; Irvine and Callison-Burch,
+2013; Irvine and Callison-Burch, 2016)</xref>
+        . The METIS-II EU
+project replaced the need for parallel corpora by using
+linguistic pre-processing and statistics from target-language
+corpora only
+        <xref ref-type="bibr" rid="ref5">(Carl et al., 2008)</xref>
+        . In a recent study applied to
+Afrikaans-to-Dutch translation, the authors use a
+characterbased “cipher model” and a word-based language model
+to design a decoder for the low-resourced input language
+        <xref ref-type="bibr" rid="ref21">(Pourdamghani and Knight, 2017)</xref>
+        .
+      </p>
+      <p>
+        The Workshops on Statistical MT have proposed translation
+tasks for low-resourced languages to/from English, such as
+Hindi in 2014
+        <xref ref-type="bibr" rid="ref3">(Bojar et al., 2014)</xref>
+        , Finnish in 2015, or
+Latvian in 2017. However, these languages are clearly not
+as low-resourced as Swiss German, and possess at least a
+normalized version with a unified spelling. In 2011, the
+featured translation task aimed at translating text messages
+from Haitian Creole into English, with a parallel corpus of
+similar size as ours (ca. 35k words on each side, plus a Bible
+translation). The original system built in the wake of the
+12http://www.statmt.org/wmt17/
+translation-task.html
+2010 Haiti earthquake leveraged a phonetic mapping from
+French to Haitian Creole to obtain a large bilingual lexicon
+        <xref ref-type="bibr" rid="ref17 ref18">(Lewis, 2010; Lewis et al., 2011)</xref>
+        .
+      </p>
+    </sec>
+    <sec id="sec-5">
+      <title>4. Normalizing Swiss German for MT</title>
+      <p>Three issues must be addressed when translating Swiss
+German into High German, which all contribute to a large
+number of out-of-vocabulary (OOV) words (i.e. previously
+unseen during training) in the source language:
+1. The scarcity of parallel GSW/DE data for training (see
+Section ), which cannot be easily addressed by the
+strategies seen in Section .
+2. The variability of dialects across training and testing
+data, which increases dialect-specific scarcity.
+3. The lack of a standard spelling, which introduces
+intra-dialect and intra-speaker variability.</p>
+      <p>There are several ways to address these issues. The most
+principled one is the normalization of all GSW input using
+unified spelling conventions, coupled with the design of a
+GSW/DE MT system for normalized input. However, such
+a goal is far too ambitious for our scope. Instead, we
+propose here to normalize Swiss German input for the concrete
+perspective of MT by converting unknown GSW words
+either to known GSW ones or to High German ones, which
+are preserved by the GSW/DE MT system and increase the
+number of correctly translated words.13
+This procedure, summarized below, rests on the
+assumption that many OOV GSW words are close to DE words,
+but with a slightly different pronunciation and spelling (see
+examples in the third column of Table 2). Each of the three
+strategies follow the same procedure:
+1. For each OOV word w, apply the normalization
+strategy. If it changes w into w0 then go to (2), if not to
+(4).
+2. If w0 is a known GSW word then replace w with w0
+and proceed to (4), if not, go to (3).
+3. If w0 is a known DE word then replace w with w0. If
+not, leave w unchanged and go to (4).</p>
+      <p>4. Translate the resulting GSW text.</p>
+      <p>This normalization method has two possible chances to
+help MT, by converting OOV words either into a known
+GSW word, or into a correct DE word which is no longer
+processed by MT. We describe below three strategies to
+normalize GSW text input before GSW/DE MT.
+4.1.</p>
+      <sec id="sec-5-1">
+        <title>Explicit Spelling Conversion Rules</title>
+        <p>The first strategy is based on explicit conversion rules for
+every OOV word w, which is changed into w0 by applying
+in sequence several spelling conversion rules, keeping the
+result if it is a GSW or a DE word, as explained above. The
+orthographic rules implemented in our system are shown in
+Table 2, with possible conversion examples.</p>
+      </sec>
+      <sec id="sec-5-2">
+        <title>4.2. Using Phonetic Representations</title>
+        <p>The second approach is based on the assumption that
+despite spelling differences, variants of the same word will
+have the same pronunciation. Thus, converting an
+out-ofvocabulary (OOV) word to its phonetic transcription may
+allow finding the equivalent word which is present in the
+13The MT system is specifically built so that OOV words are
+copied in the target sentence, rather than deleted.</p>
+        <sec id="sec-5-2-1">
+          <title>Spelling</title>
+          <p>.*scht.*
+.*schp.*
+ˆga¨ge.*
+Ca¨C
+ˆgm.*
+ˆgf.*
+ˆgw.*
+ˆaa.*
+.*ig$
+ˆii.*</p>
+        </sec>
+        <sec id="sec-5-2-2">
+          <title>Convert to</title>
+          <p>.*st.*
+.*sp.*
+ˆgegen.*</p>
+          <p>CeC
+ˆgem
+ˆgef
+ˆgew
+ˆan.*
+.*ung$
+ˆein.*</p>
+          <p>Example
+Angscht ! Angst
+Schprache ! Sprache
+Ga¨gesatz ! Gegensatz
+Pra¨sident ! President
+Gmeinde ! Gemeinde
+gfunde ! gefunde(n)
+gwa¨hlt ! gewa¨hlt
+Aafang ! Anfang
+Regierig ! Regierung
+Iiwohner ! Einwohner
+vocabulary. In this case, substituting the OOV word with a
+known word with the same pronunciation should help MT,
+assuming the same meaning.</p>
+          <p>For this, a grapheme-to-phoneme (G2P) converter is
+needed. It consists of an algorithm which is able to
+convert sequences of characters into phonetic sequences, or go
+from the written form of a word to its pronunciation. The
+idea is to build it on High German, as we expect Swiss
+German to be written in a phonetic way, which means that the
+G2P conversion should be close to High German
+pronunciation rules. In our experiments, a G2P converter was trained
+on the Phonolex dictionary, which contains High German
+words with their phonetic transcriptions. A GSW phonetic
+dictionary was created by using this system. To translate a
+new OOV word, we convert the word to its pronunciation,
+and check whether the resulting pronunciation exists either
+in the phonetic GSW dictionary or in the phonetic DE
+dictionary, following the procedure explained at the beginning
+of this section.</p>
+        </sec>
+      </sec>
+      <sec id="sec-5-3">
+        <title>4.3. Character-based Neural MT</title>
+        <p>
+          Mainstream neural MT systems are typically trained using
+recurrent neural networks (RNNs) to encode a source
+sentence, and then decode its representation into the target
+language
+          <xref ref-type="bibr" rid="ref2 ref6">(Cho et al., 2014)</xref>
+          . The RNNs are often augmented
+with an attention mechanism to the source sentence
+          <xref ref-type="bibr" rid="ref2">(Bahdanau et al., 2014)</xref>
+          . However, training an NMT is not
+feasible for GSW/DE, as the size of our resources is several
+orders of magnitude below NMT requirements. However,
+several recent approaches have explored a new strategy: the
+translation system is trained at the character level
+          <xref ref-type="bibr" rid="ref13 ref16 ref19 ref26 ref4 ref8 ref9">(Ling et
+al., 2015; Costa-jussa` and Fonollosa, 2016; Chung et al.,
+2016; Bradbury et al., 2017; Lee et al., 2017)</xref>
+          , or at least
+character-level techniques such as byte-pair encoding are
+used to translate OOV words
+          <xref ref-type="bibr" rid="ref29">(Sennrich et al., 2016)</xref>
+          .
+As the available data is limited, one possible approach is
+to combine a PBSMT and a CBNMT system: the former
+translates known words, while the latter translates OOV
+ones. The CBNMT system has two main advantages: it
+can translate unseen words based on the spelling
+regularities observed in the training data, and it can be trained with
+smaller amounts of data compared to the requirements of
+standard NMT methods.
+        </p>
+        <p>
+          Among the CBNMT approaches, we use here Quasi
+Recurrent Neural Networks (QRNNs)
+          <xref ref-type="bibr" rid="ref4">(Bradbury et al., 2017)</xref>
+          ,
+which take advantage of both convolutional and recurrent
+layers. The increased parallelism introduced by the use of
+convolutional layers allows to speed up both training and
+testing of translation models. There are two advantages to
+use CBNMT for OOV translation only. First, the training
+data may be sufficient to capture spelling conversion better
+than hand-crafted rules such as those in Table 2. Second,
+we can use smaller recurrent layers, as the character
+sequences to translate for OOV words are much shorter than
+sentences.
+        </p>
+        <p>We built a CBNMT system for OOV words based on open
+source scripts for TensorFlow available online, using the
+implementation of the QRNN architecture proposed by
+Kyubyong Park,14 with the following modifications:
+1. We added a “start of word” symbol to avoid mistakes
+on the first letter of the word. This was done outside
+the translation scripts, by adding the ‘:’ symbol to each
+word before the first letter, and removing it after
+translation.
+2. We modified the QRNN translation script to allow the
+translation of input texts without scoring the
+translation (for the production mode, when no reference is
+available).
+3. We added the possibility to translate an incomplete
+minibatch, by padding the last incomplete batch with
+empty symbols (0).15
+4. We set the following hyper-parameters: the maximum
+number of characters is 40, as no longer words were
+found in our GSW vocabulary. The minibatch size was
+kept to 16, and the number of hidden units was kept to
+320, as in the default implementation.</p>
+        <p>We trained the CBNMT model using unique word pairs
+from the Archimob corpus (see above), i.e. a Swiss
+German word and its normalized version, with a training set
+of 40,789 word pairs and a development set of 2,780 word
+pairs.</p>
+        <p>5.</p>
+      </sec>
+    </sec>
+    <sec id="sec-6">
+      <title>Integration with Machine Translation</title>
+      <p>We use phrase-based statistical MT for the core of our
+system, as data was not sufficient to train neural MT. We
+experimented indeed with two NMT systems16, which are
+typically trained on at least one million sentences, and tuned on
+100k. In our case, the available data did not allow NMT to
+outperform PBSMT, which is used below.</p>
+      <p>
+        Using the Moses toolkit17 to build a PBSMT system
+        <xref ref-type="bibr" rid="ref15">(Koehn
+et al., 2003)</xref>
+        , we used various subsets of the parallel
+GSW/DE data presented in Section above to learn
+translation models. As for the target language model, we trained a
+tri-gram model using IRSTLM18 over ca. 1.3 billion words
+14https://github.com/Kyubyong/quasi-rnn
+15Originally, if the size of the minibatch is n, and the number
+of sentences modulo n is y (i.e. there are n x + y sentences),
+then only the n x first sentences were translated by the system,
+which ignored the y last ones.
+      </p>
+      <p>16The DL4MT toolkit https://github.com/nyu-dl/
+dl4mt-tutorial and the OpenNMT-py one https://
+github.com/OpenNMT/OpenNMT-py.</p>
+      <p>
+        17http://www.statmt.org/moses/
+18http://hlt-mt.fbk.eu/technologies/irstlm
+in High German, and tuned the system using the
+development data indicated above in Section . As explained above,
+the normalization strategies are used to attempt to change
+GSW OOV words into either GSW or even DE words that
+are in the vocabulary. As we will see, we have combined
+two strategies in several experiments. We will use the
+most common metric for automatic MT evaluation, i.e. the
+BLEU score
+        <xref ref-type="bibr" rid="ref20">(Papineni et al., 2002)</xref>
+        .
+      </p>
+    </sec>
+    <sec id="sec-7">
+      <title>6. Results and Discussion</title>
+      <p>6.1.</p>
+      <sec id="sec-7-1">
+        <title>Effects of Genre and Dialect</title>
+        <p>
+          The first system to translate from Swiss German into High
+German was built using Moses trained on the Bernese novel
+corpus (GSW-BE-Novel in Table 1 above), with
+characterbased NMT for OOV words. Table 3 shows the BLEU
+scores obtained when testing this system on test sets from
+different regions or topics. Moreover, we also vary the
+tuning sets, including ones closer to the target test domains to
+assess their impact. The best BLEU score is around 35%
+which can be compared, for instance, with Google’s NMT
+scores of 41% for EN/FR and 26% for EN/DE, trained on
+tens of millions of sentences and nearly one hundred
+processors
+          <xref ref-type="bibr" rid="ref30">(Wu et al., 2016)</xref>
+          . In our case, our modest resources
+enable us to reach quite a high score thanks to the
+normalization strategy and the relative similarity of GSW to DE.
+        </p>
+        <sec id="sec-7-1-1">
+          <title>Test set</title>
+          <p>GSW-BE-Novel
+GSW-BE-Wikipedia
+same
+GSW-ZH-Wikipedia
+same
+GSW-VS-Radio
+Tuning (dev) set
+GSW-BE-Novel
+GSW-BE-Novel
+GSW-BE-Wikipedia
+GSW-BE-Novel
+GSW-ZH-Wikipedia
+GSW-BE-Novel</p>
+        </sec>
+        <sec id="sec-7-1-2">
+          <title>A typical output of this system is:</title>
+          <p>GSW-BE source: fasch wiwenernola¨nger ha¨tt wo¨ueku¨sse
+. oder hanisa¨chtnumegmeint?
+DE MT: fast wie wenn er noch la¨nger ha¨tte wollten ku¨sse
+. oder hab ich es wohl nur gemeint ?
+Human DE reference: als ha¨tte er noch la¨nger ku¨ssen
+wollen . oder etwa nicht ?
+The scores in Table 3 show the following trends:
+1. When testing on similar data, i.e. the same dialect and
+same domain, the scores are the highest, and in the
+same range as state of the art EN-DE or EN-FR
+systems.
+2. When changing domain (testing on Wikipedia data in
+the same dialect), the scores are decreasing.
+3. When testing on different dialects, the scores decrease
+more. This is true both for GSW-ZH and GSW-VS.
+As the dialect and domain are further from the data
+used to train the system, the score gets lower.
+GSWVS is known to be very different from any other GSW
+dialect, and radio broadcast data is expected to be very
+different from the novel used at training time.
+6.2.</p>
+        </sec>
+      </sec>
+      <sec id="sec-7-2">
+        <title>Effect of the Size of Training Data and</title>
+      </sec>
+      <sec id="sec-7-3">
+        <title>Language Model</title>
+        <p>To evaluate first the effect of using more training data, with
+larger vocabularies, a new system was trained using the
+same data as in the previous experiments, complemented
+with the two bilingual lexicons presented in Section .
+Table 4, second column, presents the resulting BLEU scores,
+which increase in all cases by about 1 BLEU point. As
+expected, using more training data in the form of bilingual
+lexicons yields more reliable translation models.
+To build more robust systems, we also used a larger target
+language model built on the NewsCrawl 2007-2015 data
+from WMT (see Section ) instead of only the DE side of our
+parallel data, which is still used for training the translation
+models, as above. Table 4, third column, gives the BLEU
+scores on the same test sets, using the larger target language
+model. We observe that the scores decrease slightly for the
+Bernese test sets, and hypothesize that this is due to the
+different domains of the language model and the test set.
+However, as the larger language model is trained on more
+diverse data, we will keep using it below for its robustness.</p>
+        <sec id="sec-7-3-1">
+          <title>Test set</title>
+          <p>GSW-BE-Novel
+GSW-BE-Wikipedia
+GSW-ZH-Wikipedia
+GSW-VS-Radio
+The three approaches proposed for normalization were
+evaluated on the same datasets as the previous systems.
+Additionally, two other approaches combining, on one side
+orthographic and phonetic based conversions, and on the
+other side CBNMT and phonetic conversion, were
+evaluated. Table 5 summarizes the results for the baseline system
+and the proposed approaches.</p>
+          <p>Baseline1 corresponds to the system with a language model
+trained only on the parallel GSW-DE data, while Baseline2
+is using a larger language model, described in Sec. . We
+can make the following observations:</p>
+          <p>In all the cases except GSW-BE-Novel, the
+orthographic approach improves the BLEU score of the
+baseline system, and the improvement is bigger for
+more remote dialects and domains.</p>
+          <p>The phonetic approach improves the score in 4 out of
+6 cases. In the remaining cases, we suppose that some
+words did not require pre-processing, and that the
+preprocessing may have converted the word to a false
+positive (i.e. the algorithm found a matching word, but it
+was not the correct one for translation).</p>
+          <p>Combining both approaches always results in better
+scores than the baseline, but in the case for which
+the phonetic approach score deteriorated, orthographic
+conversion only performs better.</p>
+          <p>In all the cases, combining CBNMT with the baseline
+PBSMT works the best. The highest improvement is
+brought when dialect or domain are different (except
+for the Bible), because more data was used to train the
+CBNMT models. This is especially true for the
+GSWArchimob test set, which has similar data as the one
+used to train the CBNMT models.</p>
+          <p>Baseline1 performs better than all the systems for
+GSW-BE-Novel test set. This is expected as the
+training data is both from the same dialect and the same
+domain. Additionally, the language model is trained
+on this same data.</p>
+          <p>7.</p>
+        </sec>
+      </sec>
+    </sec>
+    <sec id="sec-8">
+      <title>Conclusion</title>
+      <p>In this paper, we proposed solutions for the machine
+translation of a family of dialects, Swiss German, for which
+parallel corpora are scarce. Our efforts on resource collection
+and MT design have yielded:
+a small Swiss German / High German parallel corpus
+of about 60k words;
+a larger list of resources which await digitization and
+alignment;
+three solutions for input normalization, to address
+variability of region and spelling;
+a baseline GSW-to-DE MT system reaching 36 BLEU
+points.</p>
+      <p>Among the three normalization strategies, we found that
+character-based neural MT was the most promising one.
+Moreover, we found that MT quality depended more
+strongly on the regional rather than topical similarity of test
+vs. training data.</p>
+      <p>These findings will be helpful to design MT systems for
+spoken dialects without standardized spellings, such as
+numerous regional languages across Africa or Asia, which are
+natural means of communication in social media.</p>
+    </sec>
+    <sec id="sec-9">
+      <title>Acknowledgments</title>
+      <p>We are grateful to Swisscom for the grant supporting the
+first author from January to June 2017.</p>
+    </sec>
+    <sec id="sec-10">
+      <title>Bibliographical References</title>
+    </sec>
+  </body>
+  <back>
+    <ref-list>
+      <ref id="ref1">
+        <mixed-citation>
+          <string-name>
+            <surname>Ali</surname>
+            ,
+            <given-names>A. M.</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Nakov</surname>
+            ,
+            <given-names>P.</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Bell</surname>
+            ,
+            <given-names>P.</given-names>
+          </string-name>
+          , and
+          <string-name>
+            <surname>Renals</surname>
+            ,
+            <given-names>S.</given-names>
+          </string-name>
+          (
+          <year>2017</year>
+          ).
+          <article-title>WERd: Using social text spelling variants for evaluating dialectal speech recognition</article-title>
+          .
+          <source>arXiv preprint arXiv:1709</source>
+          .
+          <fpage>07484</fpage>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref2">
+        <mixed-citation>
+          <string-name>
+            <surname>Bahdanau</surname>
+            ,
+            <given-names>D.</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Cho</surname>
+            ,
+            <given-names>K.</given-names>
+          </string-name>
+          , and
+          <string-name>
+            <surname>Bengio</surname>
+            ,
+            <given-names>Y.</given-names>
+          </string-name>
+          (
+          <year>2014</year>
+          ).
+          <article-title>Neural machine translation by jointly learning to align and translate</article-title>
+          .
+          <source>arXiv preprint arXiv:1409</source>
+          .
+          <fpage>0473</fpage>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref3">
+        <mixed-citation>
+          <string-name>
+            <surname>Bojar</surname>
+            ,
+            <given-names>O.</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Buck</surname>
+            ,
+            <given-names>C.</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Federmann</surname>
+            ,
+            <given-names>C.</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Haddow</surname>
+            ,
+            <given-names>B.</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Koehn</surname>
+            ,
+            <given-names>P.</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Leveling</surname>
+            ,
+            <given-names>J.</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Monz</surname>
+            ,
+            <given-names>C.</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Pecina</surname>
+            ,
+            <given-names>P.</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Post</surname>
+            ,
+            <given-names>M.</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>SaintAmand</surname>
+          </string-name>
+          , H.,
+          <string-name>
+            <surname>Soricut</surname>
+            ,
+            <given-names>R.</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Specia</surname>
+            ,
+            <given-names>L.</given-names>
+          </string-name>
+          , and
+          <string-name>
+            <surname>Tamchyna</surname>
+            ,
+            <given-names>A.</given-names>
+          </string-name>
+          (
+          <year>2014</year>
+          ).
+          <source>Findings of the 2014 Workshop on Statistical Machine Translation</source>
+          .
+          <source>In Proceedings of the Ninth Workshop on Statistical Machine Translation (WMT)</source>
+          , pages
+          <fpage>12</fpage>
+          -
+          <lpage>58</lpage>
+          , Baltimore,
+          <string-name>
+            <surname>MD</surname>
+          </string-name>
+          , USA.
+        </mixed-citation>
+      </ref>
+      <ref id="ref4">
+        <mixed-citation>
+          <string-name>
+            <surname>Bradbury</surname>
+            ,
+            <given-names>J.</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Merity</surname>
+            ,
+            <given-names>S.</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Xiong</surname>
+            ,
+            <given-names>C.</given-names>
+          </string-name>
+          , and
+          <string-name>
+            <surname>Socher</surname>
+            ,
+            <given-names>R.</given-names>
+          </string-name>
+          (
+          <year>2017</year>
+          ).
+          <article-title>Quasi-recurrent neural networks</article-title>
+          .
+          <source>In Proceedings of the Int. Conf. on Learning Representations (ICLR)</source>
+          , Toulon, France.
+        </mixed-citation>
+      </ref>
+      <ref id="ref5">
+        <mixed-citation>
+          <string-name>
+            <surname>Carl</surname>
+            ,
+            <given-names>M.</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Melero</surname>
+            ,
+            <given-names>M.</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Badia</surname>
+            ,
+            <given-names>T.</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Vandeghinste</surname>
+            ,
+            <given-names>V.</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Dirix</surname>
+            ,
+            <given-names>P.</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Schuurman</surname>
+            ,
+            <given-names>I.</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Markantonatou</surname>
+            ,
+            <given-names>S.</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Sofianopoulos</surname>
+            ,
+            <given-names>S.</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Vassiliou</surname>
+            ,
+            <given-names>M.</given-names>
+          </string-name>
+          , and
+          <string-name>
+            <surname>Yannoutsou</surname>
+            ,
+            <given-names>O.</given-names>
+          </string-name>
+          (
+          <year>2008</year>
+          ).
+          <article-title>METIS-II: low resource machine translation</article-title>
+          .
+          <source>Machine Translation</source>
+          ,
+          <volume>22</volume>
+          (
+          <issue>1</issue>
+          ):
+          <fpage>67</fpage>
+          -
+          <lpage>99</lpage>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref6">
+        <mixed-citation>
+          <string-name>
+            <surname>Cho</surname>
+            ,
+            <given-names>K.</given-names>
+          </string-name>
+          , Van Merrie¨nboer,
+          <string-name>
+            <given-names>B.</given-names>
+            ,
+            <surname>Gulcehre</surname>
+          </string-name>
+          ,
+          <string-name>
+            <given-names>C.</given-names>
+            ,
+            <surname>Bahdanau</surname>
+          </string-name>
+          ,
+          <string-name>
+            <given-names>D.</given-names>
+            ,
+            <surname>Bougares</surname>
+          </string-name>
+          ,
+          <string-name>
+            <given-names>F.</given-names>
+            ,
+            <surname>Schwenk</surname>
+          </string-name>
+          ,
+          <string-name>
+            <given-names>H.</given-names>
+            , and
+            <surname>Bengio</surname>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Y.</surname>
+          </string-name>
+          (
+          <year>2014</year>
+          ).
+          <article-title>Learning phrase representations using RNN encoder-decoder for statistical machine translation</article-title>
+          .
+          <source>arXiv preprint arXiv:1406</source>
+          .
+          <fpage>1078</fpage>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref7">
+        <mixed-citation>
+          <string-name>
+            <surname>Christen</surname>
+            ,
+            <given-names>H.</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Glaser</surname>
+            ,
+            <given-names>E.</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Friedli</surname>
+            ,
+            <given-names>M.</given-names>
+          </string-name>
+          , and
+          <string-name>
+            <surname>Renn</surname>
+            ,
+            <given-names>M.</given-names>
+          </string-name>
+          (
+          <year>2013</year>
+          ).
+          <article-title>Kleiner Sprachatlas der deutschen Schweiz</article-title>
+          . Verlag Huber, Frauenfeld, Switzerland.
+        </mixed-citation>
+      </ref>
+      <ref id="ref8">
+        <mixed-citation>
+          <string-name>
+            <surname>Chung</surname>
+            ,
+            <given-names>J.</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Cho</surname>
+            ,
+            <given-names>K.</given-names>
+          </string-name>
+          , and
+          <string-name>
+            <surname>Bengio</surname>
+            ,
+            <given-names>Y.</given-names>
+          </string-name>
+          (
+          <year>2016</year>
+          ).
+          <article-title>A characterlevel decoder without explicit segmentation for neural machine translation</article-title>
+          .
+          <source>arXiv preprint arXiv:1603</source>
+          .
+          <fpage>06147</fpage>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref9">
+        <mixed-citation>
+          <string-name>
+            <surname>Costa-jussa`</surname>
+            ,
+            <given-names>M. R.</given-names>
+          </string-name>
+          and
+          <string-name>
+            <surname>Fonollosa</surname>
+            ,
+            <given-names>J. A. R.</given-names>
+          </string-name>
+          (
+          <year>2016</year>
+          ).
+          <article-title>Character-based neural machine translation</article-title>
+          .
+          <source>In Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (ACL)</source>
+          , pages
+          <fpage>357</fpage>
+          -
+          <lpage>361</lpage>
+          , Berlin, Germany.
+        </mixed-citation>
+      </ref>
+      <ref id="ref10">
+        <mixed-citation>
+          <string-name>
+            <surname>Garner</surname>
+            ,
+            <given-names>P. N.</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Imseng</surname>
+            ,
+            <given-names>D.</given-names>
+          </string-name>
+          , and Meyer, T. (
+          <year>2014</year>
+          ).
+          <article-title>Automatic speech recognition and translation of a Swiss German dialect: Walliserdeutsch</article-title>
+          .
+          <source>In Proceedings of Interspeech</source>
+          , Singapore.
+        </mixed-citation>
+      </ref>
+      <ref id="ref11">
+        <mixed-citation>
+          <string-name>
+            <surname>Hildenbrandt</surname>
+            ,
+            <given-names>T.</given-names>
+          </string-name>
+          , Moosmu¨ller, S., and
+          <string-name>
+            <surname>Neubarth</surname>
+            ,
+            <given-names>F.</given-names>
+          </string-name>
+          (
+          <year>2013</year>
+          ).
+          <article-title>Orthographic encoding of the Viennese dialect for machine translation</article-title>
+          .
+          <source>In Proceedings of the 6th Language &amp; Technology Conference (LTC</source>
+          <year>2013</year>
+          ), pages
+          <fpage>7</fpage>
+          -
+          <lpage>9</lpage>
+          , Poznan, Poland.
+        </mixed-citation>
+      </ref>
+      <ref id="ref12">
+        <mixed-citation>
+          <string-name>
+            <surname>Irvine</surname>
+            ,
+            <given-names>A.</given-names>
+          </string-name>
+          and
+          <string-name>
+            <surname>Callison-Burch</surname>
+            ,
+            <given-names>C.</given-names>
+          </string-name>
+          (
+          <year>2013</year>
+          ).
+          <article-title>Combining bilingual and comparable corpora for low resource machine translation</article-title>
+          .
+          <source>In Proceedings of the 8th Workshop on Statistical MT</source>
+          , pages
+          <fpage>262</fpage>
+          -
+          <lpage>270</lpage>
+          , Sofia, Bulgaria.
+        </mixed-citation>
+      </ref>
+      <ref id="ref13">
+        <mixed-citation>
+          <string-name>
+            <surname>Irvine</surname>
+            ,
+            <given-names>A.</given-names>
+          </string-name>
+          and
+          <string-name>
+            <surname>Callison-Burch</surname>
+            ,
+            <given-names>C.</given-names>
+          </string-name>
+          (
+          <year>2016</year>
+          ).
+          <article-title>End-to-end statistical machine translation with zero or small parallel texts</article-title>
+          .
+          <source>Natural Language Engineering</source>
+          ,
+          <volume>22</volume>
+          (
+          <issue>4</issue>
+          ):
+          <fpage>517</fpage>
+          -
+          <lpage>548</lpage>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref14">
+        <mixed-citation>
+          <string-name>
+            <surname>Klementiev</surname>
+            ,
+            <given-names>A.</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Irvine</surname>
+            ,
+            <given-names>A.</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Callison-Burch</surname>
+            ,
+            <given-names>C.</given-names>
+          </string-name>
+          , and
+          <string-name>
+            <surname>Yarowsky</surname>
+            ,
+            <given-names>D.</given-names>
+          </string-name>
+          (
+          <year>2012</year>
+          ).
+          <article-title>Toward statistical machine translation without parallel corpora</article-title>
+          .
+          <source>In Proceedings of the 13th Conference of the European Chapter of the ACL</source>
+          , pages
+          <fpage>130</fpage>
+          -
+          <lpage>140</lpage>
+          , Avignon, France.
+        </mixed-citation>
+      </ref>
+      <ref id="ref15">
+        <mixed-citation>
+          <string-name>
+            <surname>Koehn</surname>
+            ,
+            <given-names>P.</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Och</surname>
+            ,
+            <given-names>F. J.</given-names>
+          </string-name>
+          , and
+          <string-name>
+            <surname>Marcu</surname>
+            ,
+            <given-names>D.</given-names>
+          </string-name>
+          (
+          <year>2003</year>
+          ).
+          <article-title>Statistical phrase-based translation</article-title>
+          .
+          <source>In Proceedings of the 2003 Conference of the North American Chapter of the ACL</source>
+          , pages
+          <fpage>48</fpage>
+          -
+          <lpage>54</lpage>
+          , Edmonton, Canada.
+        </mixed-citation>
+      </ref>
+      <ref id="ref16">
+        <mixed-citation>
+          <string-name>
+            <surname>Lee</surname>
+            ,
+            <given-names>J.</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Cho</surname>
+            ,
+            <given-names>K.</given-names>
+          </string-name>
+          , and
+          <string-name>
+            <surname>Hofmann</surname>
+            ,
+            <given-names>T.</given-names>
+          </string-name>
+          (
+          <year>2017</year>
+          ).
+          <article-title>Fully characterlevel neural machine translation without explicit segmentation</article-title>
+          .
+          <source>Transactions of the Association for Computational Linguistics (TACL)</source>
+          ,
+          <volume>5</volume>
+          :
+          <fpage>365</fpage>
+          -
+          <lpage>378</lpage>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref17">
+        <mixed-citation>
+          <string-name>
+            <surname>Lewis</surname>
+            ,
+            <given-names>W. D.</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Munro</surname>
+            ,
+            <given-names>R.</given-names>
+          </string-name>
+          , and
+          <string-name>
+            <surname>Vogel</surname>
+            ,
+            <given-names>S.</given-names>
+          </string-name>
+          (
+          <year>2011</year>
+          ).
+          <article-title>Crisis MT: Developing a cookbook for MT in crisis situations</article-title>
+          .
+          <source>In Proceedings of the Sixth Workshop on Statistical Machine Translation</source>
+          , pages
+          <fpage>501</fpage>
+          -
+          <lpage>511</lpage>
+          , Edinburgh, UK.
+        </mixed-citation>
+      </ref>
+      <ref id="ref18">
+        <mixed-citation>
+          <string-name>
+            <surname>Lewis</surname>
+            ,
+            <given-names>W. D.</given-names>
+          </string-name>
+          (
+          <year>2010</year>
+          ).
+          <article-title>Haitian Creole: How to build and ship an MT engine from scratch in 4 days, 17 hours, and 30 minutes</article-title>
+          .
+          <source>In Proceedings of the 14th Annual Conference of the European Association for Machine Translation (EAMT)</source>
+          , Saint-Raphae¨l, France.
+        </mixed-citation>
+      </ref>
+      <ref id="ref19">
+        <mixed-citation>
+          <string-name>
+            <surname>Ling</surname>
+            ,
+            <given-names>W.</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Trancoso</surname>
+            ,
+            <given-names>I.</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Dyer</surname>
+            ,
+            <given-names>C.</given-names>
+          </string-name>
+          , and
+          <string-name>
+            <surname>Black</surname>
+            ,
+            <given-names>A. W.</given-names>
+          </string-name>
+          (
+          <year>2015</year>
+          ).
+          <article-title>Character-based neural machine translation</article-title>
+          .
+          <source>arXiv preprint arXiv:1511</source>
+          .
+          <fpage>04586</fpage>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref20">
+        <mixed-citation>
+          <string-name>
+            <surname>Papineni</surname>
+            ,
+            <given-names>K.</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Roukos</surname>
+            ,
+            <given-names>S.</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Ward</surname>
+            ,
+            <given-names>T.</given-names>
+          </string-name>
+          , and
+          <string-name>
+            <surname>Zhu</surname>
+          </string-name>
+          , W.-J. (
+          <year>2002</year>
+          ).
+          <article-title>BLEU: a method for automatic evaluation of machine translation</article-title>
+          .
+          <source>In Proceedings of the 40th Annual Meeting on Association for Computational Linguistics (ACL)</source>
+          , pages
+          <fpage>311</fpage>
+          -
+          <lpage>318</lpage>
+          , Philadelphia, PA, USA.
+        </mixed-citation>
+      </ref>
+      <ref id="ref21">
+        <mixed-citation>
+          <string-name>
+            <surname>Pourdamghani</surname>
+            ,
+            <given-names>N.</given-names>
+          </string-name>
+          and
+          <string-name>
+            <surname>Knight</surname>
+            ,
+            <given-names>K.</given-names>
+          </string-name>
+          (
+          <year>2017</year>
+          ).
+          <article-title>Deciphering related languages</article-title>
+          .
+          <source>In Proceedings of the 2017 Conference on Empirical Methods in Natural Language Processing (EMNLP)</source>
+          , pages
+          <fpage>2513</fpage>
+          -
+          <lpage>2518</lpage>
+          , Copenhagen, Denmark.
+        </mixed-citation>
+      </ref>
+      <ref id="ref22">
+        <mixed-citation>
+          <string-name>
+            <surname>Russ</surname>
+            ,
+            <given-names>C. V. J.</given-names>
+          </string-name>
+          (
+          <year>1990</year>
+          ).
+          <article-title>High Alemannic</article-title>
+          . In Charles V. J. Russ, editor,
+          <source>The Dialects of Modern German. A linguistic survey</source>
+          , pages
+          <fpage>364</fpage>
+          -
+          <lpage>393</lpage>
+          . Routledge, London, UK.
+        </mixed-citation>
+      </ref>
+      <ref id="ref23">
+        <mixed-citation>
+          <string-name>
+            <surname>Russ</surname>
+            ,
+            <given-names>C. V. J.</given-names>
+          </string-name>
+          (
+          <year>1994</year>
+          ).
+          <article-title>The German language today. A linguistic introduction</article-title>
+          .
+          <source>Routledge</source>
+          , London, UK.
+        </mixed-citation>
+      </ref>
+      <ref id="ref24">
+        <mixed-citation>
+          <string-name>
+            <surname>Samardzˇic´</surname>
+            ,
+            <given-names>T.</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Scherrer</surname>
+            ,
+            <given-names>Y.</given-names>
+          </string-name>
+          , and
+          <string-name>
+            <surname>Glaser</surname>
+            ,
+            <given-names>E.</given-names>
+          </string-name>
+          (
+          <year>2015</year>
+          ).
+          <article-title>Normalising orthographic and dialectal variants for the automatic processing of Swiss German</article-title>
+          .
+          <source>In Proceedings of the 7th Language and Technology Conference (LTC)</source>
+          , Poznan, Poland.
+        </mixed-citation>
+      </ref>
+      <ref id="ref25">
+        <mixed-citation>
+          <string-name>
+            <surname>Samardzˇic´</surname>
+            ,
+            <given-names>T.</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Scherrer</surname>
+            ,
+            <given-names>Y.</given-names>
+          </string-name>
+          , and
+          <string-name>
+            <surname>Glaser</surname>
+            ,
+            <given-names>E.</given-names>
+          </string-name>
+          (
+          <year>2016</year>
+          ).
+          <article-title>ArchiMob - a corpus of spoken Swiss German</article-title>
+          .
+          <source>In Proceedings of the 10th Int. Conf. on Language Resources and Evaluation (LREC</source>
+          <year>2016</year>
+          ), Portorozˇ, Slovenia.
+        </mixed-citation>
+      </ref>
+      <ref id="ref26">
+        <mixed-citation>
+          <string-name>
+            <surname>Scherrer</surname>
+            ,
+            <given-names>Y.</given-names>
+          </string-name>
+          and Ljubesˇic´,
+          <string-name>
+            <surname>N.</surname>
+          </string-name>
+          (
+          <year>2016</year>
+          ).
+          <article-title>Automatic normalisation of the Swiss German ArchiMob corpus using character-level machine translation</article-title>
+          .
+          <source>In Proceedings of the 13th Conference on Natural Language Processing (KONVENS)</source>
+          , Bochum, Germany.
+        </mixed-citation>
+      </ref>
+      <ref id="ref27">
+        <mixed-citation>
+          <string-name>
+            <surname>Scherrer</surname>
+            ,
+            <given-names>Y.</given-names>
+          </string-name>
+          (
+          <year>2012a</year>
+          ).
+          <article-title>Generating Swiss German sentences from Standard German: a multi-dialectal approach</article-title>
+          .
+          <source>Ph.D. thesis</source>
+          , University of Geneva, Switzerland.
+        </mixed-citation>
+      </ref>
+      <ref id="ref28">
+        <mixed-citation>
+          <string-name>
+            <surname>Scherrer</surname>
+            ,
+            <given-names>Y.</given-names>
+          </string-name>
+          (
+          <year>2012b</year>
+          ).
+          <article-title>Machine translation into multiple dialects: The example of Swiss German</article-title>
+          .
+          <source>In 7th SIDG Congress - Dialect 2.0</source>
+          , Vienna, Austria.
+        </mixed-citation>
+      </ref>
+      <ref id="ref29">
+        <mixed-citation>
+          <string-name>
+            <surname>Sennrich</surname>
+            ,
+            <given-names>R.</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Haddow</surname>
+            ,
+            <given-names>B.</given-names>
+          </string-name>
+          , and
+          <string-name>
+            <surname>Birch</surname>
+            ,
+            <given-names>A.</given-names>
+          </string-name>
+          (
+          <year>2016</year>
+          ).
+          <article-title>Neural machine translation of rare words with subword units</article-title>
+          .
+          <source>In Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (ACL)</source>
+          , volume
+          <volume>1</volume>
+          , pages
+          <fpage>1715</fpage>
+          -
+          <lpage>1725</lpage>
+          , Berlin, Germany.
+        </mixed-citation>
+      </ref>
+      <ref id="ref30">
+        <mixed-citation>
+          <string-name>
+            <surname>Wu</surname>
+            ,
+            <given-names>Y.</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Schuster</surname>
+            ,
+            <given-names>M.</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Chen</surname>
+            ,
+            <given-names>Z.</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Le</surname>
+            ,
+            <given-names>Q. V.</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Norouzi</surname>
+            ,
+            <given-names>M.</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Macherey</surname>
+            ,
+            <given-names>W.</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Krikun</surname>
+            ,
+            <given-names>M.</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Cao</surname>
+            ,
+            <given-names>Y.</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Gao</surname>
+            ,
+            <given-names>Q.</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Macherey</surname>
+            ,
+            <given-names>K.</given-names>
+          </string-name>
+          , et al. (
+          <year>2016</year>
+          ).
+          <article-title>Google's neural machine translation system: Bridging the gap between human and machine translation</article-title>
+          .
+          <source>arXiv preprint arXiv:1609</source>
+          .
+          <fpage>08144</fpage>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref31">
+        <mixed-citation>
+          <string-name>
+            <surname>Zbib</surname>
+            ,
+            <given-names>R.</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Malchiodi</surname>
+            ,
+            <given-names>E.</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Devlin</surname>
+            ,
+            <given-names>J.</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Stallard</surname>
+            ,
+            <given-names>D.</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Matsoukas</surname>
+            ,
+            <given-names>S.</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Schwartz</surname>
+            ,
+            <given-names>R.</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Makhoul</surname>
+            ,
+            <given-names>J.</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Zaidan</surname>
+            ,
+            <given-names>O. F.</given-names>
+          </string-name>
+          , and
+          <string-name>
+            <surname>Callison-Burch</surname>
+            ,
+            <given-names>C.</given-names>
+          </string-name>
+          (
+          <year>2012</year>
+          ).
+          <article-title>Machine translation of Arabic dialects</article-title>
+          .
+          <source>In Proceedings of the 2012 Conference of the North American Chapter of the ACL (NAACL-HLT)</source>
+          , pages
+          <fpage>49</fpage>
+          -
+          <lpage>59</lpage>
+          , Montreal, Canada.
+        </mixed-citation>
+      </ref>
+    </ref-list>
+  </back>
+</article>

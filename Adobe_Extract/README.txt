@@ -1,0 +1,1 @@
+The downloaded zip file contains your private key, credentials and personalized code samples. Please store your private key securely, since Adobe does not retain a copy of it. You can replace with your own public key on I/O Console.

@@ -1,0 +1,1105 @@
+<!DOCTYPE article PUBLIC "-//NLM//DTD JATS (Z39.96) Journal Archiving and Interchange DTD v1.0 20120330//EN" "JATS-archivearticle1.dtd">
+<article xmlns:xlink="http://www.w3.org/1999/xlink">
+  <front>
+    <journal-meta />
+    <article-meta>
+      <title-group>
+        <article-title>Discontinuous Piecewise Polynomial Neural Networks</article-title>
+      </title-group>
+      <contrib-group>
+        <contrib contrib-type="author">
+          <string-name>Editor: Somebody</string-name>
+          <xref ref-type="aff" rid="aff0">0</xref>
+        </contrib>
+        <aff id="aff0">
+          <label>0</label>
+          <institution>John Loverich N In nity Computational Sciences 638 Beauprez Avenue Lafayette CO 80026</institution>
+          ,
+          <country country="US">USA</country>
+        </aff>
+      </contrib-group>
+      <abstract>
+        <p>An arti cial neural network is presented where each link is represented by a grid of weights de ning a series of piecewise polynomial functions with discontinuities between each polynomial. The polynomial order ranges from rst to fth order. The unit averages the input values from each link. A back propagation technique that works with discontinuous link functions and activation functions is presented. The use of discontinuous links function means that only a subset of the network is active for a given input and so only a subset of the network is trained for a particular training example. Unit dropout is used for regularization and a parameter free weight update is used. Better performance is obtained by moving from piecewise linear links to piecewise quadratic and higher order links. The algorithm is tested on the MNIST data set, using multiple autoencoders, with good results.</p>
+      </abstract>
+    </article-meta>
+  </front>
+  <body>
+    <sec id="sec-1">
+      <title>1. Introduction Abstract</title>
+      <p>
+        method as described by Schaul et al. (2013) is used. Lagrange polynomials are used to
+describe the piecewise polynomial functions and, as such, the weights of the polynomial
+are the actual value of the polynomial at speci c locations. In this paper, the link is the
+important computational element, but this approach can just as well be applied to the
+unit. Piecewise polynomial approaches have been investigated in the CMAC architecture
+        <xref ref-type="bibr" rid="ref6">(Lane et al., 1992)</xref>
+        and more recently the recti ed linear unit
+        <xref ref-type="bibr" rid="ref11 ref9">(Nair and Hinton, 2010)</xref>
+        , has
+become a popular activation function which is piecewise linear . High order neural network
+using higher order weighting terms are described by several authors including Giles and
+Maxwell (1987); Shin and Ghosh (1992); Huang et al. (2004); Foresti and Dolso (2004);
+Fallahnezhad et al. (2011) and functional link arti cial neural networks (FLANN) by Pao
+(1989); Patra and Kot (2002); Purwar et al. (2007), which is the approach used in this
+paper. Discontinuous neural networks have been discussed in many articles, especially with
+respect to recurrent neural network including Forti and Nistri (2003); Liu and Cao (2010);
+Gavalda and Siegelmann (1999) focused on convergence state estimation and stability and
+by Zhang et al. (2002) where a unique recurrent high order algorithm is derived for nancial
+modeling, but where additional free parameters (weights) are added to the unit and a few
+simulations are performed with piecewise high order elements. There is very little work on
+multi-layer high order discontinuous polynomial networks. In this paper the algorithm is
+tested by performing simple curve tting through the sine wave using a single link, and
+then classi cation with the Pima Indians data set and the MNIST data set. The MNIST
+test is performed using multiple autoencoders. The unique contribution of this paper is the
+application and development of novel algorithm, using discontinuous piecewise polynomial
+approximation, in a multi-layer neural network as well as the demonstration of it use with
+dropout (Hinton, 2002) and the parameter free weight update described by Schaul et al.
+(2013). The algorithm opens the possibility of using a variety of complicated, discontinuous
+elements in an arti cial neural network using back propagation.
+      </p>
+      <p>Section describes the algorithm used in this paper including backpropagation with
+discontinuities, weight initialization and link input range selection. In Section we
+demonstrate the algorithm on 3 problems: a simple 1D function approximation; the Pima Indians
+diabetes data set; the MNIST data set. In Section we conclude the paper.
+2. Algorithm</p>
+      <p>De nitions used in this paper are de ned in table 1. There are two natural ways to
+apply higher order approximations in arti cial neural networks. The rst is to replace the
+single weight at the link with multiple adjustable weights describing a more complicated
+link function - this is a functional link neural network (FLANN) as described by Pao (1989)
+and demonstrated by Patra et al. (1999). The alternative is to add adjustable parameters
+to the unit that describe a changing activation function, in this case adjustable parameters
+exist in both the unit and the link. In this paper we chose the FLANN approach as it can
+be written slightly more compactly while maintaining weights de ned at the link.</p>
+      <p>The error correction algorithm used is backpropagation as described by Rumelhart et al.
+(1988) applied to a FLANN with a minor modi cation described in Section . The weight
+update rule is de ned by using the parameter free weight update rule described by Schaul
+et al. (2013). A slight modi cation to this rule is that the maximum learning rate is set
+to 0.9. The network description is that of a standard feed forward network, see Figure 1,</p>
+      <sec id="sec-1-1">
+        <title>Link</title>
+        <p>Sub Link
+!i
+!j ;
+Bi
+Nin
+Nout
+Np
+xi
+xj
+ym i
+yd i
+Fi
+yi
+E
+tNp</p>
+        <p>Is the connection between two units.</p>
+        <p>A link is split into sub links.</p>
+        <p>The ith weight of a sub link.
+the th weight of the jth link.</p>
+        <p>The ith basis function of a sub link.</p>
+        <p>The number of active links into a unit.</p>
+        <p>The number of active links out of a unit.</p>
+        <p>The number of Chebyshev-Lobatto nodes.</p>
+        <p>The input to the ith link.</p>
+        <p>The jth Chebyshev-Lobatto node.</p>
+        <p>The measured output value for output link i
+The desired output value for output link i
+The output function for link i.</p>
+        <p>The output for link i.</p>
+        <p>The network error for a single input.</p>
+        <p>
+          Time to completion using sub links with Np nodes
+with input links and output links added. Labels for a network element are shown in gure
+2. The main di erences of the algorithm compared to a standard network
+          <xref ref-type="bibr" rid="ref14">(Rumelhart
+et al., 1988)</xref>
+          are: (1) there are multiple weights per link; (2) No bias units are used; (3) the
+unit averages the input signal to produce an output instead of applying a more complex
+activation function; (4) input/output links are added which can be used to normalize and
+shift the data to the desired input/output range.
+        </p>
+        <p>The weight function of a sub link is described by the following equation,
+with the basis functions given by the Lagrange polynomials
+(1)
+f (x) = X wiBi (x) ;</p>
+        <p>i
+Bj =</p>
+        <p>Y</p>
+        <p>(x
+0 m k;m6=j (xj
+xm) :
+xm)
+The Lagrange polynomial Bj is useful because it has the value 1 at x = xj and has the
+value 0 at all other xi. The interpolation nodes are given by the Chebyshev-Lobatto nodes,
+these di er from pure Chebyshev nodes in that the end points of the domain are included.
+The Chebyshev-Lobatto nodes are given by,
+where k ranges from 0 to Np 1 and Np is the total number of Chebyshev-Lobatto points.
+This means that in Equation () the value of the function at xj is wj. Using this approach we
+can easily limit the range of a polynomial interpolation by limiting the range of the weights
+xj = cos</p>
+        <p>k
+Np
+1</p>
+        <p>;
+wi. For clarity we provide the polynomials for both a linear and quadratic interpolation.
+In the linear case (assuming x0 = 1 and x1 = 1)</p>
+        <p>B0 =
+1
+2
+(x
+1)
+In the quadratic case we assume x0 =</p>
+        <p>B1 =
+1</p>
+        <p>(x + 1)
+2
+1, x1 = 0, x2 = 1 the basis functions are
+B0 =
+x (x</p>
+        <p>1)
+B1 =
+(x + 1) (x</p>
+        <p>1)
+B2 =</p>
+        <p>(x + 1) x
+1
+2</p>
+        <p>In addition to the high order weighting, discontinuities are used along with the piecewise
+polynomial approximation. This means that the function is di erent depending on the range
+of the input variable x. In particular we have the de nition
+0 if [rmin</p>
+        <p>if [a0
+if [an</p>
+        <p>x &lt; a0] fi 0 (xi) 1
+x &lt; a1] fi 1 (xi) C
+::: AC
+x rmax] fi n (xi)
+(2)</p>
+        <p>At the unit, the average of the incoming signals is computed. The unit could be a
+sigmoid, but it is not needed since the non-linearity is provided by the presence of at least
+one discontinuity, so only a simple average is used as the activation function of the unit.
+g =</p>
+        <p>2 N 3
+1</p>
+        <p>Nin 4 Xj Fj (xj)5
+The averaging is important because the function Fi only has a valid solution in a nite
+range so it is important to guarantee that any signal passed to Fi is within that range. This
+can easily be accomplished by choosing initial rmin and rmax correctly. Nin is the number
+of input signals (not the total number of input sub links).</p>
+        <p>The idea to use a discontinuous piecewise polynomial comes from a pair of units with
+multiple links between the units, see Fig. 3. Only a single link is active depending on the
+output value of the unit. Equation () can be described as a set of links between two units
+where only one link passes an output signal for a given input signal. As a result, the links
+are grouped together in a bundle (Equation ) and shown in gure 4. The standard link
+of a neural network described in this paper then consists of one or more sub links. The
+link function can now be thought of as a one dimensional grid with piecewise polynomial
+elements within each grid cell as shown in Figure 5.</p>
+        <sec id="sec-1-1-1">
+          <title>2.1 Backpropagation with Discontinuities</title>
+          <p>A network using a link with at least two sub links has the following property: for a
+given input signal only a subset of the network is active. When training is performed,
+only the weights of the activated sub links are updated. Figure 6 shows a 3-layer network
+consisting of two links, each link with two sub links. Figure 7 shows this same network
+with all the possible paths that a signal can take from input to output. It is evident from
+Figure 7 that there are 4 networks where each network shares some weights with the other
+networks. It's easy to over train this type of network since each signal only e ects a subset
+of the weights. To resolve over training the \dropout" regularization technique is used as
+described in Hinton et al. (2012).</p>
+          <p>The key to getting an algorithm working with functions that are discontinuous is a
+backpropagation algorithm that works for discontinuous functions. The implementation is
+incredibly simple and the only requirement is to remove idle sub links from the back
+propagation step. After a signal has been propagated through the network, back propagation is
+performed, but only on the subset of the network active for the input signal. This means
+that for each link, only one sub link is active, and so back propagation is performed only on
+that sub link, all other sub links in the link are ignored. When weights are updated, they
+are only updated in the links that red during the forward step.</p>
+          <p>For clarity we include a description of the back propagation applied to this network,
+recall that backpropagation is only applied to the active sub network.</p>
+          <p>Forward propagate input signal
+Record each sub link that is activated for the given input signal
+Back propagate error signal through active sub links
+Update weights of the active sub link
+Ensure that weights are within desired range, wi = min (wmax; max (wmin; wi))
+Repeat with a new input signal
+The error at the output of the network is measured as</p>
+          <p>E =</p>
+          <p>XNi 1</p>
+          <p>2
+i
+(ym;i</p>
+          <p>yd;i)2
+= ym;i</p>
+          <p>yd;i
+The derivative of a link output with respect to a link input is given by
+Although, Fi is discontinuous at points, it is entirely continuous within the range of the
+derivative. If the derivative happens to be required exactly at the discontinuity, the
+derivative is taken only in the activated sub link (either left or right of the discontinuity). The</p>
+          <p>Nin
+derivative across a unit to one of the unit input links is
+The derivative of the weight with respect to the link output is</p>
+        </sec>
+      </sec>
+      <sec id="sec-1-2">
+        <title>Error at the top of the link in the output link</title>
+      </sec>
+      <sec id="sec-1-3">
+        <title>Error at the top of the link one layer in</title>
+        <p>Ei =
+Ej =
+In the speci c case of an averaging unit, the error is</p>
+        <p>Ej =
+The rule one layer in can be applied to all further layers. The error in the weight is then
+=
+At this point, all weight update rules that work for standard neural networks will work for
+this algorithm as well. A simple example is the momentum update
+wn;+j1 = wn;j
+Although the simple update works for this problem, we instead use Schaul's parameter free
+update Schaul et al. (2013).</p>
+        <sec id="sec-1-3-1">
+          <title>2.2 Accelerated Backpropagation</title>
+          <p>The backpropagation algorithm described is the standard algorithm applied to this
+model. It was pointed out by Aizenberg and Moraga (2007) that a simple modi cation to
+the back propagation algorithm distributes the error more evenly among units. In particular,
+the algorithm shown suggests that an error at the unit is 1=Nin times the error at the top of
+the output link (the links leaving the unit). The error at the output of the unit is distributed
+evenly over the input links, and therefore the more input links there are, the smaller the
+error that each input link receives. A simple way to remedy this problem is to replace the
+back propagation 1=Nin (one over the number of active links entering a unit) with 1=Nout
+(one over the number of links leaving a unit) which will result in a more even distribution
+of weight change throughout the network and faster convergence. This technique is used in
+this paper.
+Figure 6: Two stacked bundles and their associated units. In this case each bundle has two
+sub links and therefore a signal can take one of two paths for each bundle.
+number of points 2
+3
+4
+5
+6
+7
+8
+9
+10
+pn;max</p>
+        </sec>
+        <sec id="sec-1-3-2">
+          <title>2.3 Weight Initialization</title>
+          <p>Weight initialization is a huge concern for neural networks (Yam and Chow (2000)). In
+this paper, the weights within a link are initialized such that F (x) (Equation ) is a line
+across the link, the equation is given as
+!i =</p>
+          <p>xi rmin
+rmax
+rmin
+!a + !a ;
+(3)
+where wa is chosen with a uniform random distribution in the range [ 1; 1].
+2.4 Choosing Ranges rmin and rmax</p>
+          <p>Choosing proper ranges for the links is key to getting good solutions. The weights used
+in the Lagrange polynomial interpolation do not mark the limits of the polynomial value
+except in the linear case. Figure 8 shows 5 Lagrange polynomials with maximum overshoot
+for weights within the desired range - note that only in the linear case is the range limited by
+the values of the weights. Instead, if the weights are in the range [ !max; !max] then a given
+choice of weights will produce a maximum overshoot pn;max!max where values of pn;max are
+given in Table 2. For a given input, the maximum possible output would be pn;max!max
+which could then be the input to the next link. The input range for each link should be set
+to [ pn;max!max; pn;max!max] to account for these overshoots. One potential consequence of
+this choice of range is input value decay. Consider a deep network with only one unit per
+layer and one link between units. Each layer is initialized using Equation () with wa = 1
+and input range [ pn;max; pn;max] Suppose the input value is xin then as the input value
+passes through each layer it will be compressed if rmax = pn;max &gt; !max by the ratio
+!max=rmax. After passing through n layers, the output signal will be (!max=rmax)n xin. As
+a consequence, the output from each layer is pushed towards the value 0 which means fewer
+and fewer of the network sub links are used. Fortunately, two things can occur to help the
+situation: (1) if a discontinuity is at the origin rapid learning can still occur since if a signal
+is either side of 0 it will adjust disconnected weights; (2) as the network is trained, more
+and more of the sub links are used. It would seem randomly initializing the weights could
+alleviate this problem, however, we've found that symmetric initialization as in Equation
+() works better. In this paper we use rmax = rmin = pn;max where pn;max is provided
+in Table 2 which gives the maximum overshoot for the polynomials when the weights are
+constrained to be between 1 and -1.</p>
+        </sec>
+        <sec id="sec-1-3-3">
+          <title>2.5 Automatic Normalization</title>
+          <p>Since input links and output links are used in this network and the range and weight is
+arbitrary, data does not need to be normalized before passing to the network. Normalization
+automatically occurs for input links by the user's choice of rmin and rmax for the input links,
+and by the users choice of wmin and wmax for the output links (see Figure 1 for de nitions
+of input and output links). For example, if the MNIST data is being used and image values
+range from 0 to 255, simply set rmin = 0 and rmax = 255 in the input link. Similarly, if the
+output values should be between 0 and 100 then set the weight limits in the output link to
+wmin = 0 and wmax = 100. Although not particularly important, this is a convenient way
+to deal with input and output without a separate normalization step.
+3. Results</p>
+          <p>In this section we use the network on 3 problems. The rst is the simple sine wave to
+illustrate how the functional link approximates this function. This provides clarity for how
+the link in this network di ers from the single weight used in the standard approach. The
+second problem uses the Pima Indians data set to predict if a patient has diabetes or not.
+This is a small problem and is used to show the e ectiveness of dropoutHinton et al. (2012)
+for this type of network. Finally, results for the MNIST problem are computed with 10
+autoencoders (one for each digit) in a manner similar to that described in Kamyshanska
+and Memisevic (2013), though using the reconstruction error to determine the digit. All
+results are computed using online backpropagation. In this problem, all input and output
+links have xed weights and the link function is linear with !0 = 1 and !n = 1. Input
+links have a range [rmin; rmax] dependent on the range of the input parameters.</p>
+        </sec>
+        <sec id="sec-1-3-4">
+          <title>3.1 Sine Wave</title>
+          <p>A sine wave is approximated using a single link with several sub links showing the
+function approximation capability of a single link. This problem is illustrative of how the
+functions in each sub link are combined to produce the full function. Figure 9 shows a
+sine wave approximated using a bundle with 3 and 5 linear sub links where discontinuity is
+allowed between the sub links. Figure 10 shows the same sine wave approximated using a
+link with 2 and 3 quadratic sub links with discontinuity between them. Note that the linear
+approximation has 6, and 10 degrees of freedom (for 3 and 5 ranges) and the quadratic
+approximation has 6 and 9 degrees of freedom (for 2 and 3 ranges). Despite having fewer
+degrees of freedom the quadratic approximation is substantially better than the linear
+approximation. This just illustrates the fact that higher order polynomial approximations
+require fewer degrees for freedom (for the same accuracy) than lower order approximations
+during function approximation.</p>
+        </sec>
+        <sec id="sec-1-3-5">
+          <title>3.2 Pima Indians</title>
+          <p>The Pima Indians test is a simple problem with 8 inputs and 2 outputs and has been
+a standard benchmark in the past Knowler et al. (1978); Shanker (1996). It's also a very
+good example of the e ectiveness of dropout since it is easy to over t the problem and
+so we've chosen to present it here. Table 3 shows the case where unit dropout is used
+on the hidden layers. 50% of the units are turned o during training and a new 50% are
+turned o every 10 iterations. Table 4 shows the case where no dropout is used. The error
+rates presented are averaged over 10 runs where 20% of the Pima data was used as a test
+set and the other 80% used for training. The training set was selected randomly for each
+of the 10 runs, but all examples used the same 10 training and test sets. Each run was
+performed with 8 units in the rst layer, 16 in the second and 2 in the last layer. The layers
+were fully connected. The results show that dropout signi cantly improves the test set
+error (generalization) while increasing the training error (reducing over training). In this
+problem, having one discontinuity (2 sub links) signi cantly improves the linear (Np = 2)
+link over the case with no discontinuity. In this particular problem, for links with higher
+order accuracy (Np &gt; 2) good results can be achieved without any discontinuities. This
+phenomena is generally not repeated for other problems, such as MNIST where at least
+1 discontinuity is required to get good results. The key di erence between using a linear
+polynomial in the link versus a quadratic (3 point) or higher order polynomial is that adding
+layers to the linear link produces an output that is still linear. If an nth order polynomial
+is used as the link function, the output polynomial function is of order pn k where k is the
+number of layers. If in addition, discontinuities are included in the link, these discontinuities
+serve to provide multiple interacting polynomial networks.</p>
+          <p>Np
+sub links
+% test error</p>
+          <p>% training error
+28.5
+20.2
+20.0
+14.4
+9.5
+5.6
+25.3
+16.5
+13.2
+6.2
+Np
+sub links
+% test error</p>
+          <p>% training error
+28.0
+20.0
+19.3
+9.6
+5.3
+2.2
+25.9
+12.5
+11.1
+2.07</p>
+        </sec>
+        <sec id="sec-1-3-6">
+          <title>3.3 Handwritten Digit Recognition</title>
+          <p>
+            The MNIST is a standard benchmark of neural network codes on optical character
+recognition
+            <xref ref-type="bibr" rid="ref7">(LeCun et al., 1998)</xref>
+            . The MNIST data set consists of a 60,000 image training
+set of 10 digits written from NIST employees and high schoolers. In addition there is
+a 10,000 image test set that is used to test the generalization capability of the network
+after the network is trained on the training set. The images consist of 28X28 pixel 1
+byte/pixel gray scale images. As such, there are 728 input links (one for each input pixel)
+and 10 output links (one for each digit). The number of hidden layers and the number of
+neurons in those hidden layers is variable. The digit recognition problem is solved using
+a multi-layer autoencoder for each digit. There are 10 autoencoders trained with each of
+the 10 digits. The Autoencoder 0 is only trained on the digit 0 examples, autoencoder
+1 is only trained on the digit 1 examples etc... At the end, the test set examples are
+run through each autoencoder, the predicted digit is determined by the autoencoder that
+produces the smallest error for the given input. The error used in this paper is reconstruction
+error, improvements in this error measure for this approach to classi cation are explored
+in Kamyshanska and Memisevic (2013) which might allow us to obtain even better results.
+Table 5 and 6 shows results for various networks on the MNIST benchmark. Tests were
+run with either 200,000 or 400,000 presentations of each networks test set, corresponding
+to roughly 33 and 67 epochs respectively. The following labels and de nitions are used in
+tables 5 and 6.
+          </p>
+          <p>Np - the number of Chebyshev-Lobatto points in the interpolation.
+layers - the number of neurons in each hidden layer.</p>
+          <p>DOF - degrees of freedom which is just Np
+sublinks
+sub links - the number of sub links in each link.
+width - the width of the stencil as de ned in Figure 11.
+% test error - (% of test images classi ed incorrectly).
+% training error - (% of training images classi ed incorrectly).</p>
+          <p>steps - the number of times images were presented for training.</p>
+          <p>Table 5 shows MNIST results for Np = 2 to 6 varying the number of neighbors used in
+the multi-layer autoencoder. At a width of 7, a signal from the upper left corner of the input
+image is able to interact with the signal from the lower right. Test set accuracy improves as
+the width is increased, but convergence also generally slows down. Results with Np = 3; 4; 5
+are substantially better than those produced for Np = 2. In addition, resulting test set
+accuracy tends to increase with increasing width. Unsurprisingly, the greater connectivity
+generally results in a better solution. In addition however, greater polynomial order also
+improves accuracy, especially moving from Np = 2 to Np = 3.</p>
+          <p>
+            Table 6 shows MNIST results for Np = 2 to 6 varying the number of sub links. The
+number of sub links are varied to determine whether the generally improved accuracy is a
+result of the increased number of degrees of freedom or due to the higher order polynomial
+representation. In several runs of 6 the performance is very poor, rst of all, in all cases
+with only 1 sub link (no discontinuity) the performance is bad, though this is expected
+            <xref ref-type="bibr" rid="ref8">(Leshno et al., 1993)</xref>
+            . At least 1 discontinuity should be used. In addition, poor results
+were observed in Np = 4 with sub links = 3 and Np = 6 with sub links = 3. It's thought
+that there are 2 causes for this. (1) In deep networks the initial weight values are random
+and the output of each link is averaged at the unit which tends to focus that output around
+the value 0. As the number of layers is increased the output of each unit approaches 0 more
+closely. If an odd number of sub links are used, the link function is smooth at 0. If an even
+number of sub links are used then there is a discontinuity at 0. The discontinuity allows for
+rapid changes of weight near the origin, and the result is less likely to become stuck. In both
+Np
+layers sub links
+width
+% test error
+% training error steps
+layers sub links
+          </p>
+          <p>DOF
+width
+% test error
+% training error steps
+4
+4
+4
+4
+4
+4
+4
+4
+4
+4
+cases described, the number of sub links is odd so there is no discontinuity at the origin
+of each link function. (2) For Np &gt; 2 this problem is exacerbated by input compression
+(described in Section ) since rmax &gt; wmax. A remedy for this problem might include (1) a
+more sophisticated initialization scheme and (2) an alternative to the averaging occurring
+at the unit that pushes the incoming signal away from the origin. These approaches are not
+investigated in this paper.
+Np</p>
+          <p>sub links tNp (seconds) tNp =tN2
+2
+3
+4
+5
+6
+Np
+2
+3
+4
+6
+2
+2
+2
+2
+2
+50
+61
+77
+90
+108</p>
+          <p>sub links tNp (seconds) tNp =tN2</p>
+        </sec>
+        <sec id="sec-1-3-7">
+          <title>3.4 Timing Results</title>
+          <p>A critical question is whether that added complexity and computational time of Np &gt; 2
+is really worth the e ort. Both the derivatives and function evaluations become more
+complex as Np increases.</p>
+          <p>In Tables 7 and 8 below we run the MNIST problem as above with 5 layers, and width
+6 with the other parameters speci ed in the table. The results were computed by running
+the test case 10 times and averaging the main loop time. Adding additional sub links is not
+cost free, Np = 2 with 6 sub links is 12% slower than Np = 2 with 2 sub links, but with 3
+times the degrees of freedom - this is despite the fact the only one sub link is ever active.
+In addition increasing the number of sub links with Np = 2 to 12 and the time jumps to
+111 seconds (122% slower than with 2 sub links) for 1000 iterations. Table 7 shows that
+Np = 6 is only 2.2 times slower than Np = 2 despite having 3 times the degrees of freedom.
+Similarly, in Table 8 with the same number of degrees of freedom Np = 6 is only 1.83 times
+slower on average. It was observed in section that even for the same number of degrees of
+freedom Np = 2 results in a larger error 2.06% compared Np = 6 at 1.87% in Table 5 this
+is despite Np = 2 running for twice as many steps, a similar result is observed in Table 6.
+For the same number of degrees of freedom, moving to higher order accuracy, versus using
+lower accuracy with more sub links, is the more e cient approach.</p>
+          <p>Though performance is highly implementation dependent, the conclusion we draw here is
+that increasing polynomial order (beyond piecewise linear, Np = 2) is more computationally
+e cient for the equivalent number of degrees of freedom.</p>
+        </sec>
+      </sec>
+    </sec>
+    <sec id="sec-2">
+      <title>4. Conclusion</title>
+      <p>A novel approach to arti cial neural networks is described where the traditional neuronal
+non-linearity is eliminated in favor of a discontinuous piecewise polynomial discretization
+of the weights space of each link. The use of discontinuous piecewise polynomial
+approximations leads to a network, which is the superposition of multiple networks with a set of
+shared weights as only a subset of the total network is active for each input signal. Standard
+backpropagation is used for error correction with the modi cation that sub links that do
+not re are not included in the backpropagation step. The dropout technique Hinton et al.
+(2012) is used to minimize over tting. It is found that piecewise quadratic polynomials
+generally produce much better results than piecewise linear for the same number of degrees
+of freedom and that moving to increasingly higher order polynomials can provide additional
+improvement. We believe the network described is easier to analyze than standard networks
+using hyperbolic tangent type non linearities and opens up the possibility of using all sorts
+of complicated discontinuous elements (both links and units). We have successfully
+demonstrated good solutions to the MNIST digit recognition test and expect more complicated
+problems can be solved as well using this algorithm.</p>
+      <p>References
+Igor Aizenberg and Claudio Moraga. Multilayer feedforward neural network based on
+multivalued neurons (mlmvn) and a backpropagation learning algorithm. Soft Computing, 11
+(2):169{183, 2007.</p>
+      <p>Yoshua Bengio. Learning deep architectures for ai. Foundations and trends R in Machine</p>
+      <p>Learning, 2(1):1{127, 2009.</p>
+      <p>Mehdi Fallahnezhad, Mohammad Hassan Moradi, and Salman Zaferanlouei. A hybrid higher
+order neural classi er for handling classi cation problems. Expert Systems with
+Applications, 38(1):386{393, 2011.</p>
+      <p>Gian Luca Foresti and T Dolso. An adaptive high-order neural tree for pattern recognition.</p>
+      <p>Systems, Man, and Cybernetics, Part B: Cybernetics, IEEE Transactions on, 34(2):988{
+996, 2004.</p>
+      <p>M Forti and P Nistri. Global convergence of neural networks with discontinuous neuron
+activations. Circuits and Systems I: Fundamental Theory and Applications, IEEE
+Transactions on, 50(11):1421{1435, 2003.</p>
+      <p>Ricard Gavalda and Hava Siegelmann. Discontinuities in recurrent neural networks. Neural
+computation, 11(3):715{745, 1999.</p>
+      <p>C Lee Giles and Tom Maxwell. Learning, invariance, and generalization in high-order neural
+networks. Applied optics, 26(23):4972{4978, 1987.</p>
+      <p>Jan S Hesthaven and Tim Warburton. Nodal discontinuous Galerkin methods: algorithms,
+analysis, and applications, volume 54. Springer, 2007.</p>
+      <p>Geo rey Hinton. Training products of experts by minimizing contrastive divergence. Neural
+computation, 14(8):1771{1800, 2002.</p>
+      <p>Jagdish Chandra Patra and Alex C Kot. Nonlinear dynamic system identi cation using
+chebyshev functional link arti cial neural networks. 2002.</p>
+      <p>Jagdish Chandra Patra, Ranendal N Pal, BN Chatterji, and Ganapati Panda. Identi cation
+of nonlinear dynamic systems using functional link arti cial neural networks. Systems,
+Man, and Cybernetics, Part B: Cybernetics, IEEE Transactions on, 29(2):254{262, 1999.</p>
+    </sec>
+  </body>
+  <back>
+    <ref-list>
+      <ref id="ref1">
+        <mixed-citation>
+          <string-name>
+            <surname>Geo</surname>
+            rey
+            <given-names>E</given-names>
+          </string-name>
+          <string-name>
+            <surname>Hinton and Ruslan R Salakhutdinov.</surname>
+          </string-name>
+          <article-title>Reducing the dimensionality of data with neural networks</article-title>
+          .
+          <source>Science</source>
+          ,
+          <volume>313</volume>
+          (
+          <issue>5786</issue>
+          ):
+          <volume>504</volume>
+          {
+          <fpage>507</fpage>
+          ,
+          <year>2006</year>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref2">
+        <mixed-citation>
+          <string-name>
+            <surname>Geo rey E Hinton</surname>
+          </string-name>
+          , Nitish Srivastava, Alex Krizhevsky, Ilya Sutskever, and
+          <string-name>
+            <surname>Ruslan R Salakhutdinov.</surname>
+          </string-name>
+          <article-title>Improving neural networks by preventing co-adaptation of feature detectors</article-title>
+          .
+          <source>arXiv preprint arXiv:1207.0580</source>
+          ,
+          <year>2012</year>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref3">
+        <mixed-citation>
+          <string-name>
+            <surname>Guang-Bin</surname>
+            <given-names>Huang</given-names>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Qin-Yu Zhu</surname>
+          </string-name>
+          , and
+          <string-name>
+            <surname>Chee-Kheong Siew</surname>
+          </string-name>
+          .
+          <article-title>Extreme learning machine: a new learning scheme of feedforward neural networks</article-title>
+          .
+          <source>In Neural Networks</source>
+          ,
+          <year>2004</year>
+          . Proceedings. 2004 IEEE International Joint Conference on, volume
+          <volume>2</volume>
+          , pages
+          <fpage>985</fpage>
+          {
+          <fpage>990</fpage>
+          . IEEE,
+          <year>2004</year>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref4">
+        <mixed-citation>
+          <string-name>
+            <given-names>Hanna</given-names>
+            <surname>Kamyshanska</surname>
+          </string-name>
+          and
+          <string-name>
+            <given-names>Roland</given-names>
+            <surname>Memisevic</surname>
+          </string-name>
+          .
+          <article-title>On autoencoder scoring</article-title>
+          .
+          <source>In Proceedings of the 30th International Conference on Machine Learning (ICML-13)</source>
+          , pages
+          <fpage>720</fpage>
+          {
+          <fpage>728</fpage>
+          ,
+          <year>2013</year>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref5">
+        <mixed-citation>
+          <string-name>
+            <surname>William C Knowler</surname>
+          </string-name>
+          ,
+          <string-name>
+            <surname>Peter H Bennett</surname>
+            , Richard F Hamman,
+            <given-names>and Max</given-names>
+          </string-name>
+          <string-name>
+            <surname>Miller</surname>
+          </string-name>
+          .
+          <article-title>Diabetes incidence and prevalence in pima indians: a 19-fold greater incidence than in rochester, minnesota</article-title>
+          .
+          <source>American Journal of Epidemiology</source>
+          ,
+          <volume>108</volume>
+          (
+          <issue>6</issue>
+          ):
+          <volume>497</volume>
+          {
+          <fpage>505</fpage>
+          ,
+          <year>1978</year>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref6">
+        <mixed-citation>
+          <string-name>
+            <surname>Stephen H Lane</surname>
+          </string-name>
+          ,
+          <article-title>David A Handelman, and Jack J Gelfand</article-title>
+          .
+          <article-title>Theory and development of higher-order cmac neural networks</article-title>
+          .
+          <source>Control Systems</source>
+          , IEEE,
+          <volume>12</volume>
+          (
+          <issue>2</issue>
+          ):
+          <volume>23</volume>
+          {
+          <fpage>30</fpage>
+          ,
+          <year>1992</year>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref7">
+        <mixed-citation>
+          <string-name>
+            <surname>Yann</surname>
+            <given-names>LeCun</given-names>
+          </string-name>
+          , Leon Bottou, Yoshua Bengio, and
+          <article-title>Patrick Ha ner</article-title>
+          .
+          <article-title>Gradient-based learning applied to document recognition</article-title>
+          .
+          <source>Proceedings of the IEEE</source>
+          ,
+          <volume>86</volume>
+          (
+          <issue>11</issue>
+          ):
+          <volume>2278</volume>
+          {
+          <fpage>2324</fpage>
+          ,
+          <year>1998</year>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref8">
+        <mixed-citation>
+          <string-name>
+            <given-names>Moshe</given-names>
+            <surname>Leshno</surname>
+          </string-name>
+          , Vladimir Ya Lin, Allan
+          <string-name>
+            <surname>Pinkus</surname>
+            , and
+            <given-names>Shimon</given-names>
+          </string-name>
+          <string-name>
+            <surname>Schocken</surname>
+          </string-name>
+          .
+          <article-title>Multilayer feedforward networks with a nonpolynomial activation function can approximate any function</article-title>
+          .
+          <source>Neural networks</source>
+          ,
+          <volume>6</volume>
+          (
+          <issue>6</issue>
+          ):
+          <volume>861</volume>
+          {
+          <fpage>867</fpage>
+          ,
+          <year>1993</year>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref9">
+        <mixed-citation>
+          <string-name>
+            <given-names>Xiaoyang</given-names>
+            <surname>Liu</surname>
+          </string-name>
+          and
+          <string-name>
+            <given-names>Jinde</given-names>
+            <surname>Cao</surname>
+          </string-name>
+          .
+          <article-title>Robust state estimation for neural networks with discontinuous activations</article-title>
+          .
+          <source>Systems, Man, and Cybernetics</source>
+          ,
+          <string-name>
+            <surname>Part</surname>
+            <given-names>B</given-names>
+          </string-name>
+          :
+          <string-name>
+            <surname>Cybernetics</surname>
+          </string-name>
+          , IEEE Transactions on,
+          <volume>40</volume>
+          (
+          <issue>6</issue>
+          ):
+          <volume>1425</volume>
+          {
+          <fpage>1437</fpage>
+          ,
+          <year>2010</year>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref10">
+        <mixed-citation>
+          <string-name>
+            <given-names>Volodymyr</given-names>
+            <surname>Mnih</surname>
+          </string-name>
+          , Koray Kavukcuoglu, David Silver, Andrei A Rusu, Joel Veness, Marc G Bellemare,
+          <article-title>Alex Graves, Martin Riedmiller, Andreas</article-title>
+          K Fidjeland,
+          <string-name>
+            <surname>Georg Ostrovski</surname>
+          </string-name>
+          , et al.
+          <article-title>Human-level control through deep reinforcement learning</article-title>
+          .
+          <source>Nature</source>
+          ,
+          <volume>518</volume>
+          (
+          <issue>7540</issue>
+          ):
+          <volume>529</volume>
+          {
+          <fpage>533</fpage>
+          ,
+          <year>2015</year>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref11">
+        <mixed-citation>
+          <string-name>
+            <given-names>Vinod</given-names>
+            <surname>Nair</surname>
+          </string-name>
+          and Geo rey
+          <string-name>
+            <given-names>E</given-names>
+            <surname>Hinton</surname>
+          </string-name>
+          .
+          <article-title>Recti ed linear units improve restricted boltzmann machines</article-title>
+          .
+          <source>In Proceedings of the 27th International Conference on Machine Learning (ICML-10)</source>
+          , pages
+          <fpage>807</fpage>
+          {
+          <fpage>814</fpage>
+          ,
+          <year>2010</year>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref12">
+        <mixed-citation>
+          <string-name>
+            <surname>Yoh-Han Pao</surname>
+          </string-name>
+          .
+          <article-title>Adaptive pattern recognition and neural networks</article-title>
+          .
+          <source>Addison-Wesley Longman Publishing Co., Inc</source>
+          .,
+          <year>1989</year>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref13">
+        <mixed-citation>
+          <string-name>
+            <given-names>Shubhi</given-names>
+            <surname>Purwar</surname>
+          </string-name>
+          , Indra Narayan Kar, and Amar Nath Jha.
+          <article-title>On-line system identi cation of complex systems using chebyshev neural networks</article-title>
+          .
+          <source>Applied Soft Computing</source>
+          ,
+          <volume>7</volume>
+          (
+          <issue>1</issue>
+          ):
+          <volume>364</volume>
+          {
+          <fpage>372</fpage>
+          ,
+          <year>2007</year>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref14">
+        <mixed-citation>
+          <string-name>
+            <surname>David E Rumelhart</surname>
+          </string-name>
+          , Geo rey
+          <string-name>
+            <given-names>E</given-names>
+            <surname>Hinton</surname>
+          </string-name>
+          , and
+          <string-name>
+            <surname>Ronald J Williams</surname>
+          </string-name>
+          .
+          <article-title>Learning representations by back-propagating errors</article-title>
+          .
+          <source>Cognitive modeling</source>
+          ,
+          <year>1988</year>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref15">
+        <mixed-citation>
+          <string-name>
+            <given-names>Tom</given-names>
+            <surname>Schaul</surname>
+          </string-name>
+          , Sixin Zhang, and Yann LeCun.
+          <article-title>No more pesky learning rates</article-title>
+          .
+          <source>In Proceedings of The 30th International Conference on Machine Learning</source>
+          , pages
+          <volume>343</volume>
+          {
+          <fpage>351</fpage>
+          ,
+          <year>2013</year>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref16">
+        <mixed-citation>
+          <string-name>
+            <surname>Murali S Shanker</surname>
+          </string-name>
+          .
+          <article-title>Using neural networks to predict the onset of diabetes mellitus</article-title>
+          .
+          <source>Journal of chemical information and computer sciences</source>
+          ,
+          <volume>36</volume>
+          (
+          <issue>1</issue>
+          ):
+          <volume>35</volume>
+          {
+          <fpage>41</fpage>
+          ,
+          <year>1996</year>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref17">
+        <mixed-citation>
+          <string-name>
+            <given-names>Yoan</given-names>
+            <surname>Shin</surname>
+          </string-name>
+          and
+          <string-name>
+            <given-names>Joydeep</given-names>
+            <surname>Ghosh</surname>
+          </string-name>
+          .
+          <article-title>Approximation of multivariate functions using ridge polynomial networks</article-title>
+          .
+          <source>In Neural Networks</source>
+          ,
+          <year>1992</year>
+          . IJCNN., International Joint Conference on, volume
+          <volume>2</volume>
+          , pages
+          <fpage>380</fpage>
+          {
+          <fpage>385</fpage>
+          . IEEE,
+          <year>1992</year>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref18">
+        <mixed-citation>
+          <string-name>
+            <given-names>Nitish</given-names>
+            <surname>Srivastava</surname>
+          </string-name>
+          , Geo rey Hinton,
+          <source>Alex Krizhevsky</source>
+          , Ilya Sutskever, and
+          <string-name>
+            <given-names>Ruslan</given-names>
+            <surname>Salakhutdinov</surname>
+          </string-name>
+          .
+          <article-title>Dropout: A simple way to prevent neural networks from over tting</article-title>
+          .
+          <source>The Journal of Machine Learning Research</source>
+          ,
+          <volume>15</volume>
+          (
+          <issue>1</issue>
+          ):
+          <year>1929</year>
+          {
+          <year>1958</year>
+          ,
+          <year>2014</year>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref19">
+        <mixed-citation>
+          <string-name>
+            <surname>Jim YF</surname>
+          </string-name>
+          <article-title>Yam and Tommy WS Chow. A weight initialization method for improving training speed in feedforward neural network</article-title>
+          .
+          <source>Neurocomputing</source>
+          ,
+          <volume>30</volume>
+          (
+          <issue>1</issue>
+          ):
+          <volume>219</volume>
+          {
+          <fpage>232</fpage>
+          ,
+          <year>2000</year>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref20">
+        <mixed-citation>
+          <string-name>
+            <given-names>Ming</given-names>
+            <surname>Zhang</surname>
+          </string-name>
+          , Shuxiang Xu,
+          <string-name>
+            <given-names>and John</given-names>
+            <surname>Fulcher</surname>
+          </string-name>
+          .
+          <article-title>Neuron-adaptive higher order neural-network models for automated nancial data modeling</article-title>
+          .
+          <source>Neural Networks</source>
+          , IEEE Transactions on,
+          <volume>13</volume>
+          (
+          <issue>1</issue>
+          ):
+          <volume>188</volume>
+          {
+          <fpage>204</fpage>
+          ,
+          <year>2002</year>
+          .
+        </mixed-citation>
+      </ref>
+    </ref-list>
+  </back>
+</article>

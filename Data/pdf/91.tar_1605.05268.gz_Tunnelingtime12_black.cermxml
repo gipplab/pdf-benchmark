@@ -1,0 +1,2944 @@
+<!DOCTYPE article PUBLIC "-//NLM//DTD JATS (Z39.96) Journal Archiving and Interchange DTD v1.0 20120330//EN" "JATS-archivearticle1.dtd">
+<article xmlns:xlink="http://www.w3.org/1999/xlink">
+  <front>
+    <journal-meta />
+    <article-meta>
+      <title-group>
+        <article-title>Planck-Star Tunnelling-Time: an Astrophysically Relevant Observable from Background-Free Quantum Gravity</article-title>
+      </title-group>
+      <contrib-group>
+        <contrib contrib-type="author">
+          <string-name>Marios Christodoulou</string-name>
+        </contrib>
+        <contrib contrib-type="author">
+          <string-name>Carlo Rovelli</string-name>
+        </contrib>
+        <contrib contrib-type="author">
+          <string-name>Simone Speziale</string-name>
+        </contrib>
+        <contrib contrib-type="author">
+          <string-name>Ilya Vilensky</string-name>
+        </contrib>
+      </contrib-group>
+      <abstract>
+        <p>A gravitationally collapsed object can bounce-out from its horizon via a tunnelling process that violates the classical equations in a nite region. Since tunnelling is a non-perturbative phenomenon, it cannot be described in terms of quantum uctuations around a classical solution and a backgroundfree formulation of quantum gravity is needed to analyze it. Here we use Loop Quantum Gravity to compute the amplitude for this process, in a rst approximation. The amplitude determines the tunnelling time as a function of the mass. This is the key information to evaluate the relevance of this process for the interpretation of Fast Radio Bursts or high-energy cosmic rays. The calculation o ers a template and a concrete example of how a background-free quantum theory of gravity can be used to compute a realistical observable quantity.</p>
+      </abstract>
+    </article-meta>
+  </front>
+  <body>
+    <sec id="sec-1">
+      <title>I. INTRODUCTION</title>
+      <p>A striking realization of the last decades is that our
+universe is teeming with gravitationally collapsed
+objects {or `black holes'{ of various sizes. The recent
+gravitational-waves observation of the merger of two
+black holes of unexpected size [1] makes this conclusion
+even more compelling.</p>
+      <p>Classical general relativity (GR) predicts that
+gravitationally collapsed objects are stable: once a dynamical [2]
+or trapping horizon forms (light surfaces shrink), it lasts
+forever (it is an `event' horizon). But this prediction
+disregards quantum e ects. Some of these are accounted for
+by the theory of quantum elds interacting with
+classical geometry, which predicts Hawking radiation.
+However, macroscopic black holes are still e ectively stable
+on accessible time scales |a stellar-mass black hole takes
+1050 Hubble times to evaporate via Hawking radiation.
+But this theory, or any perturbative formulation of
+quantum gravity, are still approximations, because they
+disregard non-perturbative quantum-gravitational
+phenomena. Among these is the possibility of black hole decay
+via gravitational quantum tunnelling1.</p>
+      <p>The idea has a long history and has been considered
+by numerous authors [4{24]. Kie er and Hajichek have
+found evidence that the quantum state of a spherically
+symmetric in-falling null shell tunnels into an outgoing
+one in the context of a minisuperspace model [25].
+Quantum e ects could indeed make collapsing objects bounce
+when they reach the \Planck star" stage [26], namely
+planckian density.</p>
+      <p>A key step was taken in [27], where it is shown that a
+violation of the Einstein equations within a nite
+spacey
+z
+1 Not \in a di erent universe" as in [3], but simply exploding in
+its actual location.
+time region is su cient to allow a black hole tunnel into
+a white hole (an `anti-trapped' region, where all light
+fronts expand). From the outside, the process looks like
+a quantum bounce of the in-falling matter, and it is akin
+in nature to the `big bounce' of quantum cosmology [28].</p>
+      <p>This is a standard tunnelling phenomenon: evolution
+that violates the classical equations of motion in a nite
+spatial region and during a limited time. It is therefore a
+very plausible phenomenon. Its astrophysical relevance,
+on the other hand, depends on the time it takes.
+Dimensional arguments suggest that accumulation of small
+quantum e ects could trigger the tunnelling already after
+a time m2 in Planck units, where m is the mass of the
+collapsed object [27]. This is su ciently long to be
+compatible with the black holes we observe in the sky, but
+much shorter than the huge Hawking evaporation time
+H m3. Hawking radiation could be a sub-dominant
+phenomenon, with respect to the bounce. Writing ~
+explicitly gives m2=p~, which indicates that this is not
+a perturbative phenomenon.</p>
+      <p>A lifetime m2 implies that primordial black holes
+of lunar-size mass could be exploding today and yield
+observable signals [29]. A component of the expected
+resulting signal is tantalisingly similar to the recently observed
+Fast Radio Bursts [30]. Fast Radio Bursts [31{34] could
+thus be the rst genuinely quantum gravitational
+phenomenon ever observed [35, 36]. A second, high energy,
+component of the signal could be the source of some very
+high-energy cosmic rays. In both cases the expected
+signal has a signature distance-frequency relation that
+characterises it [37, 38]. Maybe black holes could `reveal their
+inner secrets' [39] after all, thanks to quantum theory.</p>
+      <p>The rst objective of this paper is to compute the
+black-hole lifetime from a full quantum theory of gravity,
+to assess the credibility of the dimensional estimate of
+[27] and therefore ground the astrophysical relevance of
+black hole tunnelling.</p>
+      <p>Since the quantum bounce of a Planck star is a
+nonperturbative phenomenon, it is not captured by the small
+quantum uctuations around a classical solution of the
+Einstein equations. Therefore it can only be described
+by a background-free quantum theory of gravity. Here
+we use Loop Quantum Gravity (LQG) which provides a
+non-perturbative de nition of quantum gravity [40{43] .</p>
+      <p>LQG is tailor-made for this calculation, because in its
+covariant formulation [44{50] it associates an amplitude
+to any compact region of spacetime, as a function of the
+boundary geometry. In a Planck star bounce, we know
+the initial and nal geometry, we know that no
+classical solution interpolates between the two, and we need
+the probability for a quantum transition from the rst
+to the second. This is precisely what the amplitudes of
+covariant LQG provide.</p>
+      <p>The calculation we present is thus a concrete
+example of how a background-free quantum theory of gravity
+can be used to predict observable quantities. The
+difculty of computing realistically measurable quantities
+in a background-free quantum theory is well known [51{
+54]: it raises conceptual subtleties related to the notion
+of time, to the di culty of de ning general covariant
+observables and to locality. The second objective of this
+paper is to show concretely how such a calculation can
+be done, and how all these problems can be successfully
+addressed. We consider this a major result of this paper.</p>
+      <p>The article is organised as follows. In Section we
+explain how a gravitational tunnelling amplitude can be
+computed and we list the assumptions and
+approximations we take. In Section we discuss the intuitive
+physical picture of the phenomenon we analyse. In Section we
+write the external metric. In Section we x the
+boundary between the region that we consider classical and the
+region we treat as the quantum system, and we compute
+its geometry. In Section we specify the triangulation we
+use for the quantum calculation. In Section we write the
+quantum state of the boundary. In Section we compute
+the amplitude. In Section we begin to analyze it.</p>
+      <p>Appendix recalls the basic equations of loop
+quantum gravity. Appendix summarizes our result giving
+the amplitude in a self-contained form useful for future
+developments.</p>
+    </sec>
+    <sec id="sec-2">
+      <title>II. QUANTUM TUNNELLING</title>
+      <p>We study the black hole tunnelling process and we
+derive explicitly the amplitude W (m; T ) for a collapsed
+object of mass m to tunnel out after a time T , under a
+number of simplifying assumptions and approximations.
+These are listed below.</p>
+      <p>1. We assume vanishing angular momentum of the
+collapsing object. This is not a plausible
+assumption for astrophysical objects, but it is the best we
+can do so far.
+2. We take as collapsing object a spherical, thin, null
+shell, with mass (energy) m. This too is a drastic
+simpli cation, because it eliminates the complexity
+of the accretion and the physics of the explosion;
+essentially, we disregard most of the dynamics of
+matter.
+3. We disregard dissipative phenomena, such as
+Hawking radiation. This is a good approximation to the
+extent that the bounce time turns out to be faster
+than the Hawking evaporation time. Accordingly,
+we disregard the thermal properties of quantum
+black holes [55{57] and we do not consider the
+constraints on the mass loss rate studied in [58] nor
+the corresponding back reaction.
+4. We assume the process to be time-reversal
+invariant. This is related to the previous point, because
+Hawking radiation breaks time reversal symmetry.
+In particular, we disregard the possibility of
+instabilities (see for instance [23, 59]). A time
+asymmetric version of a black hole bounce which addresses
+these issues is studied in [60].
+5. We work at rst order in the vertex expansion [50].</p>
+      <p>This means that we assume the phenomenon to be
+dominated by large scale degrees of freedom. This
+is needed in order to extract a doable computation
+from the full non-perturbative de nition of the
+theory.</p>
+      <p>Under these assumptions, we derive the bounce
+amplitude W (m; T ) and we write it explicitly at the end of this
+paper. In turn, this quantity determines the black hole
+lifetime (m).</p>
+      <p>The explicit expression for W (m; T ) that we derive is
+nite (no divergences) and self contained. However, it
+is given by a complicated sums of integrals and is not
+transparent. It is also too complicated for a
+straightforward numerical evaluation. Its evaluation require
+further work, which is course and will be reported
+elsewhere. Here we only mention, in closure, the preliminary
+tentative indications that we have been able to derive so
+far from it. These seem to be support the quadratic
+dependence of the evaporation on the mass: m2.
+The main goal of the present paper is only to derive the
+expression for W (m; T ), and discuss the technical and
+conceptual questions raised by the calculation.</p>
+      <p>Gravitational tunnelling has been treated in the
+literature mostly in the context of tunnelling of the
+entire universe, using WKB techniques and Euclidean
+solutions (see for instance [61, 62] and references therein).
+This is not what we do here. The phenomenon we study
+concerns a small nite spacetime region, and we study
+it using the Lorentzian geometry-to-geometry transition
+amplitude.</p>
+      <p>To compute this amplitude, we choose a hypersurface
+surrounding the region where quantum e ects cannot
+be neglected. includes also a small region outside the
+horizon, because the process we consider needs quantum
+e ects to leak outside the horizon, a possibility that has
+recently drawn increasing attention [63, 64]. Under the
+assumptions listed above, the external geometry is given
+in [27] and depends only on two parameters: the mass m
+of the collapsing object and the decay time T . In
+particular, the external geometry determines the (intrinsic and
+extrinsic) geometry of . We represent this geometry by
+means of a quantum state, and compute the associated
+transition amplitude. has a past and a future
+component (the past and the future boundaries of the quantum
+region), and W (m; T ) can be seen as the transition
+amplitude between the past and the future state. Intuitively, it
+can be thought of as the path integral over geometries in
+the quantum region where the collapsed object bounces
+(tunnels).</p>
+      <p>This strategy solves the problem of time in the
+following sense. The calculation does not require a speci c
+time variable to describe evolution, while a physically
+(partial [52, 65]) observable clock time T is identi ed as
+one of the parameters of the boundary state (see [43] for a
+full discussion). The bounce region itself does not admit
+a classical spacetime picture at all, in the same sense in
+which there is no single trajectory for a quantum electron
+during a quantum leap between two atomic orbitals. In
+the bounce region, the `architecture' [66] of the quantum
+geometry is fully non classical.</p>
+      <p>The modulus squared of the amplitude W (m; T )
+determines the probability density for the process to happen
+at a given (external) time T , for a given mass m. The
+lifetime of the black hole is given by requiring the total
+probability that the hole has not decayed before to be
+of order unit. For consistency with traditional de nitions
+of lifetime (for instance in nuclear physics)) we set this
+to e 1; that is, we de ne the lifetime by</p>
+      <p>
+        Z
+0
+Since we work to rst order in the vertex expansion (point
+5. of the previous section), the estimate of the full T
+integral is unreliable. Pending a higher order calculation,
+we circumvent the problem by taking the (reasonable)
+assumption that the probability density for an existing
+black hole to decay within a small interval of time is
+constant |as it is the case in standard radioactive decay|
+which is to say the probability for the black hole to have
+decayed after a time T from its formation takes the
+exponential decay form
+p(T ) = 1
+e T = ;
+(
+        <xref ref-type="bibr" rid="ref2">2</xref>
+        )
+possibly after a short initial transient. This will allow
+us to compute the black hole lifetime simply from the
+value of the function W (m; T ) on two points (one for the
+normalisation and one for ), as we show below in Section
+.
+      </p>
+      <p>The interpretation of the amplitude we compute
+requires an important discussion, essential to understand
+the present setting. In standard radioactive decay, a
+particle tunnels out from the potential barrier that traps it
+inside the nucleus. If we evolve an initial quantum state
+of the particle using the Schrodinger equation, we nd
+a state that slowly leaks out of the con ning potential.
+After some time, the quantum state describes a quantum
+superposition of many di erent positions of the particle,
+corresponding to di erent escape times from the nucleus.
+A Geiger counter will detect the escaping particle at some
+time and in a single position, corresponding to a speci c
+decay time T . Formally, the measurement projects the
+widely spread quantum state to a localized
+semiclassical state of the particle, and realizes a single time for
+the decay, which is determined probabilistically by the
+initial state. Equivalently (depending on one's preferred
+way of thinking about quantum theory): the branches of
+the state corresponding to di erent decay times decohere
+rapidly, due to the interaction with the outside world.</p>
+      <p>We use this same logic for the case of the black hole.
+The quantum state of the geometry in the future of a
+collapsed object is formed by a quantum state spread over
+vastly di erent geometries, as discussed in [67]. Due to
+the large number of degrees of freedom involved, these
+decohere rapidly. Equivalently: any interaction of the
+geometry in the future of the quantum region \projects"
+the widely spread quantum state onto a given classical
+geometry, realising (probabilistically) a well determined
+black hole explosion time T . We are interested in the
+probability distribution of this explosion time. Quantum
+mechanics allows us to compute this probability by
+sandwiching the transition amplitude between an initial and a
+nal state. This is what we do here. We isolate the region
+where quantum phenomena cannot be disregarded and
+describe the quantum phenomenon in terms of the
+probability for di erent possible classical evolutions of the
+world (outside and) after the transition region, namely
+for di erent values of T .
+star" [26]. Importantly, this happens when the object
+has still a size many orders of magnitude larger than the
+Planck length [26, 68]. At this scale, the curvature
+becomes Planckian as well (that is: scalar functions of the
+curvature such as RabcdRabcd reach the Planck scale).
+Simple dimensional arguments indicate that quantum
+mechanical e ects become dominant. The classical
+Einstein equations are thus necessarily violated by quantum
+e ects at this scale. This is consistent with the standard
+picture in Loop Quantum Cosmology.</p>
+      <p>Quantum e ects can act as an e ective pressure, as
+in Loop Quantum Cosmology. These are akin to the
+quantum pressure that forbids an electron to fall into
+an atomic nucleus. Gravitational collapse can therefore
+stop and the Planck star can \bounce out" via quantum
+tunnelling into a new classical solution of the Einstein
+equations.</p>
+      <p>This naive picture, however, is incomplete, because it
+assumes a classical geometry, disregarding in particular
+the fact that quantum-gravitational e ects are not
+necessarily con ned to a xed-geometry causal future of the
+matter bounce. Quantum uctuations of the background
+causal structure can allow violations of the
+backgroundgeometry causality. This is the mechanism that permits
+quantum e ects to leak outside the horizon.</p>
+      <p>Indeed, notice that in the standard geometry of a
+collapse a generic spacetime point outside the horizon is
+only a single Planck space-like distance away from the
+singularity. This is counter-intuitive at rst, but true,
+due to the Lorentzian nature of spacetime (see Figure 2).
+Therefore there is no surprise, nor violation of any known
+fundamental physical low that we know, if quantum
+effects leak outside the horizon. This cannot happen in
+quantum eld theory over a xed background, but there
+is no reason we know it should not happen when the
+full quantum dynamics of the gravitational eld is taken
+into account, including the non-perturbative e ects that
+are not accounted for by quantum eld theory on curved
+spacetime. Here we see clearly the limitation of local
+quantum eld theory. See [69], and in particular the
+contributions by Giddings and Rovelli therein, for a recent
+discussion of this essential point.</p>
+      <p>The violation of Einstein's equations outside the
+horizon opens the channel for the matter bounce, the
+tunnelling of the black hole into a white hole, and the
+explosion.</p>
+      <p>The most appealing aspects of this picture is its
+temporal structure. At rst, there seems to be a tension
+between the long time during which a black hole is in
+existence, namely the long black hole lifetime (after all,
+a black hole is macroscopic object, we cannot expect a
+short tunnelling time) on the one hand, and the short
+time required by the bounce picture on the other hand.
+But the tension is beautifully resolved by the general
+relativistic time dilatation: the bouncing process can be at
+the same time extremely fast measured by a clock on the
+star, and extremely long in external time, due to the huge
+gravitational redshift between the inside and the outside
+of the hole. This is concretely realized in the metric
+computed in [27].</p>
+      <p>The black holes we see in the sky could be \bouncing
+stars", seen at the extreme slow motion implied by the
+standard general relativistic time dilation [26].</p>
+      <p>The fact that this intriguing physical picture has a
+chance to be supported by direct astrophysical
+observations [29{34, 37, 38] renders it, in our opinion, well worth
+studying.</p>
+      <p>We now close the introductory discussion and get to
+the actual calculation of the the black hole lifetime. We
+emphasize the fact that very little of this intuitive picture
+of the phenomenon is relevant for the calculation below,
+which simply moves from rst principles to compute a
+quantum transition amplitude between an incoming and
+an outgoing classical state.</p>
+    </sec>
+    <sec id="sec-3">
+      <title>IV. EXTERNAL CLASSICAL METRIC</title>
+      <p>We are interested in the geometry describing the
+collapse and the bounce of a null shell found in [27] and
+illustrated by the (Carter-Penrose) causal diagram of Figure
+1. The relevant aspect of this geometry is that it is an
+exact solution of Einstein's equations outside a compact
+region. In the gure, the thick grey lines represent the
+incoming and outgoing spherical shell. The dotted lines
+represent the black hole (trapping) horizon and the white
+hole (anti-trapping) horizon. The metric is at in the
+white region and Schwarzschild in the light grey region.
+More precisely, the light grey region is a portion of a
+double covering of the Kruskal extension of the Schwarzschild
+metric, as illustrated in Figure 3. This is why the white
+hole can be in the future of the black hole, as explained
+in detail in [27]. The dark grey area of Figure 1 is the
+quantum region {namely the region where the classical
+equations are violated{ which concerns us in this paper.
+We call rS and tS the standard Schwarzschild coordinates
+that cover the region of the Kruskal diagram outside the
+horizons. The spacetime is time reversal invariant and
+we assign the Schwarzschild time tS = 0 to the re ection
+hypersurface.</p>
+      <p>There are two important points (spheres in spacetime)
+in these diagrams, which we denote and .</p>
+      <p>The point is the point where the incoming shell
+crosses the surface with Schwarzschild time tS = 0 in
+the Kruskal diagram. With a slight abuse of notation,
+we call also the dimensionless fractional Schwarzschild
+radial distance from the horizon, that is we write
+=
+rS( )
+2m
+2m</p>
+      <p>;
+rS( ) = 2m(1 + );
+(rS(P ) is the Schwarzschild radial coordinate of the point
+P ), or equivalently
+Notice that is the image of two spacetime points
+(spheres), one on the collapsing shell and one on the
+exploding shell, both just outside the horizons, indicated
+respectively as and 0 in the r.h.s. panel of Figure 3.</p>
+      <p>In [27] it is shown that (for 1) the bouncing time
+observed by an external observer (de ned as the proper
+time of a distant observer sitting at radius R 2m from
+the moment she sees the in-falling shell passing by, to the
+moment she sees the out-going shell passing by, minus
+the time 2R for the shell to go in and come out from the
+rS 2m region) is</p>
+      <p>T =
+The meaning of the time T is clari ed by Figure 4, which
+displays the process in Schwarzschild coordinates. These
+cover only the region outside the horizons.</p>
+      <p>The point is the point where the map between
+spacetime and the Kruskal geometry bifurcates, which we take
+a bit outside the quantum region. Again with abuse of
+notation, we write the Schwarzschild radius of the point
+in the form
+rS( ) = 2m(1 +</p>
+      <p>
+        ):
+&lt;
+because the two points where the ingoing and outgoing
+shells cross tS = 0 must be distinct in physical space, and
+therefore inside the bifurcation point (see Figure 3.)
+We need
+where rS &gt; 0 is the function of r and t de ned by
+(
+        <xref ref-type="bibr" rid="ref3">3</xref>
+        )
+(
+        <xref ref-type="bibr" rid="ref4">4</xref>
+        )
+(
+        <xref ref-type="bibr" rid="ref5">5</xref>
+        )
+(
+        <xref ref-type="bibr" rid="ref6">6</xref>
+        )
+(
+        <xref ref-type="bibr" rid="ref7">7</xref>
+        )
+(
+        <xref ref-type="bibr" rid="ref8">8</xref>
+        )
+(
+        <xref ref-type="bibr" rid="ref9">9</xref>
+        )
+FIG. 4. The Schwarzschild region of the bouncing spacetime
+in Schwarzschild coordinates: the shell (thick line) freezes
+near the horizon (dashed line) until it reaches the point ,
+hence bounces back. The bounce time T is the Schwarzschild
+time during which the shell hovers near the horizon. An
+observer at Schwarzschild radius R sees the shell emerge after a
+time which is T plus the time for the shell to go in and come
+out. The grey region is where quantum e ects leak outside
+the horizon and the Einstein equations are violated.
+      </p>
+      <p>V.</p>
+    </sec>
+    <sec id="sec-4">
+      <title>THE BOUNDARY AND ITS GEOMETRY</title>
+      <p>We now choose a surface surrounding the quantum
+region. This will be the boundary for the computation
+of the transition amplitude. As discussed in the
+introduction, quantum probabilities are computed, a la Bohr,
+at the boundary with the classical world. As stressed by
+Wigner [70], there is arbitrariness in choosing the
+boundary between a quantum system and the classical world,
+in computing quantum probabilities; accordingly, there
+is a freedom in choosing . We want to be su ciently
+away from the tunneling region to be sure to capture
+all quantum e ects. That is, su ciently away from the
+tunneling region to permit the external region to be well
+approximated by classical physics. But it is convenient
+to choose of minimal size, in order to minimise the
+technical complexity of the calculation.</p>
+      <p>Tentatively, we choose the surface depicted in Figure
+5. To de ne it, it is convenient to use di erent
+coordinates than the Schwarzschild coordinates. Very
+convenient coordinates are the Lema^tre coordinates [71, 72]
+which are in time gauge (Lapse=1, Shift=0), the gauge
+in which LQG transition amplitudes are written. In these
+coordinates, which we denote r and t, the Schwarzschild
+geometry reads
+ds2 =
+dt2 +</p>
+      <p>
+        dr2 + rS2d 2
+2m
+rS
+rS3 =
+9m
+2
+(r
+t)2:
+The line element (
+        <xref ref-type="bibr" rid="ref8">8</xref>
+        ) shows that rS is the Schwarzschild
+radial coordinate. The Lema^tre time t is related to the
+The Lema^tre coordinates cover the exterior and the
+interior of a black hole.
+      </p>
+      <p>
+        Each t = constant hypersurface crosses the tS = 0
+hypersurface at a point (sphere) of Schwarzschild radius
+rS(t) (see Fig. 6), which is obtained by setting tS = 0 in
+(
+        <xref ref-type="bibr" rid="ref10">10</xref>
+        ). In particular, consider the t = constant
+hypersurface that crosses the tS = 0 in . The portion B of this
+hypersurface inside is a 3d (topological) ball bounded
+by the two-sphere . Its image under time reversal B+
+is a 3d (topological) ball with the same boundary. We
+choose as the union of B and B+.
+      </p>
+      <p>To be sure, the actual surface , which is depicted in
+Figure 5 and 8, is not entirely within the Schwarzschild
+region, because both its past and its future branches are
+cut by the ingoing and, respectively, outgoing, shells,
+inside which the metric is at. We disregard this fact here,
+under the assumption that the geometry of this small
+region has no e ect on the transition, and we take the
+geometry to be exactly the union of B and B+.</p>
+      <p>
+        It is easy to obtain the value of t on B : assuming
+0 &lt; 1, posing tS = 0 (
+        <xref ref-type="bibr" rid="ref10">10</xref>
+        ) reduces to
+t = 2m ln ;
+(
+        <xref ref-type="bibr" rid="ref11">11</xref>
+        )
+Notice that the Lema^tre time goes logarithmically to
+1 when ! 0, namely when its intersection with
+(
+        <xref ref-type="bibr" rid="ref13">13</xref>
+        )
+(
+        <xref ref-type="bibr" rid="ref14">14</xref>
+        )
+where the range [rmin; rmax] of the radius r is determined
+by rS(rmin; t) = 0 and rS(rmax; t) = 2m(1 + ).
+Remarkably, this metric is (3d) at. This can be easily
+seen as follows. The variation of (
+        <xref ref-type="bibr" rid="ref9">9</xref>
+        ) at constant t gives
+dr = prS=2m drS, so that rS and the angles are at polar
+coordinates on B .
+      </p>
+      <p>
+        Its extrinsic curvature is given by the time derivative
+kab = q_ab, because we are in time gauge. Again from (
+        <xref ref-type="bibr" rid="ref9">9</xref>
+        )
+we can compute the time derivative of rS at constant r:
+drS =
+dt
+r 2m
+rS
+      </p>
+      <sec id="sec-4-1">
+        <title>Using this, we have immediately</title>
+        <p>
+          3 5
+kabdxadxb = (2m) 2 rs 2 dr2
+p8mrS d 2:
+Equations (
+          <xref ref-type="bibr" rid="ref12">12</xref>
+          ) and (
+          <xref ref-type="bibr" rid="ref14">14</xref>
+          ) give the geometry of the past
+component B of the boundary surface . Because of
+the time reversal symmetry, the geometry of B+ is the
+time reversal of the geometry of B . This means that the
+intrinsic geometry is the same, while the extrinsic
+curvature is the same but with opposite sign. A ip of sign in
+the conjugate momentum is of course the hallmark of a
+bounce (a ball that bounces on the oor ips its velocity
+almost suddenly). Thus, the tunnelling process we are
+considering is the ip of sign of the extrinsic curvature of
+B : something like snapping over a cap (Figure 7).
+        </p>
+        <p>This determines entirely the intrinsic and extrinsic
+geometry of the boundary surface , as a function of m
+and &gt; , where = e T =2m is related to the bounce
+time T .</p>
+        <p>
+          So far we have used Einstein's metric formalism. Loop
+quantum gravity, however, is based on the tetrad-spin
+connection and {on a boundary{ the Ashtekar variables
+formalism, which introduce a local SU (
+          <xref ref-type="bibr" rid="ref2">2</xref>
+          ) gauge. Before
+proceeding we therefore need to translate the geometry
+of in terms of Ashtekar variables. On , we can
+introduce a triad eld eia such that qab = Pi3=1 eiaeib by simply
+cosh o =
+2
+r
+For the simple discretisation we consider below, we will
+be forced to take o 4 . For o(
+          <xref ref-type="bibr" rid="ref1">1</xref>
+          ), this gives
+&gt; 10 5 which is still within the above approximation.
+        </p>
+        <p>
+          The last point we need to discuss is the relation
+between and . The boundary between a quantum
+system and its classical environment can be moved
+arbitrarily out without a ecting the probabilistic predictions of
+the theory [70]. Therefore there is some arbitrariness
+in the choice of the exact position of , which should
+not a ect the nal result. However, is bounded from
+below by (
+          <xref ref-type="bibr" rid="ref7">7</xref>
+          ) but also from above by the fact that we
+need the t = constant surface it de nes to intersect the
+shell, rather than ending on the singularity (see the right
+panel of Figure 8). Thus the maximum value of we
+can take is bounded by the Lemaitre time of the point
+where the shell reaches the singularity. This time can
+be easily calculated by integrating a null geodesic from
+to the singularity in Lemaitre coordinates. The
+calculation is straightforward and gives the Lemaitre time
+choosing a local triad at each point. This freedom gives
+the local SO(
+          <xref ref-type="bibr" rid="ref3">3</xref>
+          ) gauge invariance. The Ashtekar variables
+aarned tthheethAeshdteenksairt-iBzeadrbienrvoercsoentnreiacdtioneldAiaEia== iade+t e keiaai
+where is the spin connection of the triad, is the
+Barbero-Immirzi parameter and kab = kaiebi. These elds
+are uniquely determined by qab and kab once the gauge,
+namely the orientation of the triad at each point, is xed.
+We make this choice explicitly in the following section,
+after discretization.
+        </p>
+        <p>
+          There is one last geometrical quantity that we shall
+need below: the boost angle between B and B+ at their
+junction. This is twice the boost angle o=2 between the
+tS = 0 surface and the t = constant surfaces. Calling
+ns = dtS and n = dt the normals to these surfaces, we
+have
+cosh o = (dtS; dt)
+2
+jdtSjjdtj
+=
+(1
+(1
+2rmS ) 1
+2rmS ) 21 =
+1
+2m
+rS
+On
+, which is the intersection point, this gives
+FIG. 8. The two surfaces B and B+, sharing the boundary
+S. Ingoing and outgoing null spherical shells are also depicted.
+t = t( )+2m(1+ ). This is thus the time of the maximal
+. Using then the (approximate) equation (
+          <xref ref-type="bibr" rid="ref11">11</xref>
+          ) both for
+and we obtain 2m ln = 2m ln + 2m(1 + ), which
+for small gives the maximum value = e . In other
+words, if we want to use the constant-Lemaitre-time
+surfaces for the calculation, we have to take very close to
+. Consequently, we can simply use
+        </p>
+        <p>T =
+2m ln (e 1 )</p>
+        <p>We now want to compute the quantum amplitude for a
+spacetime region bounded by a surface with this
+geometry, using loop quantum gravity. To that end, one needs
+a spin network state describing the boundary geometry,
+and to sum over all bulk spin foams compatible with the
+boundary. As a rst approximation, we will select (i),
+a single spin network graph, dual to a simple
+triangulation of the continuum boundary geometry, and represent
+the geometry of via a coherent state peaked on
+discrete data approximating the boundary geometry; and
+(ii), the lowest order spin foam amplitude. Before going
+to the quantum theory, we present in the next section
+the details of the discretisation used.</p>
+      </sec>
+    </sec>
+    <sec id="sec-5">
+      <title>VI. DISCRETIZATION</title>
+      <p>The boundary surface is formed by two ( at) balls
+joined at their (spherical) boundary. A ball can be nicely
+triangulated by a single equilateral at tetrahedron o.
+We re ne this triangulation splitting o into 4 equal
+isosceles tetrahedra, as in Fig.10. The boundary surface
+is then triangulated by eight tetrahedra (four in B
+and four in B+) connected to one another as in Figure
+9, where the tetrahedra are the nodes of the graph. This
+is not the minimal triangulation of , but {as we shall
+see{ is the boundary of the minimal triangulation of
+the region enclosed by , which respects time reversal
+invariance.</p>
+      <p>
+        We now derive the data describing the geometry of
+this triangulation. We do so in two steps. First, in terms
+of the metric formalism, giving the area of all the
+triangles of the triangulation and {again at each triangle{
+the 4d boost angles between tetrahedra normals, which
+discretise the extrinsic curvature. Next, we give the
+discrete version of the Ashtekar variables, called the ux and
+holonomy variables. All these data can be immediately
+computed from (
+        <xref ref-type="bibr" rid="ref8">8</xref>
+        ).
+      </p>
+      <p>To x notation, we call the four upper (future)
+tetrahedra a+ with a = 1; 2; 3; 4 and the four lower (past)
+tetrahedra a . We call `ab the (oriented) upper links
+and `a the side links, which are dual to the triangles
+forming the two sphere . Because of the symmetries
+of , and because each 3-ball is at, we will see that we
+can take all isosceles tetrahedra with the same shape, so
+that all links `ab (straight links of the graph) are dual
+to triangles that have the same area A = A+ and
+extrinsic curvature angle . The four links `a (curved in
+the picture) are dual to triangles that have area Ao and
+extrinsic curvature angle o. These are \thin" triangles,
+namely the outgoing normals of the two tetrahedra they
+FIG. 9. The boundary spin network with the orientation
+chosen for later convenience. The two balls B and B+
+correspond to the upper and lower part, sharing the boundary S
+which corresponds to the four intermediate links.
+bound have opposite time directions, as one belongs to
+B+ and one to B . The explicit values of these data can
+be computed as follows, as functions of m and T .</p>
+    </sec>
+    <sec id="sec-6">
+      <title>A. Discrete metric variables</title>
+      <p>To match with the continuum geometry, we identify
+the total surface of o with the sphere where B and
+B+ join, thus posing
+4Ao = 4 (2m(1 +
+))2:
+An equilateral tetrahedron splits into four equal isosceles
+tetrahedra, each with base area A0 and side areas A
+with ratio
+as can be immediately derived from Pythagoras
+theorem.2 This xes the shape of all tetrahedra, for instance
+the dihedral angle (see Fig.10), which we will need later
+on, is given by</p>
+      <p>A</p>
+      <p>1
+= p
+6</p>
+      <p>Ao;
+cos
+=</p>
+      <p>EF
+EO
+=
+r 2
+3
+:</p>
+      <p>
+        As for the discrete extrinsic curvature, this is
+concentrated on the triangles, and is given by the boost angle
+between the 4d normals to the tetrahedra. On the sphere
+this is given by o. More precisely the triangles
+discretising , such as ABC, are thin and o, given in (
+        <xref ref-type="bibr" rid="ref17">17</xref>
+        ),
+is the angle between their future normals.
+2 Using the notation of the gure, by elementary geometry the
+height of a face is ED = EC = 3 EF and the height of the
+tetrahedron o is CF = 4 OF . By Pythagoras theorem on the
+two triangles EF O and EF C a line of algebra gives immediately
+that EC = p6 EO.
+      </p>
+      <p>The discrete curvature on the radial triangles, such as
+ABO, is determined by the tangential part of kab, which
+depends on the time dependence of the tangential
+components of the metric. We can determine it as follows.
+Let dV be the change of volume of a tetrahedron in a
+time dt, due to a change in the metric. This change can
+be split into two parts: a change of volume dVrad due to
+the change in qrr which corresponds to a growth normal
+to the basis of , and a change dVtang due to the angular
+part in qab which corresponds to a growth normal to the
+side faces of . Since</p>
+      <p>V =</p>
+      <p>Z rmax
+rmin</p>
+      <p>dr pqrr 4 rS2;
+the two can be computed explicitly. In particular
+dVtang = Z rmax
+dt</p>
+      <p>dr pqrr 4
+=
+=</p>
+      <p>
+        rmin
+Z 2m
+(
+        <xref ref-type="bibr" rid="ref22">22</xref>
+        )
+(
+        <xref ref-type="bibr" rid="ref23">23</xref>
+        )
+(
+        <xref ref-type="bibr" rid="ref24">24</xref>
+        )
+(
+        <xref ref-type="bibr" rid="ref25">25</xref>
+        )
+(
+        <xref ref-type="bibr" rid="ref26">26</xref>
+        )
+      </p>
+      <p>On the other hand, a little geometry shows that if the
+discrete extrinsic curvature on each of the three faces is
+, the change of the tangential volume in time is
+dVtang = 3 1 A
+dt 2</p>
+      <p>3 1
+= 2 p6
+(2m)2
+:
+From the last two equations, we have
+=
+32 p
+9
+6:
+(A comparable estimation can be obtained by integrating
+the trace of the extrinsic curvature on the continuous
+hypersurface ). Since B+ is the image under time reversal
+of B , with opposite extrinsic curvature, we have then
+immediately
++ =
+32 p
+9</p>
+      <p>6:
+C</p>
+      <p>O
+E
+α F</p>
+      <p>D
+A</p>
+      <p>B
+FIG. 10. The triangulation of a spherically symmetric 3d ball
+as a regular tetrahedron A; B; C; D split into four isosceles
+tetrahedra. O is the center of the regular tetrahedron, E the
+center of a side and F the center of a face.</p>
+      <p>
+        Next we compute the discretized version of the Ashtekar
+variables describing the geometry of the triangulation.
+These are the variables in terms of which the coherent
+states of loop quantum gravity are de ned. They are
+the holonomy- ux variables (X~ ; H) respectively in R3
+and SU (
+        <xref ref-type="bibr" rid="ref2">2</xref>
+        ), associated to each triangle. Like the triad
+and Ashtekar variables, these introduce a local rotation
+gauge. Geometrically, this corresponds to xing a local
+frame on each tetrahedron; see [73] for a discussion.
+      </p>
+      <p>The holonomy- ux variables allow a generalisation of
+the Regge geometry, called twisted geometry [74], where
+the discontinuity of the metric on the triangles allow a
+mismatch of the shape of the shared triangles [75]; here
+we are not concerned with this generalisation, since we
+use these variables to describe the Regge geometry
+constructed above.</p>
+      <p>The \ ux" Xi = R Eiana is the ux of the densitized
+tried Ea, a two-form, across each triangle. Here na is the
+i
+geometrical normal to the triangle. Choosing a constant
+Euclidean triad Eia(x) = ia with each tetrahedron, X~ =
+fXig is simply given by X~ = A~n, the unit normal ~n to
+the face, in the coordinates de ned by the triad chosen in
+the tetrahedron, multiplied by the area A of the triangle.
+More precisely, since the triad on the triangulation is
+in general discontinuous across the (oriented) triangle,
+there are two vectors, ~n and ~n0 associated to its source
+and target sides respectively.</p>
+      <p>
+        The \holonomy" H 2 SU (
+        <xref ref-type="bibr" rid="ref2">2</xref>
+        ) is the holonomy of the
+Ashtekar connection A, along a line (\link") dual to the
+triangle. Since the triad chosen is constant inside each
+tetrahedron, both the extrinsic curvature and the spin
+connection on a triangulation are distributional and
+concentrated on the triangle, therefore the holonomy is a
+single group element associated to the triangle itself and
+the exact points where the link starts and ends in the
+tetrahedra are irrelevant. The holonomy is the group
+element that turns the two triads on the two tetrahedra
+into one another. It depends on the two ingredients of
+A, the spin connection (E) and the extrinsic curvature
+multiplied by the Immirzi parameter K. The holonomy
+of the spin connection alone is
+where n and n0 are SU (
+        <xref ref-type="bibr" rid="ref2">2</xref>
+        ) group elements that turn the
+unit vector in the z direction z^ into ~n and ~n0
+respectively (the minus sign is because we take all normal
+vectors to tetrahedra faces as outgoing), and is the
+rotation angle in the (x; y) plane needed to match the x; y
+axis of the two triads across the face.3 However, the
+exponentiation of the K term also contributes a rotation
+3 To x for general twisted geometries one has to pick a preferred
+edge, see [76, 77]; the angle can be nicely parametrised in terms
+of spinors' phases in the spinor formalism [73, 77, 78].
+(
+        <xref ref-type="bibr" rid="ref31">31</xref>
+        )
+(32)
+(33)
+(34)
+around an axis normal to the triangle, because the only
+non-vanishing component of the extrinsic curvature of a
+triangulation is kab nanb. Therefore the discretized
+holonomy reads
+where is boost angle between the normals of the
+tetrahedra. Thus, in the discretization of the Ashtekar
+variables the extrinsic curvature is coded into an extra
+rotation along the normal to triangles [75, 79]. The relation
+is the discrete equivalent of the Ashtekar-Barbero
+relation A = (E) + K.4 Notice that the quantity is
+gauge invariant.
+      </p>
+      <p>
+        The map from ~n to n is not unique, because there are
+many rotations n that brings z^ into ~n, that is, di
+erent choices of section of the Hopf bration SU (
+        <xref ref-type="bibr" rid="ref2">2</xref>
+        ) ! S2.
+Di erent choices of map di er by a rotation along the
+normal to the face and therefore give di erent values of
+. Following [74], we chose the natural section where the
+rotation is around an axis normal to both z^ and ~n. This
+is the one used in the de nition of the SU (
+        <xref ref-type="bibr" rid="ref2">2</xref>
+        ) coherent
+states. Explicitly, describing a unit vector with its polar
+angles ~n = ( ; ), it is given by
+For the target of the same link, we compensate the minus
+sign by adding a parity transformation (given by P =
+i 2) to ensure that both normals are outgoing; if ~n0 =
+( ; ) then
+      </p>
+      <p>
+        Since the tetrahedra are all equal, we can exploit the
+local rotational freedom to assign the same four normals
+to all of them. Using the orientation of Figure 11, we get
+4 Encoding in a dependent way the extrinsic curvature in the
+boost can be interpreted as the solution of the secondary
+simplicity constraints for Regge con gurations [73, 77, 80, 81],
+gaugexing the rst-class primary simplicity constraints [82].
+way that the respective triangles match (lie in the (x; y)
+plane), with opposite orientation. To make them match,
+that is to align the edges, a further rotation around the
+z^ axis is needed in general. Because of the symmetry of
+the tetrahedra, it is easy to see that the required rotations
+have angles
+Then, in (
+        <xref ref-type="bibr" rid="ref29">29</xref>
+        ) is given by = 0 for the angular
+(equilateral) faces, and for the radial (iscosceles) faces we have
+This gives explicitly all variables n; n0; for all links,
+which, along with the 's which are given in the next
+section, are the data needed to de ne the quantum states.
+Notice that using (
+        <xref ref-type="bibr" rid="ref29">29</xref>
+        ) with the explicit values (35), these
+cancel the right-most exponentials in (
+        <xref ref-type="bibr" rid="ref30">30</xref>
+        ) and (
+        <xref ref-type="bibr" rid="ref31">31</xref>
+        ). The
+e ect of the angles is therefore simply to replace n and
+n0 in (
+        <xref ref-type="bibr" rid="ref30">30</xref>
+        ) and (
+        <xref ref-type="bibr" rid="ref31">31</xref>
+        ) by
+so that on each link we have
+VII.
+      </p>
+    </sec>
+    <sec id="sec-7">
+      <title>THE QUANTUM BOUNDARY STATE</title>
+      <p>It is time to move to the quantum theory. The basic
+equations of covariant LQG are brie y recalled in
+Appendix A. We follow [50], to which we refer the reader for
+all details. We start by constructing a quantum
+boundary state representing the geometry of , then we write
+0 = 0;</p>
+      <p>k = 'k:
+= k</p>
+      <p>k0
+= e 2i ' 3 e 2 2 ;</p>
+      <p>i
+0 = e 2i ' 3 P e 2 2 ;</p>
+      <p>i
+i
+H = 0e 2
+3</p>
+      <p>
+        1:
+3
+1
+0
+2
+FIG. 11. The orientation chosen for the isosceles tetrahedra
+and their four normals (33). Fixing these normals amounts to
+choosing the SO(
+        <xref ref-type="bibr" rid="ref3">3</xref>
+        ) gauge at each node. The equatorial angle
+is 2 =3, the polar angle satis es cos = p2=3.
+5 Alternatively, it would be interesting to use the U (N ) coherent
+states proposed in [86].
+(35)
+(36)
+(37)
+(38)
+(39)
+its quantum amplitude. The quantum state is essentially
+a wave packet peaked on the classical geometrical data
+(X~ ; H).
+      </p>
+      <p>
+        LQG states are de ned over abstract graphs. The
+nodes n of the graph represent quanta of space. The
+links ` of the graph represent the surfaces between the
+quanta of space. A state is represented by a square
+integrable function (h`), where h` 2 SU (
+        <xref ref-type="bibr" rid="ref2">2</xref>
+        ), for every link `.
+The interpretation of h` is the holonomy of the Ashtekar
+connection between two nodes. Here, in the rst relevant
+approximation, we choose the graph depicted in Figure
+9, dual to the triangulation of the boundary described in
+the previous Section. We call hab and ha the oriented
+group elements on the links `ab and `a.
+      </p>
+      <p>Coherent states approximating a discrete classical
+intrinsic and extrinsic geometry have been constructed by
+various authors. Here we shall use the heat-kernel
+coherent states by Thiemann [83] (denoted `extrinsic' in [50]),
+parametrized in terms of twisted geometries [84] as in
+[85], that depend on a complex number z = + i and
+two unit-length 3d vectors ~n; ~n0 per each link `. These
+are de ned (see (A1)) as the product over the links of the
+coherent link states</p>
+      <p>j(j2+1) tr[Dj (n 1h{1n0)Dj (ez 23 )]
+(40)
+where dj = 2j +1, the matrices Dj are spin-j Wigner
+matrices, in the last term analytically extended to complex
+parameters.5</p>
+      <p>
+        The spin network coherent states are obtained by
+gauge averaging these states on the nodes, but this is
+not needed when contracting the state with a spinfoam,
+as we do below, since the SL(2; C) integral in the
+spinfoam amplitude already implement the gauge averaging
+and renders the SU (
+        <xref ref-type="bibr" rid="ref2">2</xref>
+        ) averaging redundant.
+      </p>
+      <p>
+        For large real part of z, the trace is dominated by
+the highest magnetic moment component which is
+proportional to e j and the sum over j is therefore peaked
+on the minimum of j(j + 1)=(
+        <xref ref-type="bibr" rid="ref2">2</xref>
+        ) j, which is
+The quantity determines whether the state is peaked
+on the area or on the extrinsic curvature. A convenient
+choice allowing both to be peaked in the large j limit is
+= pj0 which gives
+If we want the state to be peaked on an area A we must
+pose, recalling the LQG relation between spin area A
+8 ~Gj,
+j0
+      </p>
+      <p>:
+= pj0
+= pj0 =
+s
+8</p>
+      <p>A
+~G
+:
+(41)
+(42)
+(43)
+0 = pjo =
+s</p>
+      <p>Ao
+8
+~G
+=
+2m(1 +
+p2 ~G
+)
+where</p>
+      <p>with
+and
+ab(h) =
+a(h) =
+(44)
+(45)
+(47)
+(48)
+(49)
+(50)
+FIG. 12. The spinfoam and its 2-skeleton (edges and vertices)
+with the orientation of the edges. The boundary orientation
+is as in Fig. 9. The faces are orientated as in Fig. 13.</p>
+      <p>From the general formulas of the appendix, the
+amplitude of such a spinfoam can be written in the form,
+W (hl) =</p>
+      <p>Z</p>
+      <p>SL(2;C)
+dge Y Pf (ge; ge0 ; hl)
+f
+where
+Pf (g0; g; h) =</p>
+      <p>X dj Dj;jm;j;l;p(g0)Dl;jp;;jj;n(g 1)Dnj;m(h)</p>
+      <p>j
+for the upper and lower faces and
+Pf (g0; g; h) =</p>
+      <p>
+        X dj Dj;jm;j;l;p(g0) jl Dl;jp;;jj;n(g 1)Dnj;m(h)
+j
+(51)
+for the lateral faces. (The di erence between the two
+expression is that the rst includes a sum over the spin
+index l while in the second this is xed to j by the
+projection.) Here the Dj are the Wigner matrices of SU (
+        <xref ref-type="bibr" rid="ref2">2</xref>
+        )
+and the Dp;k are the Wigner matrices of the unitary
+representations of SL(2; C) in the canonical basis. Writing
+this explicitly for the spinfoam that concerns us, we get
+0 =
+      </p>
+      <p>
+        The lowest order triangulation lling the triangulated
+surface is obtained gluing two regular four-simplices
+by a single tetrahedron. The 2-skeleton of the dual of
+this triangulation is depicted in Figure 12. The
+corresponding spinfoam has no internal faces. In each of the
+two vertices, we can drop the integral associated to the
+edge connecting the two vertices. Then the amplitude
+is like that of an eight-valent vertex whose edges are all
+connected to the boundary, with the only di erence that
+in the four lateral faces an SU (
+        <xref ref-type="bibr" rid="ref2">2</xref>
+        ) projection associated
+to the internal edge is inserted between the two SL(2; C)
+group elements.
+      </p>
+      <p>W (ha; hab) =</p>
+      <p>dga
+Z</p>
+      <p>SL(2;C)
+0</p>
+      <p>Y Pa(ga ; ga+; ha)
+a
+1</p>
+      <p>!
+Pab(ga ; gb ; hab)A :
+(52)</p>
+      <p>The amplitude for the boundary coherent state is
+obtained contracting the two
+for the upper and lower faces (f = fab g) and
+Pf (g0; g; n; n0; z)=</p>
+      <p>
+        X dj e j(j+1)=(
+        <xref ref-type="bibr" rid="ref2">2</xref>
+        )Dj;jm;j;l;p(g0) jl
+j
+      </p>
+      <p>j
+Dl;jp;;jj;n(g 1)Dnj;m(n0ez 23 n 1)
+(56)
+for the lateral faces (f = a). The equations (54), (55)
+and (56) de ne W (m; T ) completely.</p>
+      <p>The modulus square jW (m; T )j2 is proportional to the
+probability density for the process to happen at time T .
+Assuming that the process happens, the proportionality
+constant is determined by requiring the total
+probability to be unit. This gives in particular the probability
+density in time</p>
+      <p>jW (m; T )j2</p>
+      <p>P (m; T ) = R01 jW (m; T )j2 dT :
+and the black hole lifetime
+by
+Z
+0</p>
+      <p>
+        P (m; T ) dT =
+1
+1
+e
+(57)
+(58)
+which gives equation (
+        <xref ref-type="bibr" rid="ref1">1</xref>
+        ).
+      </p>
+      <p>
+        The integration for all T is problematic: (46) is
+periodic in the boost parameters o and , with period 4 = ,
+and o becomes larger than 4 = for large T , see (47).
+As discussed in [87], the periodicity makes the amplitude
+ill de ned, and its validity should be restricted to a single
+period. To allow for large T then, one needs to go to a
+higher order in the vertex expansion. Therefore the use
+of the simple discretisation de ned above, and the
+quantum amplitude associated to it derived above, should be
+used for small T . A meaningful half-life can still be
+extracted at this level of approximation, if, as mentioned
+in the Introduction, we consider an additional
+hypothesis on the decay of the black hole: that, at least in some
+(59)
+(60)
+(61)
+(62)
+(
+        <xref ref-type="bibr" rid="ref32">63</xref>
+        )
+(
+        <xref ref-type="bibr" rid="ref33">64</xref>
+        )
+(
+        <xref ref-type="bibr" rid="ref34">65</xref>
+        )
+appropriate regime, it follows the usual exponential form
+of decay processes. Namely the probability to decay at
+time T has the form
+      </p>
+      <sec id="sec-7-1">
+        <title>Equating this and (57), we have</title>
+        <p>P (m; T ) =
+e</p>
+        <p>(Tm)
+(m)</p>
+        <p>In the previous section we have derived the black to
+white hole transition amplitude W (m; T ). In this paper
+we do not extract an estimation for (m), which will be
+reported elsewhere. In this section, we only sketch a
+procedure for simplifying the form of the amplitude. The</p>
+        <p>nal expression and all relevant de nitions are
+summarized in a self contained form in Appendix , for future
+reference.</p>
+        <p>As a rst step, we notice that the real part of zo and
+z is large compared to unit. Because of this, in the last
+matrix of (55) the term with highest magnetic number
+dominates and we can write</p>
+        <p>Dnjm(ez 23 )</p>
+        <p>
+          nj mj ezj :
+As we will see, this decouples the z data, and thus the
+m and T dependence, from the combinatorial structure
+of SU (
+          <xref ref-type="bibr" rid="ref2">2</xref>
+          ) and SL(2; C).
+        </p>
+        <p>Next, following [88], we parametrize the SL(2; C)
+ele</p>
+        <p>
+          r 3
+ments as g = ue 2 v 1 with u; v 2 SU (
+          <xref ref-type="bibr" rid="ref2">2</xref>
+          ) and r 2 (0; 1),
+and write the SL(2; C) integrals as
+        </p>
+        <p>Z</p>
+        <p>dg =
+SL(2;C)</p>
+        <p>Z 1
+0
+dr
+sinh2 r Z
+4</p>
+        <p>Z
+du dv</p>
+        <p>
+          SU(
+          <xref ref-type="bibr" rid="ref2">2</xref>
+          ) SU(
+          <xref ref-type="bibr" rid="ref2">2</xref>
+          )
+The SL(2; C) representation matrices are expanded as
+        </p>
+        <p>
+          Dj mj;jln(g) = Dmjp(u)djlp(r)Dpln(v 1)
+where the middle term is explicitly known in terms of a
+real integral, see Appendix . The SU (
+          <xref ref-type="bibr" rid="ref2">2</xref>
+          ) integral can be
+performed using
+Z
+        </p>
+        <p>
+          SU(
+          <xref ref-type="bibr" rid="ref2">2</xref>
+          )
+dU
+kDmjkknk (U ) =
+= X(2J + 1)iJ; jm1;1j;2m;j23;;mj43;m4 iJ; jn11;j;n2;2j;3n;3j4;n4
+where the four-valent intertwiners are given as a
+product of two Wigner 3j symbols, see Appendix . Using this,
+we can perform all the SU (
+          <xref ref-type="bibr" rid="ref2">2</xref>
+          ) integrals, giving
+intertwiners that join the indices of the matrices Dj (n). To each
+node correspond four intertwiners, two from the u
+integration and two from the v integration, one for each of
+the four (half-) links attached to the node.
+        </p>
+        <p>Bringing all of the above together, W (m; T ) can be
+written as a sum over the spin con gurations fja; jabg,
+with the summand containing an eight-dimensional real
+integral over dra and contractions between these
+integrals, 3j symbols and Wigner's matrices.</p>
+        <p>Because of the highest-weight approximation, the
+dependence on the spacetime parameters m and T (z data)
+is pulled into a weight function w(z0; z ; ja; jab). Then,
+in order to arrive to a compact expression, we rearrange
+the combinatorial structure and the gauge data (normals)
+at the level of nodes. The orientations of the spinfoam
+and its boundary as de ned in Figs. 9, 12, 13, were
+chosen so that the pattern of signs appearing in the indices
+of the various objects and the functional dependence of
+the boost integrands are identical for each node.</p>
+        <p>
+          Before giving the nal expression, we remind and
+explain notation: spins on the four angular links are
+labelled as ja and on the twelve radial links as jab, where
+ab ba and a 6= b. Spins appearing in (
+          <xref ref-type="bibr" rid="ref34">65</xref>
+          ) are
+indicated as capital letters and labelled as Ja , they live on
+the eight four-valent nodes. The composite index fja g is
+the set of indices on the links connected to the node a
+(one ja and three jab). Magnetic indices of Wigner's
+ma
+        </p>
+        <p>!
+trices live on half-links and are indicated as fma g, where
+a right arrow means those ingoing to the node come with
+a minus sign while a left arrow that those outgoing to the
+node come with a minus sign.</p>
+        <p>
+          Explicitly, with a bit of algebra, we have
+(
+          <xref ref-type="bibr" rid="ref36">67</xref>
+          )
+(
+          <xref ref-type="bibr" rid="ref37">68</xref>
+          )
+(
+          <xref ref-type="bibr" rid="ref38">69</xref>
+          )
+The arrow in the tensor product of the djlp(r)
+indicates that those on links ingoing to the node appear as
+dljp( r). There remains one intertwiner from each node.
+        </p>
+        <p>These are contracted amongst them according to the
+schema
+, yielding a 24j symbol. Explicitely, it is
+W (m; T ) = X</p>
+        <p>
+          w(z0; z ; ja; jab) (
+          <xref ref-type="bibr" rid="ref1">1</xref>
+          )P`2 j`
+the group elements de ning the normals of the tetrahedron (node) a as given in (37) and (38):
+In this expression we see explicitly that the \position" variable j is peaked on the area Re(z)2 and the conjugate
+\momentum" variable multiplies j in the oscillating part. The factor c( ; 0) arises from completing the square in
+the gaussian and can be absorbed in the normalization.
+        </p>
+        <p>J
+The part containing the normals, Nfjaa g, is the contraction of one of the intertwiners with the Wigner matrices of</p>
+        <p>The above specify the half life of a black hole as a
+function of the mass. The nal formula is summarised in
+appendix B with some further details.</p>
+        <p>Preliminary partially numerical and partially
+analytical estimates developed in [89] appears to support the
+lifetime m2. The mechanism for this to happen is
+intriguing: taking the semiclassical approximation where
+the horizon area is xed to its classical value, namely
+restricting the sum to a xed value of the spins associated
+to the surfaces representing the size of the black hole
+horizon (ja jmax m2), renders the lifetime in nite. But
+including uctuations of the horizon area (terms in the
+sum ja 6= jmax) generates interference terms that makes
+the lifetime nite. This suggests that the tunneling
+channel could be open precisely by the quantum uctuations
+of the geometry at the horizon.</p>
+        <p>A detailed analysis of the amplitude is in course and
+will be reported elsewhere.</p>
+      </sec>
+    </sec>
+    <sec id="sec-8">
+      <title>ACKNOWLEDGEMENTS</title>
+      <p>We thank Pierre Martin-Dussaud and especially Fabio
+D'Ambrosio and for discussions and helpful comments.
+IV thanks Jonathan Engle and U.S. National Science
+Foundation for partial support under grants PHY-1205968
+and PHY-1505490. I.V. gratefully acknowledges the
+hospitality of CPT Luminy during his visit in autumn 2015.
+MC acknowledges support from the Educational Grants
+Scheme of the A.G.Leventis Foundation for the
+academic years 2013-2014, 2014-2015 and 2015-2016 as well
+as from the Samy Maroun Center for Space, Time and
+the Quantum.</p>
+    </sec>
+    <sec id="sec-9">
+      <title>Appendix A: Review of LQG</title>
+      <p>This review is condensed; we follow [50], to which we
+refer the reader for all details.</p>
+      <p>
+        States are de ned over four-valent graphs. The nodes
+n of the graph represent quanta of space. The links ` the
+graph represent the surfaces between the quanta of space.
+A state is represented by a square integrable function
+(h`), where h` 2 SU (
+        <xref ref-type="bibr" rid="ref2">2</xref>
+        ), for every link `. The
+interpretation of h` is the holonomy of the Ashtekar connection
+between two nodes.
+      </p>
+      <p>Coherent states approximating a discrete classical
+intrinsic and intrinsic geometry have been constructed by
+various authors. Here we shall use the states de ned in
+[85] that depend on a complex number z = + i and
+two unit-length 3d vectors ~n; ~n0 per each link `. These
+FIG. 13. The wedge amplitude with the orientation of the
+two edges and the link. The face is oriented in accord with
+the link. Note that the group elements are acting on their
+right, so following the arrow in the picture actually means to
+insert the terms in reverse order inside the traces.</p>
+      <p>j
+are de ned as the product over the links of the link states</p>
+      <p>
+        X dj e j(j+1)=2 tr[Dj (h 1)Dj (n0ez 23 n 1)]
+(A1)
+where dj = 2j +1, the matrices Dj are spin-j Wigner
+matrices analytically extended to complex parameters and
+we have indicated with n and n0 the SU (
+        <xref ref-type="bibr" rid="ref2">2</xref>
+        ) elements
+corresponding to the rotation of the z axis to the vectors ~n
+and ~n0. These states can be seen as a smearing of the
+states
+z;~n;~n0 (h) = (h; n0ez 23 n 1)
+(A2)
+which are peaked on the holonomy h = n0ez 23 n 1. They
+have the property that the expectation value of the
+geometrical operators de nes a discrete geometry where ~n
+and ~n0 are the normals to the face dual to the link, in the
+frames of the two quanta, is the (dimensionless) area of
+the face, and is, in the gauge where ~n = ~n0, the angle
+between the 4d normals to the two space quanta, namely
+the boost giving the relative velocity between the two.
+      </p>
+      <p>The amplitude associated to a state can be
+approximated by choosing a 5-valent two-complex C bounded
+by the graph. The ner the two-complex, the better the
+approximation. The LQG amplitude associated to a state
+is [50]:</p>
+      <p>Z</p>
+      <p>
+        SU(
+        <xref ref-type="bibr" rid="ref2">2</xref>
+        )
+hWC j i =
+dh` W (h`)
+(h`):
+where the amplitude associated to the two complex C is
+WC(h`) = NC
+      </p>
+      <p>Z</p>
+      <p>
+        SU(
+        <xref ref-type="bibr" rid="ref2">2</xref>
+        )
+dhfv Y
+f
+      </p>
+      <p>Y hfv
+v2f</p>
+      <p>Y Av(hfv)
+v
+(A3)
+Here f and v denote the faces and the vertices of C.
+In turn, the vertex amplitude Av is de ned as follows.
+Calling h` = hvf the variables on the links of the vertex
+graph, and n the nodes of the vertex graph
+Av(h`) =</p>
+      <p>Z</p>
+      <p>dge0 Y X dj Dj(njj;jm)(gege01) Dm(jn)(h`)
+SL(2;C) ` j
+(A4)
+Z (m)</p>
+      <p>0</p>
+      <sec id="sec-9-1">
+        <title>The amplitude is</title>
+        <p>
+          summarized in the paragraph above equation (
+          <xref ref-type="bibr" rid="ref35">66</xref>
+          ).
+        </p>
+        <p>
+          The lifetime (m) of a black hole as a function of its
+mass m is given by LQG to rst order in the vertex
+amplitude and in the highest-weight approximation (62) by
+The integration is over one ge for each node (edge of
+v), except one. The product is over 10 faces f per each
+vertex, and D(j) and D(p k) are matrix elements of the
+SU (
+          <xref ref-type="bibr" rid="ref2">2</xref>
+          ) and SL(2; C) representations. See Figure 13 for
+the relative orientation of edges and links.
+        </p>
+      </sec>
+    </sec>
+    <sec id="sec-10">
+      <title>Appendix B: Summary of the amplitude</title>
+      <p>
+        Here we summarise in self-contained form all the
+formulas de ning our resulting expression. All labels refer
+to the oriented boundary which determines the pattern
+of contraction. This is xed by Fig. 9. The notation is
+W (m; T ) = X w(z0; z ; ja; jab) (
+        <xref ref-type="bibr" rid="ref1">1</xref>
+        )P`2 j`
+(B3)
+(B4)
+(B5)
+(B6)
+(B8)
+(B9)
+with
+The normals are in
+c( ; 0) =
+The arrowed product indicates that the magnetic indices of the representation matrices on the half links outgoing
+from the node come with a minus sign. The boost part is
+!
+The arrow in the tensor product of the djlp(r)
+indicates that those on links ingoing to the node appear as
+dljp( r). The ranges on the l and p indices are l j
+and p is summed over the range jpj j. The functions
+djlp(r) are given by the integral
+24j symbol is given by
+a;
+!
+where djmn(cos ) are Wigner's SU (
+        <xref ref-type="bibr" rid="ref2">2</xref>
+        ) matrices. The
+      </p>
+      <p>
+        The four-valent intertwiners are de ned as
+iJ; jm1;1j;2m;j23;;mj43;m4 =
+= (
+        <xref ref-type="bibr" rid="ref1">1</xref>
+        )j1 j2+
+j1 j2 J
+m1 m2
+j3 j4 J
+m3 m4
+with
+=
+are the Wigner 3j symbols. Finally
+zo =
+z =
+The black hole decay time can then be estimated from
+(m)
+      </p>
+    </sec>
+  </body>
+  <back>
+    <ref-list>
+      <ref id="ref1">
+        <mixed-citation>
+          [1]
+          <string-name>
+            <given-names>B. P.</given-names>
+            <surname>Abbott</surname>
+          </string-name>
+          et. al. and
+          <string-name>
+            <surname>(Ligo Collaboration Virgo Collabora</surname>
+          </string-name>
+          [t3i2o]n)E, .\FO.bKseeravnaet,ioBn. oWfG.Sratvapitpaetirosn,aMl .WKarvaemsefro, manad BAi.nGar.yLyne, \
+          <article-title>On the Black Hole Merger,"</article-title>
+          <source>Physical Review Letters</source>
+          <volume>116</volume>
+          (
+          <year>2016</year>
+          )
+          <article-title>061102</article-title>
+          . MNRAS 425 (
+          <year>2012</year>
+          )
+          <article-title>L71</article-title>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref2">
+        <mixed-citation>
+          [2]
+          <string-name>
+            <given-names>A.</given-names>
+            <surname>Ashtekar</surname>
+          </string-name>
+          and
+          <string-name>
+            <given-names>B.</given-names>
+            <surname>Krishnan</surname>
+          </string-name>
+          , \
+          <source>Dynamical horizons and their[3p3r]oDpe.rTtiheos,r"ntPohny</source>
+          ,sB..
+          <source>RSetva</source>
+          .pDpe6r8s,(
+          <issue>M20</issue>
+          .
+          <year>0B3</year>
+          )
+          <year>ai1l0es4</year>
+          ,
+          <fpage>0B30</fpage>
+          .,
+          <string-name>
+            <surname>Barsdell</surname>
+            ,
+            <given-names>S.</given-names>
+          </string-name>
+          <string-name>
+            <surname>Bates</surname>
+          </string-name>
+          , N. D. R arXiv:
+          <volume>0308033</volume>
+          [gr-qc]. Champion,
+          <string-name>
+            <given-names>P.</given-names>
+            <surname>Coster</surname>
+          </string-name>
+          ,
+          <string-name>
+            <given-names>N. D</given-names>
+            <surname>'Amico</surname>
+          </string-name>
+          ,
+          <string-name>
+            <given-names>A.</given-names>
+            <surname>Jameson</surname>
+          </string-name>
+          ,
+          <string-name>
+            <given-names>S.</given-names>
+            <surname>Johnston</surname>
+          </string-name>
+          , M. Ke
+        </mixed-citation>
+      </ref>
+      <ref id="ref3">
+        <mixed-citation>
+          [3]
+          <string-name>
+            <given-names>L.</given-names>
+            <surname>Smolin</surname>
+          </string-name>
+          ,
+          <article-title>The Life of the Cosmos</article-title>
+          . Oxford University Press, NewAY.oProks,seUn.tSi,.Aa.n,
+          <year>d19W97</year>
+          ..van Straten,
+          <article-title>\A population of fast radio bursts</article-title>
+        </mixed-citation>
+      </ref>
+      <ref id="ref4">
+        <mixed-citation>
+          [4]
+          <string-name>
+            <given-names>J. V.</given-names>
+            <surname>Narlikar</surname>
+          </string-name>
+          ,
+          <string-name>
+            <given-names>K.</given-names>
+            <surname>Appa Rao</surname>
+          </string-name>
+          , and
+          <string-name>
+            <given-names>N.</given-names>
+            <surname>Dadhich</surname>
+          </string-name>
+          , \
+          <article-title>High energy radiaNt</article-title>
+          .iYon.)
+          <article-title>fr3o4m1 w(jhuilt,e20h1o3le)s,5"3{N6a</article-title>
+          ,
+          <year>taureXi2v5</year>
+          :
+          <volume>113</volume>
+          (
+          <issue>0179</issue>
+          .7146)
+          <issue>2589</issue>
+          .
+          <fpage>1</fpage>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref5">
+        <mixed-citation>
+          [5]
+          <string-name>
+            <given-names>V. P.</given-names>
+            <surname>Frolov</surname>
+          </string-name>
+          and G. Vilkovisky, \Quantum Gravity removes
+          <string-name>
+            <surname>C</surname>
+          </string-name>
+          [3l4a]ssLic.aGl.SiSnpgiutlearr,itJie.
+          <source>sMa.nCdoSrhdoerst,eJn.s Wth.eTL.ifHeeosfseBlsl,acDk. HRo</source>
+          .lLeso,r
+          <article-title>"imer, M. A</article-title>
+          . ICTP preprint IC/79/69, Trieste. (
+          <year>1979</year>
+          ) . Deneva,
+          <string-name>
+            <given-names>V. M.</given-names>
+            <surname>Kaspi</surname>
+          </string-name>
+          ,
+          <string-name>
+            <given-names>R. S.</given-names>
+            <surname>Wharton</surname>
+          </string-name>
+          ,
+          <string-name>
+            <given-names>B.</given-names>
+            <surname>Allen</surname>
+          </string-name>
+          ,
+          <string-name>
+            <given-names>S.</given-names>
+            <surname>Bogdanov</surname>
+          </string-name>
+          ,
+          <string-name>
+            <surname>A</surname>
+          </string-name>
+          . Br
+        </mixed-citation>
+      </ref>
+      <ref id="ref6">
+        <mixed-citation>
+          [6]
+          <string-name>
+            <given-names>V.</given-names>
+            <surname>Frolov</surname>
+          </string-name>
+          and G. Vilkovisky, \
+          <article-title>Spherically symmetric collapse in quCa</article-title>
+          .nKtuamrakgor-aAvirtgya,
+          <article-title>"mPanh,yBsi</article-title>
+          .csKLneisttpeerls,
+          <source>BP. 1L0a6za(r1u9s8,1K)</source>
+          .
+          <year>3J07</year>
+          .{
+          <fpage>L3e1e3</fpage>
+          ,.J. van Leeu
+        </mixed-citation>
+      </ref>
+      <ref id="ref7">
+        <mixed-citation>
+          [7]
+          <string-name>
+            <given-names>S. B.</given-names>
+            <surname>Giddings</surname>
+          </string-name>
+          and
+          <string-name>
+            <given-names>W. M.</given-names>
+            <surname>Nelson</surname>
+          </string-name>
+          , \
+          <article-title>Quantum emission from two-Xdi</article-title>
+          .mSeinemsioenas,l Ib.
+          <source>laHc.kShtoaliers,"KP</source>
+          . hSytsoivcall,RJe.viKew.
+          <source>SDwi4g6gu(m19,9A2.) Venkataram</source>
+          <volume>2486</volume>
+          {
+          <fpage>2496</fpage>
+          , arXiv:
+          <volume>9204072</volume>
+          [
+          <article-title>hep-th]. Radio Burst Discovered in the Arecibo Pulsar ALFA Survey," arXi</article-title>
+        </mixed-citation>
+      </ref>
+      <ref id="ref8">
+        <mixed-citation>
+          [8]
+          <string-name>
+            <given-names>C. R.</given-names>
+            <surname>Stephens</surname>
+          </string-name>
+          , G. t. Hooft, and
+          <string-name>
+            <given-names>B. F.</given-names>
+            <surname>Whiting</surname>
+          </string-name>
+          , \
+          <source>Black hole [e3v5a]pSo.raLtiiboenrawtitahnodutLi.nMforamccaitoinoen, l\oQssu,"anCt ulamssiGcaralvaintyd phenomenology: ac Quantum Gravity</source>
+          <volume>11</volume>
+          (
+          <year>1994</year>
+          )
+          <volume>621</volume>
+          {
+          <fpage>647</fpage>
+          , arXiv:
+          <volume>9310006</volume>
+          [gr-qc[3]
+          <fpage>6</fpage>
+          .]
+          <string-name>
+            <given-names>G.</given-names>
+            <surname>Amelino-Camelia</surname>
+          </string-name>
+          , \
+          <article-title>Quantum Spacetime Phenomenology," Living</article-title>
+        </mixed-citation>
+      </ref>
+      <ref id="ref9">
+        <mixed-citation>
+          [9]
+          <string-name>
+            <given-names>P. O.</given-names>
+            <surname>Mazur</surname>
+          </string-name>
+          and E. Mottola, \
+          <article-title>Gravitational vacuum condens[a3t7e] sAta.rBs.a,"rraPur,ocBee</article-title>
+          .dBinogllsieotf, Fth.eVNidaotitotno,alanAdcaCde.
+          <source>mWyeiomf eSrc,i\enPcheesnomenology of the United States of America</source>
+          <volume>101</volume>
+          (
+          <year>2004</year>
+          ) no.
+          <issue>26</issue>
+          ,
+          <issue>9545</issue>
+          {
+          <fpage>50</fpage>
+          , arXilvo:
+          <fpage>o0k4</fpage>
+          ,
+          <article-title>"</article-title>
+          <source>07a0r7X5iv[:g1r5-0q7c.]0</source>
+          .
+          <fpage>5424</fpage>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref10">
+        <mixed-citation>
+          [10]
+          <string-name>
+            <given-names>L.</given-names>
+            <surname>Modesto</surname>
+          </string-name>
+          , \
+          <article-title>Disappearance of the black hole singularity in l[o3o8p] Aqu.aBnatrurmaug,rBav</article-title>
+          .iBtyo,l
+          <article-title>"liePt,hyMsi</article-title>
+          .caSlchRuetvtieenw,
+          <year>aDnd70F</year>
+          .(2V0i0d4o)
+          <fpage>ttnoo</fpage>
+          ,.
+          <source>\1B2o,uncing blac 124009. excess," arXiv:1606</source>
+          .
+          <fpage>08031</fpage>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref11">
+        <mixed-citation>
+          [11]
+          <string-name>
+            <given-names>A.</given-names>
+            <surname>Ashtekar</surname>
+          </string-name>
+          and
+          <string-name>
+            <given-names>M.</given-names>
+            <surname>Bojowald</surname>
+          </string-name>
+          , \
+          <article-title>Black hole evaporation: A pa[</article-title>
+          <source>3r9a]diTg.mJ,"acCoblassosn. aQnudanTt. PG.rSaov.ti2ri2ou(</source>
+          ,
+          <volume>20</volume>
+          \0M5i)
+          <article-title>gh33t4b9l{a3ck36h2o,les reveal their inne arXiv:0504029 [gr-qc]</article-title>
+          . [40]
+          <string-name>
+            <given-names>A.</given-names>
+            <surname>Ashtekar</surname>
+          </string-name>
+          , \
+          <article-title>Introduction to Loop Quantum Gravity," PoS QGQ</article-title>
+        </mixed-citation>
+      </ref>
+      <ref id="ref12">
+        <mixed-citation>
+          [12]
+          <string-name>
+            <given-names>S.</given-names>
+            <surname>Mathur</surname>
+          </string-name>
+          , \
+          <article-title>The fuzzball proposal for black holes: an elemen[t4a1r]yRre.vGieawm,"biFnioratnsdchJr</article-title>
+          .itPteudlleinr,PLhoyospisk,
+          <source>5K3n(o2t0s,05G)anuog.e7T-8h,eories and Quant</source>
+          <volume>793</volume>
+          {
+          <fpage>827</fpage>
+          , arXiv:
+          <volume>0502050</volume>
+          [
+          <article-title>hep-th]</article-title>
+          .
+          <source>Mathematical Physics</source>
+          . Cambridge University Press, Cambridge, U.
+        </mixed-citation>
+      </ref>
+      <ref id="ref13">
+        <mixed-citation>
+          [13]
+          <string-name>
+            <given-names>S. A.</given-names>
+            <surname>Hayward</surname>
+          </string-name>
+          , \
+          <article-title>Formation and Evaporation of Nonsingular [B42la]cTk.HTohleies,m"aPnhny,sM</article-title>
+          .
+          <source>Rodeevr.nLeCtat.n9on6ic(a2l00Q6u)a0n3t1u1m03G,eneral Relativity</source>
+          . Cam arXiv:
+          <volume>0506126</volume>
+          [gr-qc]. [43]
+          <string-name>
+            <given-names>C.</given-names>
+            <surname>Rovelli</surname>
+          </string-name>
+          , Quantum Gravity. Cambridge University Press,
+          <year>2004</year>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref14">
+        <mixed-citation>
+          [14]
+          <string-name>
+            <given-names>V.</given-names>
+            <surname>Balasubramanian</surname>
+          </string-name>
+          ,
+          <string-name>
+            <given-names>D.</given-names>
+            <surname>Marolf</surname>
+          </string-name>
+          , and
+          <string-name>
+            <surname>Rozali</surname>
+            . M., \Informatio[n44R] eJc.ovEenrgyleF,rRom.PBelraecirka,Haonleds,
+            <given-names>C</given-names>
+          </string-name>
+          " .
+          <source>GReonv</source>
+          .eRllie,l.\
+          <source>TGhraevl</source>
+          .o3op8
+          <article-title>-q(2u0a0n6t)um-gravity ver 1529{1536</article-title>
+          , arXiv:
+          <volume>0604045</volume>
+          [gr-qc].
+          <source>arXiv:0705</source>
+          .
+          <fpage>2388</fpage>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref15">
+        <mixed-citation>
+          [15]
+          <string-name>
+            <given-names>L.</given-names>
+            <surname>Modesto</surname>
+          </string-name>
+          , \
+          <article-title>Black Hole Interior from Loop Quantum Gravit[y45,"]AJd.vEancgeles, iEn</article-title>
+          .HLiigvhinEe,neRr.gyPePrheyirsai,
+          <year>csan2d00C8</year>
+          .
+          <source>(Rnoovve</source>
+          ,
+          <year>ll2i</year>
+          ,
+          <volume>00</volume>
+          \8L)
+          <article-title>Q1G{1v2e,rtex with arXiv:0611043 [gr-qc]</article-title>
+          .
+          <volume>136</volume>
+          {
+          <issue>149</issue>
+          , arXiv:
+          <fpage>0711</fpage>
+          .
+          <fpage>0146</fpage>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref16">
+        <mixed-citation>
+          [16]
+          <string-name>
+            <given-names>S.</given-names>
+            <surname>Hossenfelder</surname>
+          </string-name>
+          and
+          <string-name>
+            <given-names>L.</given-names>
+            <surname>Smolin</surname>
+          </string-name>
+          , \
+          <article-title>Conservative solutions to the[4b6]laLck. Fhroeliedienl faonrmdaKti.oKn rparsonbolve,m\,A" PNheywsiScaplinReFvoiaemw DMo8d1el for 4d Gravit (</article-title>
+          <year>2010</year>
+          )
+          <volume>064009</volume>
+          , arXiv:
+          <fpage>0901</fpage>
+          .3156. arXiv:
+          <volume>0708</volume>
+          .
+          <fpage>1595</fpage>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref17">
+        <mixed-citation>
+          [17]
+          <string-name>
+            <given-names>V. P.</given-names>
+            <surname>Frolov</surname>
+          </string-name>
+          , \
+          <article-title>Information loss problem and a \black hole" m[4o7d]eWlw</article-title>
+          .itKhaamcinlosskei,dMa p.
+          <source>pKairseineltowhosrkiiz,oann,"</source>
+          d aJr.
+          <source>XLievw:a1n4d0o2w.5s4k4i</source>
+          ,
+          <volume>6</volume>
+          \.Spin-Foams for
+        </mixed-citation>
+      </ref>
+      <ref id="ref18">
+        <mixed-citation>
+          [18]
+          <string-name>
+            <given-names>C.</given-names>
+            <surname>Bambi</surname>
+          </string-name>
+          ,
+          <string-name>
+            <given-names>D.</given-names>
+            <surname>Malafarina</surname>
+          </string-name>
+          , and L. Modesto, \
+          <article-title>Non-singular quantum27-in(2sp01ir0e)d9g5r0a0v6it</article-title>
+          ,
+          <source>aatrioXniavl:c0o9l0la9p.s0e9,3"9P.hysical Review D</source>
+          <volume>88</volume>
+          (
+          <issue>aug</issue>
+          ,
+          <year>2013</year>
+          )
+          <volume>044009</volume>
+          , arXiv:
+          <fpage>1305</fpage>
+          .
+          <fpage>4790</fpage>
+          . [48]
+          <string-name>
+            <given-names>A.</given-names>
+            <surname>Perez</surname>
+          </string-name>
+          , \
+          <article-title>The Spin-Foam Approach to Quantum Gravity," Living</article-title>
+        </mixed-citation>
+      </ref>
+      <ref id="ref19">
+        <mixed-citation>
+          [19]
+          <string-name>
+            <given-names>R.</given-names>
+            <surname>Gambini</surname>
+          </string-name>
+          and
+          <string-name>
+            <given-names>J.</given-names>
+            <surname>Pullin</surname>
+          </string-name>
+          , \
+          <article-title>Loop quantization of the Schwarz[4sc9h]iJld. BbleanckGheololeu,n"</article-title>
+          ,
+          <source>PRh</source>
+          .yGs.uRraeuv,.
+          <source>aLnedtt.V1.1R0iv(a2s0s1e3a)u</source>
+          ,
+          <volume>21</volume>
+          \1E3P0R1,
+          <string-name>
+            <surname>L</surname>
+          </string-name>
+          /FK group eld arXiv:
+          <volume>1302</volume>
+          .
+          <fpage>5265</fpage>
+          . 60008, arXiv:
+          <fpage>1008</fpage>
+          .
+          <fpage>0354</fpage>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref20">
+        <mixed-citation>
+          [20]
+          <string-name>
+            <surname>J. M. Bardeen</surname>
+          </string-name>
+          , \
+          <article-title>Black hole evaporation without an event hor[5iz0o]nC,"</article-title>
+          .
+          <source>aRroXvievll:i1a4n0d6.F4.0V98id.otto, Covariant Loop Quantum Gravity</source>
+          . Camb
+        </mixed-citation>
+      </ref>
+      <ref id="ref21">
+        <mixed-citation>
+          [21]
+          <string-name>
+            <given-names>S. D.</given-names>
+            <surname>Mathur</surname>
+          </string-name>
+          , \
+          <article-title>A model with no rewall,"</article-title>
+          <source>arXiv:1506.0434[25</source>
+          .1]
+          <string-name>
+            <given-names>C.</given-names>
+            <surname>Rovelli</surname>
+          </string-name>
+          , \
+          <article-title>What is observable in classical and quantum gravity?,"</article-title>
+        </mixed-citation>
+      </ref>
+      <ref id="ref22">
+        <mixed-citation>
+          [22]
+          <string-name>
+            <given-names>F.</given-names>
+            <surname>Saueressig</surname>
+          </string-name>
+          ,
+          <string-name>
+            <given-names>N.</given-names>
+            <surname>Alkofer</surname>
+          </string-name>
+          ,
+          <string-name>
+            <surname>G. D'Odorico</surname>
+            , and
+            <given-names>F.</given-names>
+          </string-name>
+          <string-name>
+            <surname>Vidotto</surname>
+          </string-name>
+          , \
+          <source>Bl[a5c2k] hCo.leRsoivnelAlis,y\mPpatrotitaiclaolblyseSrvaafeblGesr,a"vPityh,y"s. Rev. D65</source>
+          (
+          <year>2002</year>
+          ) 124013, ar arXiv:
+          <volume>1503</volume>
+          .
+          <fpage>06472</fpage>
+          . [53]
+          <string-name>
+            <given-names>S. B.</given-names>
+            <surname>Giddings</surname>
+          </string-name>
+          ,
+          <string-name>
+            <given-names>D.</given-names>
+            <surname>Marolf</surname>
+          </string-name>
+          , and
+          <string-name>
+            <given-names>J. B.</given-names>
+            <surname>Hartle</surname>
+          </string-name>
+          , \Observables in e ectiv
+        </mixed-citation>
+      </ref>
+      <ref id="ref23">
+        <mixed-citation>
+          [23]
+          <string-name>
+            <given-names>C.</given-names>
+            <surname>Barcelo</surname>
+          </string-name>
+          ,
+          <string-name>
+            <given-names>R.</given-names>
+            <surname>Carballo-Rubio</surname>
+          </string-name>
+          ,
+          <string-name>
+            <given-names>L. J.</given-names>
+            <surname>Garay</surname>
+          </string-name>
+          , and G. Jannes, \
+          <article-title>The0l6if4e0t1im8,eaprrXoibvl:em051o2f2e0v0ap[ohreapti-ntgh]b.lack holes: mutiny or resignation,"</article-title>
+          <source>Classical and Quantum Gravity</source>
+          <volume>32</volume>
+          (
+          <year>2015</year>
+          )
+          <volume>03501</volume>
+          [
+          <fpage>524</fpage>
+          ,]aNr X.iAvr:k1a4n0i9-
+          <lpage>H</lpage>
+          .
+          <year>1a5m0e1d</year>
+          .,
+          <string-name>
+            <given-names>S.</given-names>
+            <surname>Dubovsky</surname>
+          </string-name>
+          ,
+          <string-name>
+            <given-names>A.</given-names>
+            <surname>Nicolis</surname>
+          </string-name>
+          , E. Trincherini, and G. V
+        </mixed-citation>
+      </ref>
+      <ref id="ref24">
+        <mixed-citation>
+          [24]
+          <string-name>
+            <given-names>C.</given-names>
+            <surname>Barcelo</surname>
+          </string-name>
+          ,
+          <string-name>
+            <given-names>R.</given-names>
+            <surname>Carballo-Rubio</surname>
+          </string-name>
+          ,
+          <string-name>
+            <given-names>L. J.</given-names>
+            <surname>Garay</surname>
+          </string-name>
+          , and G. Jannes, \Theinlifeattiimone,
+          <article-title>"prJoHblEemP 0o7f0ev5a(p2o0r0a7t)in5g5b</article-title>
+          ,
+          <source>laarcXkihvo:l0e7s0:4m.1u8ti1n4y. or resignation," arXiv:1409</source>
+          .
+          <fpage>1501</fpage>
+          . [55]
+          <string-name>
+            <given-names>A.</given-names>
+            <surname>Ghosh</surname>
+          </string-name>
+          and
+          <string-name>
+            <given-names>A.</given-names>
+            <surname>Perez</surname>
+          </string-name>
+          , \
+          <article-title>Black hole entropy and isolated horizons t</article-title>
+        </mixed-citation>
+      </ref>
+      <ref id="ref25">
+        <mixed-citation>
+          [25]
+          <string-name>
+            <given-names>P.</given-names>
+            <surname>Haj</surname>
+          </string-name>
+          cek and C. Kiefer, \
+          <article-title>Singularity avoidance by collapsing shealrlsX iinv:q1u1a0n7t.u1m32g0r.avity,"</article-title>
+          <source>International Journal of Modern Physics D</source>
+          <volume>10</volume>
+          (
+          <issue>dec</issue>
+          ,
+          <year>2001</year>
+          )
+          <volume>775</volume>
+          {
+          <fpage>779</fpage>
+          , arXiv:
+          <volume>0107102</volume>
+          [[g5r6-
+          <fpage>]</fpage>
+          qEc.]B.ianchi, \
+          <article-title>Horizon entanglement entropy and universality of the g</article-title>
+        </mixed-citation>
+      </ref>
+      <ref id="ref26">
+        <mixed-citation>
+          [26]
+          <string-name>
+            <given-names>C.</given-names>
+            <surname>Rovelli</surname>
+          </string-name>
+          and
+          <string-name>
+            <given-names>F.</given-names>
+            <surname>Vidotto</surname>
+          </string-name>
+          , \
+          <article-title>Planck stars,"</article-title>
+          <source>Int. J. Mod. Phys.[5D7] 2E3. (B2i0a1n4c)hi1</source>
+          ,
+          <fpage>4</fpage>
+          \4E20n2tr6o,payrXoifvN:
+          <fpage>o1n4</fpage>
+          -
+          <lpage>0E1x</lpage>
+          .
+          <year>t6r5e6m2a</year>
+          .l Black Holes from Loop Gravi
+        </mixed-citation>
+      </ref>
+      <ref id="ref27">
+        <mixed-citation>
+          [27]
+          <string-name>
+            <given-names>H. M.</given-names>
+            <surname>Haggard</surname>
+          </string-name>
+          and
+          <string-name>
+            <given-names>C.</given-names>
+            <surname>Rovelli</surname>
+          </string-name>
+          , \Black hole reworks: quantu[m58-
+          <fpage>]</fpage>
+          grEa.vBityianecheictasnoduMtsi.dSemtherelahko,ri\zLoanstspgaarskpbolfacakbtloacwkhhitoele:
+          <article-title>unitary eva hole tunneling," Physical Review D92 (</article-title>
+          <year>2015</year>
+          )
+          <volume>104020</volume>
+          , arXiv:
+          <fpage>1407a</fpage>
+          .
+          <source>r0X9i8v9:</source>
+          .
+          <volume>1405</volume>
+          .5235.
+        </mixed-citation>
+      </ref>
+      <ref id="ref28">
+        <mixed-citation>
+          [28]
+          <string-name>
+            <given-names>A.</given-names>
+            <surname>Ashtekar</surname>
+          </string-name>
+          , \
+          <article-title>Quantum Gravity and Quantum Cosmology,"</article-title>
+          [L59ec]
+          <string-name>
+            <given-names>tD.N.</given-names>
+            <surname>Mote</surname>
+          </string-name>
+          .sEParhdylse.y,
+          <volume>89</volume>
+          \
+          <article-title>D3e(a2t0h13o)f 3W1{h5it6e. Holes in the Early Universe," Physi</article-title>
+        </mixed-citation>
+      </ref>
+      <ref id="ref29">
+        <mixed-citation>
+          [29]
+          <string-name>
+            <given-names>A.</given-names>
+            <surname>Barrau</surname>
+          </string-name>
+          and
+          <string-name>
+            <given-names>C.</given-names>
+            <surname>Rovelli</surname>
+          </string-name>
+          , \
+          <article-title>Planck star phenomenology,"</article-title>
+          <source>Phy[6s0ic]sTL.eDtterLsoBre7n3zo9 a(n20d1A4)</source>
+          .
+          <source>4P0e5r{e4z</source>
+          ,
+          <fpage>09</fpage>
+          \,
+          <source>ImarpXriove:d14B0l4a.c5k82H1o.le Fireworks: Asy</source>
+        </mixed-citation>
+      </ref>
+      <ref id="ref30">
+        <mixed-citation>
+          [30]
+          <string-name>
+            <given-names>A.</given-names>
+            <surname>Barrau</surname>
+          </string-name>
+          ,
+          <string-name>
+            <given-names>C.</given-names>
+            <surname>Rovelli</surname>
+          </string-name>
+          , and
+          <string-name>
+            <given-names>F.</given-names>
+            <surname>Vidotto</surname>
+          </string-name>
+          , \
+          <article-title>Fast radio bursts and whSitceenhaorleios,"ig.nals,"</article-title>
+          <source>Physical Review D</source>
+          <volume>90</volume>
+          (
+          <year>2014</year>
+          )
+          <volume>127503</volume>
+          , arXiv:
+          <fpage>1409</fpage>
+          .
+          <fpage>4031</fpage>
+          . [61]
+          <string-name>
+            <given-names>G. W.</given-names>
+            <surname>Gibbons</surname>
+          </string-name>
+          and
+          <string-name>
+            <given-names>J. B.</given-names>
+            <surname>Hartle</surname>
+          </string-name>
+          , \
+          <article-title>Real tunneling geometries and th</article-title>
+        </mixed-citation>
+      </ref>
+      <ref id="ref31">
+        <mixed-citation>
+          [31]
+          <string-name>
+            <given-names>D. R.</given-names>
+            <surname>Lorimer</surname>
+          </string-name>
+          ,
+          <string-name>
+            <given-names>M.</given-names>
+            <surname>Bailes</surname>
+          </string-name>
+          ,
+          <string-name>
+            <given-names>M. A.</given-names>
+            <surname>McLaughlin</surname>
+          </string-name>
+          ,
+          <string-name>
+            <given-names>D. J.</given-names>
+            <surname>Narkevic</surname>
+          </string-name>
+          , andRFev.iCewraDwfo4r2d,(
+          <volume>1</volume>
+          \9A90B)
+          <article-title>r2ig4h5t8{M24il6li8s.econd Radio Burst of Extralactic origin,"</article-title>
+          <source>Science 318</source>
+          (
+          <year>2007</year>
+          )
+          <fpage>777</fpage>
+          . [62]
+          <string-name>
+            <given-names>S.</given-names>
+            <surname>Gielen</surname>
+          </string-name>
+          and
+          <string-name>
+            <given-names>N.</given-names>
+            <surname>Turok</surname>
+          </string-name>
+          , \
+          <string-name>
+            <given-names>A Perfect</given-names>
+            <surname>Bounce</surname>
+          </string-name>
+          ,
+          <article-title>"</article-title>
+          <source>arXiv:1510</source>
+          .
+          <fpage>00699</fpage>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref32">
+        <mixed-citation>
+          [63]
+          <string-name>
+            <given-names>S. B.</given-names>
+            <surname>Giddings</surname>
+          </string-name>
+          , \
+          <article-title>Possible observational windows for quantum e eacrtsXifrvo:m12b0l9a.c4k89h2o.les,"</article-title>
+          <source>Physical Review D</source>
+          <volume>90</volume>
+          (
+          <year>2014</year>
+          )
+          <volume>124033</volume>
+          , arXiv:
+          <fpage>1406</fpage>
+          .
+          <fpage>7001</fpage>
+          . [77]
+          <string-name>
+            <given-names>M.</given-names>
+            <surname>Langvik</surname>
+          </string-name>
+          and
+          <string-name>
+            <given-names>S.</given-names>
+            <surname>Speziale</surname>
+          </string-name>
+          , \
+          <article-title>Twisted geometries, twistors</article-title>
+          and conf
+        </mixed-citation>
+      </ref>
+      <ref id="ref33">
+        <mixed-citation>
+          [64]
+          <string-name>
+            <given-names>G.</given-names>
+            <surname>Dvali and M. Panchenko</surname>
+          </string-name>
+          , \
+          <source>Black Hole Type Quantum Co[m78p]uLti.nFgrienidCelriatincdalJB.oHsney-Ebindsat</source>
+          ,e\inOSnytshtemexs,a
+          <article-title>"ct evaluation of spin network arXiv:1507</article-title>
+          .
+          <fpage>08952</fpage>
+          . [79]
+          <string-name>
+            <given-names>C.</given-names>
+            <surname>Rovelli</surname>
+          </string-name>
+          and
+          <string-name>
+            <given-names>S.</given-names>
+            <surname>Speziale</surname>
+          </string-name>
+          , \
+          <article-title>On the geometry of loop quantum gravi</article-title>
+        </mixed-citation>
+      </ref>
+      <ref id="ref34">
+        <mixed-citation>
+          [65]
+          <string-name>
+            <given-names>B.</given-names>
+            <surname>Dittrich</surname>
+          </string-name>
+          , \
+          <article-title>Partial and complete observables for Hamiltonian coanrsXtiravi:n1e0d05sy.s2t9e2m7.s,"</article-title>
+          <source>Gen. Rel. Grav</source>
+          .
+          <volume>39</volume>
+          (
+          <year>2007</year>
+          )
+          <year>1891</year>
+          {
+          <year>1927</year>
+          , arXiv:
+          <volume>0411013</volume>
+          [gr-qc]. [80]
+          <string-name>
+            <given-names>B.</given-names>
+            <surname>Dittrich</surname>
+          </string-name>
+          and
+          <string-name>
+            <given-names>J. P.</given-names>
+            <surname>Ryan</surname>
+          </string-name>
+          , \
+          <article-title>On the role of the Barbero-Immirzi par</article-title>
+        </mixed-citation>
+      </ref>
+      <ref id="ref35">
+        <mixed-citation>
+          [66]
+          <string-name>
+            <given-names>E.</given-names>
+            <surname>Bianchi</surname>
+          </string-name>
+          and
+          <string-name>
+            <given-names>R. C.</given-names>
+            <surname>Myers</surname>
+          </string-name>
+          , \
+          <article-title>On the Architecture of Spacetime GQeuoamnteutrmy</article-title>
+          ,
+          <source>G"raarvXiityv:31021(20.1531)83n.o. 9</source>
+          ,
+          <issue>095015</issue>
+          , arXiv:
+          <fpage>1209</fpage>
+          .
+          <fpage>4892</fpage>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref36">
+        <mixed-citation>
+          [67]
+          <string-name>
+            <given-names>A.</given-names>
+            <surname>Perez</surname>
+          </string-name>
+          , \
+          <article-title>No rewalls in quantum gravity: the role of discre[t8e1n]eHss</article-title>
+          . oMf .quHaangtguamrdg,eCo.mReotrvyelilni, rWes.oWlviineglatnhde, iannfdorFm.aVtiiodnotto, \
+          <article-title>The spin loss paradox,"</article-title>
+          <source>Classical and Quantum Gravity</source>
+          <volume>32</volume>
+          (
+          <year>2015</year>
+          )
+          <fpage>084001</fpage>
+          , (
+          <year>a2r0X1i3v</year>
+          ):
+          <fpage>214401308</fpage>
+          .,7a0r6X2i.v:
+          <volume>1211</volume>
+          .
+          <fpage>2166</fpage>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref37">
+        <mixed-citation>
+          [68]
+          <string-name>
+            <given-names>A.</given-names>
+            <surname>Ashtekar</surname>
+          </string-name>
+          ,
+          <string-name>
+            <given-names>T.</given-names>
+            <surname>Pawlowski</surname>
+          </string-name>
+          ,
+          <string-name>
+            <given-names>P.</given-names>
+            <surname>Singh</surname>
+          </string-name>
+          ,
+          <article-title>and</article-title>
+          K. Vandersloot, \L[o82o]p Sq.
+          <source>uSapnteuzimalecoasnmdoWlog.yMo.f Wk=ie1laFnRdW,\Tmhoedtewlsi,s"toPrihaylss.tRruecvt.ure of loop-gr D75</source>
+          (
+          <year>2007</year>
+          )
+          <volume>24035</volume>
+          , arXiv:
+          <volume>0612104</volume>
+          [gr-qc]. [83]
+          <string-name>
+            <given-names>T.</given-names>
+            <surname>Thiemann</surname>
+          </string-name>
+          and
+          <string-name>
+            <given-names>O.</given-names>
+            <surname>Winkler</surname>
+          </string-name>
+          , \
+          <article-title>Gauge eld theory coherent states (</article-title>
+        </mixed-citation>
+      </ref>
+      <ref id="ref38">
+        <mixed-citation>
+          [69] G. 't Hooft,
+          <string-name>
+            <given-names>S. B.</given-names>
+            <surname>Giddings</surname>
+          </string-name>
+          ,
+          <string-name>
+            <given-names>C.</given-names>
+            <surname>Rovelli</surname>
+          </string-name>
+          ,
+          <string-name>
+            <given-names>P.</given-names>
+            <surname>Nicolini</surname>
+          </string-name>
+          , J. Mureika,
+          <source>MG.rKaav.m1in8sk(2i,0a0n1)d 2M56. 1B{l2e6ic3h6e</source>
+          ,
+          <string-name>
+            <surname>ra,</surname>
+          </string-name>
+          r\XTihve:0G0o0o52d3,
+          <article-title>7th[ehBepa-dt,ha]n.d the Ugly of Gravity and Information," to appear (</article-title>
+          <year>2016</year>
+          ) . [84]
+          <string-name>
+            <given-names>L.</given-names>
+            <surname>Freidel</surname>
+          </string-name>
+          and
+          <string-name>
+            <given-names>S.</given-names>
+            <surname>Speziale</surname>
+          </string-name>
+          , \
+          <article-title>Twisted geometries: A geometric param</article-title>
+        </mixed-citation>
+      </ref>
+      <ref id="ref39">
+        <mixed-citation>
+          [70]
+          <string-name>
+            <given-names>P. E.</given-names>
+            <surname>Wigner</surname>
+          </string-name>
+          , \
+          <article-title>Remarks on the mind-body question," in The Scie(n20ti1s0ts) S84pe0c4u0l</article-title>
+          ,aatersX,iIv.:
+          <source>G10o0o1d.,2e7d4.,8</source>
+          .pp.
+          <volume>248</volume>
+          {
+          <fpage>302</fpage>
+          .
+          <string-name>
+            <surname>Heinemann</surname>
+          </string-name>
+          , London,
+          <year>1961</year>
+          . http://www.projects.science. u[8u5.]nlE/.iBgiga/njcohsi/,fEo.uMndaQgMl/iawriog,naenrd.pCd.fP.erini, \
+          <article-title>Coherent spin-networks,"</article-title>
+        </mixed-citation>
+      </ref>
+      <ref id="ref40">
+        <mixed-citation>
+          [71]
+          <string-name>
+            <given-names>G.</given-names>
+            <surname>Lema</surname>
+          </string-name>
+          <article-title>^tre, \L'Univers en expansion,"</article-title>
+          <source>Annales de la Societ[e86S]ciMen.tDiuqpueuidseanBdruEx.elRle.sLAiv5in3e(</source>
+          ,
+          <volume>1</volume>
+          \9H3o3l)
+          <article-title>o5m1o{r8p5h. ic simplicity constraints fo</article-title>
+        </mixed-citation>
+      </ref>
+      <ref id="ref41">
+        <mixed-citation>
+          [72]
+          <string-name>
+            <given-names>M.</given-names>
+            <surname>Blau</surname>
+          </string-name>
+          , Lecture Notes in General Relativity. http://www.blau.
+          <source>iGtrpa.vuitnyib2e8.c(2h0/1L1e)ctnuor.e2n1o,t2e1s5.0h2t2m,sa.rXiv:1104</source>
+          .
+          <fpage>3683</fpage>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref42">
+        <mixed-citation>
+          [73]
+          <string-name>
+            <given-names>F.</given-names>
+            <surname>Anza</surname>
+          </string-name>
+          and
+          <string-name>
+            <given-names>S.</given-names>
+            <surname>Speziale</surname>
+          </string-name>
+          , \
+          <article-title>A note on the secondary simplicity[8c7o]nMst</article-title>
+          .raCinhtrsisitno dlooouploquu,aCn.tuRmovgelrlai,viatnyd,
+          <source>"SC. lSapsseizciaallea,n\dMaximal extrinsic c Quantum Gravity</source>
+          <volume>32</volume>
+          (
+          <year>2015</year>
+          ) no.
+          <issue>19</issue>
+          ,
+          <issue>195015</issue>
+          , arXiv:
+          <fpage>1409</fpage>
+          .083[
+          <issue>68</issue>
+          .8]
+          <string-name>
+            <given-names>S.</given-names>
+            <surname>Speziale</surname>
+          </string-name>
+          , \
+          <article-title>Boosting Wigner's n-j symbols,"</article-title>
+          <source>arXiv:1609</source>
+          .
+          <fpage>01632</fpage>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref43">
+        <mixed-citation>
+          [74]
+          <string-name>
+            <given-names>L.</given-names>
+            <surname>Freidel</surname>
+          </string-name>
+          and
+          <string-name>
+            <given-names>S.</given-names>
+            <surname>Speziale</surname>
+          </string-name>
+          , \
+          <article-title>From twistors to twisted geometr[8ie9s],"</article-title>
+          <source>MP.hCysh.rRisetvo.dDou8l2ou(</source>
+          ,
+          <year>2F01</year>
+          .
+          <year>0D</year>
+          )'
+          <fpage>A84m04b1ro</fpage>
+          ,sairoX,
+          <source>iavn:d10I.0V6.il0e1n9s9k.y, \Scaling of SL2</source>
+        </mixed-citation>
+      </ref>
+      <ref id="ref44">
+        <mixed-citation>
+          [75]
+          <string-name>
+            <given-names>B.</given-names>
+            <surname>Dittrich</surname>
+          </string-name>
+          and
+          <string-name>
+            <given-names>S.</given-names>
+            <surname>Speziale</surname>
+          </string-name>
+          , \
+          <article-title>Area-angle variables for general relativity," NewJ</article-title>
+          .Phys.
+          <volume>10</volume>
+          (
+          <year>2008</year>
+          )
+          <fpage>83006</fpage>
+          .
+        </mixed-citation>
+      </ref>
+      <ref id="ref45">
+        <mixed-citation>
+          [76]
+          <string-name>
+            <given-names>B.</given-names>
+            <surname>Dittrich</surname>
+          </string-name>
+          and
+          <string-name>
+            <given-names>J. P.</given-names>
+            <surname>Ryan</surname>
+          </string-name>
+          , \
+          <article-title>On the role of the Barbero-Immirzi parameter in discrete quantum gravity,"</article-title>
+        </mixed-citation>
+      </ref>
+    </ref-list>
+  </back>
+</article>
