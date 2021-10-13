@@ -3,9 +3,9 @@ import shutil
 from pathlib import Path
 from shutil import copy
 import pandas as pd
-from refextract import extract_journal_reference, extract_references_from_file, extract_references_from_url
-from MetadataExtraction.GROBID.evaluate import similarity_index, eval_metrics
-from Table_Extraction.genrateGT import load_data
+from refextract import extract_references_from_file
+from GROBID.evaluate import similarity_index, eval_metrics
+from Tabula_Camelot.genrateGT import load_data
 
 
 def sort_ref_files(dir):

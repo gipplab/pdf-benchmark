@@ -1,7 +1,7 @@
 import cv2
 import pytesseract
 
-file = '//scripts/247.tar_1710.11035.gz_MTforGSW_2_ori.jpg'
+file = '//Utility_Scripts/247.tar_1710.11035.gz_MTforGSW_2_ori.jpg'
 
 img = cv2.imread(file)
 h, w, _ = img.shape

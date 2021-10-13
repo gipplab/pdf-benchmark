@@ -6,13 +6,13 @@ import pandas as pd
 from similarity.damerau import Damerau
 from similarity.jaccard import Jaccard
 from similarity.jarowinkler import JaroWinkler
-from MetadataExtraction.CERMINE.cermine_parse_xml import parse_metadata_cermine, extract_cermine_metadata
-from MetadataExtraction.GROBID.grobid_metadata_extract import parse_metadata, create_pdfmetadata_obj, grobid_extract
-from Table_Extraction.genrateGT import load_data
+
+from CERMINE.cermine_parse_xml import extract_cermine_metadata, parse_metadata_cermine
+from GROBID.grobid_metadata_extract import parse_metadata, create_pdfmetadata_obj, grobid_extract
+from Tabula_Camelot.genrateGT import load_data
 from scipy.spatial.distance import cdist
 from Levenshtein import ratio
-from collections import namedtuple
-from nltk import word_tokenize
+
 pd.options.mode.chained_assignment = None
 
 def fix_hyphanated_tokens(df):
@@ -222,18 +222,18 @@ def main():
     metadir = sort_metadata_files("/home/apurv/Thesis/PDF-Information-Extraction-Benchmark/Data/pdf")
 
     # Run GROBID Metadata Extraction
-    grobid_extract(metadir, 'processHeaderDocument')
-    #extract_cermine_metadata(metadir)
+    #grobid_extract(metadir, 'processHeaderDocument')
+    extract_cermine_metadata(metadir)
 
     # Parse TEI XML file from GROBID
-    resultdf = parse_metadata(metadir)
-    #resultdf = parse_metadata_cermine(metadir)
+    #resultdf = parse_metadata(metadir)
+    resultdf = parse_metadata_cermine(metadir)
 
     # Create PDFMetadata Objects
     MetaObjList = create_pdfmetadata_obj(metadir, resultdf)
 
     # Clean-up the sorted files directory
-    shutil.rmtree(metadir, ignore_errors=True)
+    #shutil.rmtree(metadir, ignore_errors=True)
 
     # Process Every extracted metadata field(Title, Abstract, Author) and compute the metrics.
     for MetaObj in MetaObjList:
@@ -241,7 +241,7 @@ def main():
         titlegt, absgt, autgt = get_gt_metadata(MetaObj,MetaObj.filepath, False)
         # One Row Consolidation
         finadf = process_tokens(MetaObj.abstract, MetaObj.authors, MetaObj.title, absgt[['token']], autgt[['token']],
-                                titlegt[['token']], MetaObj.pdf_name, 'GROBID')
+                                titlegt[['token']], MetaObj.pdf_name, 'CERMINE')
         # Evaluate every metadata label.
         if len(absgt) != 0:
             similarity_df, no_of_gt_tok, no_of_ex_tok, df_ex, lavsim = similarity_index(finadf, 'abstract')

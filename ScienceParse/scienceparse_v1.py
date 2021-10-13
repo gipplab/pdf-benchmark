@@ -1,11 +1,9 @@
 import os
 import pathlib
-import pprint
-from collections import ChainMap
 
 from science_parse_api.api import parse_pdf
 
-from GeneralExtraction.PdfAct.pdfact_extract import load_data, crop_pdf, compute_metrics
+from PdfAct.pdfact_extract import load_data, crop_pdf, compute_metrics
 
 
 def get_refstring(reflist):

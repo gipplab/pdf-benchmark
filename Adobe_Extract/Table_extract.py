@@ -3,10 +3,10 @@ import shutil
 import subprocess
 from pathlib import Path
 import pandas as pd
-from GeneralExtraction.PdfAct.pdfact_extract import  crop_pdf
+from PdfAct.pdfact_extract import  crop_pdf
 import zipfile
-from MetadataExtraction.GROBID.evaluate import fix_hyphanated_tokens, similarity_index, eval_metrics
-from Table_Extraction.genrateGT import load_data
+from GROBID.evaluate import fix_hyphanated_tokens, similarity_index, eval_metrics
+from Tabula_Camelot.genrateGT import load_data
 
 
 def sort_table_files(dir):

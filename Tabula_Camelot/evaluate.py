@@ -5,9 +5,9 @@ from similarity.jarowinkler import JaroWinkler
 from similarity.normalized_levenshtein import NormalizedLevenshtein
 from similarity.qgram import QGram
 from tqdm import tqdm
-from Table_Extraction.tabula_camelot_extract import tabula_extract_table, camelot_extract_table
-from Table_Extraction.table_area_heuristics import get_table_coordinates
-from Table_Extraction.genrateGT import format_tablecells_dfs, get_gt_table, load_data
+from Tabula_Camelot.tabula_camelot_extract import tabula_extract_table, camelot_extract_table
+from Tabula_Camelot.table_area_heuristics import get_table_coordinates
+from Tabula_Camelot.genrateGT import format_tablecells_dfs, get_gt_table, load_data
 
 
 def calc_similarity(table_extracted, table_groundT):

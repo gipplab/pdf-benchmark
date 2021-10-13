@@ -1,14 +1,11 @@
 import csv
 import os
-import shutil
 import subprocess
 from glob import glob
-from pathlib import Path
-from shutil import copy
 from os import path
 import pandas as pd
-from MetadataExtraction.GROBID.evaluate import fix_hyphanated_tokens, similarity_index, eval_metrics
-from Table_Extraction.genrateGT import load_data, PDF
+from GROBID.evaluate import fix_hyphanated_tokens, similarity_index, eval_metrics
+from Tabula_Camelot.genrateGT import load_data, PDF
 from PyPDF2 import PdfFileReader, PdfFileWriter
 
 

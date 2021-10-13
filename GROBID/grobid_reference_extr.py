@@ -1,13 +1,12 @@
 import os
 import shutil
-from glob import glob
 from pathlib import Path
 from shutil import copy
-from os.path import basename, splitext
-from GeneralExtraction.PdfAct.pdfact_extract import crop_pdf, compute_metrics
-from MetadataExtraction.GROBID.grobid_metadata_extract import grobid_extract, parse_metadata
-from MetadataExtraction.GROBID.grobid_parse_xml import parse_extracted_references
-from Table_Extraction.genrateGT import load_data
+from os.path import splitext
+from PdfAct.pdfact_extract import crop_pdf, compute_metrics
+from GROBID.grobid_metadata_extract import grobid_extract
+from GROBID.grobid_parse_xml import parse_extracted_references
+from Tabula_Camelot.genrateGT import load_data
 
 
 def get_gt_metadata(PDFObj, p, label, retflag):

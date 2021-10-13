@@ -7,9 +7,9 @@ import tika
 from bs4 import BeautifulSoup
 from dicttoxml import dicttoxml
 from tika import parser
-from GeneralExtraction.PdfAct.pdfact_extract import process_tokens, crop_pdf
-from MetadataExtraction.GROBID.evaluate import  similarity_index, eval_metrics
-from Table_Extraction.genrateGT import load_data
+from PdfAct.pdfact_extract import process_tokens, crop_pdf
+from GROBID.evaluate import  similarity_index, eval_metrics
+from Tabula_Camelot.genrateGT import load_data
 import fitz
 
 

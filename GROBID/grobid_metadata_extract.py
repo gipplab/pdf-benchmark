@@ -4,8 +4,8 @@ from os import path
 import pandas as pd
 from grobid_client.grobid_client import GrobidClient
 from tqdm import tqdm
-from MetadataExtraction.GROBID.grobid_parse_xml import parse_extracted_metadata
-from Table_Extraction.genrateGT import PDF
+from GROBID.grobid_parse_xml import parse_extracted_metadata
+from Tabula_Camelot.genrateGT import PDF
 
 # Subclass of PDF with extra fields of title, authors and abstract.
 class PDFMetadata(PDF):
@@ -59,6 +59,6 @@ def parse_metadata(dir):
 
 
 def grobid_extract(dir, extract_param):
-    client = GrobidClient(config_path="./config.json")
+    client = GrobidClient(config_path="config.json")
     client.process(extract_param, dir, n=15)
 

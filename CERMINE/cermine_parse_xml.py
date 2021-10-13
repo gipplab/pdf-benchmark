@@ -9,7 +9,7 @@ import lxml.etree as et
 from pathlib import Path
 
 def extract_cermine_metadata(dir):
-    subprocess.call(["java", "-cp", "/home/apurv/Thesis/PDF-Information-Extraction-Benchmark/MetadataExtraction/CERMINE/cermine-impl-1.13-jar-with-dependencies.jar", "pl.edu.icm.cermine.ContentExtractor",
+    subprocess.call(["java", "-cp", "/home/apurv/Thesis/PDF-Information-Extraction-Benchmark/CERMINE/cermine-impl-1.13-jar-with-dependencies.jar", "pl.edu.icm.cermine.ContentExtractor",
                      "-path",dir, "-outputs", "jats"])
 
 
