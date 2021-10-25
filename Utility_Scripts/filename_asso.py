@@ -23,4 +23,4 @@ def change_pdf_name(pdfdir, txtdir):
         if os.path.isfile(datapdfpath):
             shutil.copy(datapdfpath, pdfname)
 
-change_pdf_name('/home/apurv/Thesis/testd', '/home/apurv/Thesis/testd/docbank')
+change_pdf_name(r'/media/apurv/621A92EA14B499C3/AWS_Data/1804', r'/media/apurv/621A92EA14B499C3/docbank/docbank_1804')

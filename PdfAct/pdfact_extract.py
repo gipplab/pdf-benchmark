@@ -3,7 +3,11 @@ import os
 import subprocess
 from glob import glob
 from os import path
+
+
 import pandas as pd
+from tqdm import tqdm
+
 from GROBID.evaluate import fix_hyphanated_tokens, similarity_index, eval_metrics
 from Tabula_Camelot.genrateGT import load_data, PDF
 from PyPDF2 import PdfFileReader, PdfFileWriter
@@ -66,22 +70,21 @@ def compute_metrics(pdf, extracted_file, label):
         return f1,pre, recall, lavsim
 
 def crop_pdf(pdfpath,pdfname, pagenumber):
-    pdf_file_name = pdfname
-    file_base_name = pdf_file_name.replace('.pdf', '')
-
-    pdf = PdfFileReader(pdfpath + os.sep + pdf_file_name)
-
     #pages = [pagenumber] # page 1, 3, 5
-    pdfWriter = PdfFileWriter()
-
-    #for page_num in pages:
-    pdfWriter.addPage(pdf.getPage(int(pagenumber)))
-
-    cropped_file=pdfpath + os.sep + file_base_name + '_subset_' + pagenumber + '.pdf'
-    with open(cropped_file, 'wb') as f:
-        pdfWriter.write(f)
-        f.close()
-    return cropped_file
+    try:
+        pdf_file_name = pdfname
+        file_base_name = pdf_file_name.replace('.pdf', '')
+        pdf = PdfFileReader(pdfpath + os.sep + pdf_file_name, strict=False)
+        pdfWriter = PdfFileWriter()
+        #for page_num in pages:
+        pdfWriter.addPage(pdf.getPage(int(pagenumber)))
+        cropped_file=pdfpath + os.sep + file_base_name + '_subset_' + pagenumber + '.pdf'
+        with open(cropped_file, 'wb') as f:
+            pdfWriter.write(f)
+            f.close()
+        return cropped_file
+    except Exception:
+        pass
 
 def extract_label_pdfact(dir):
     #label_array=['caption','author','title', 'abstract','section', 'footer','table','reference', 'body']
@@ -89,11 +92,15 @@ def extract_label_pdfact(dir):
     resultdata=[]
     for label in label_array:
         PDFlist=load_data(dir, label)
-        for pdf in PDFlist:
-            print(pdf.pdf_name, label)
+        for pdf in tqdm(PDFlist):
+            #print(pdf.pdf_name, label)
             pdfpath=pdf.filepath + os.sep + pdf.pdf_name
             croppedfile=crop_pdf(pdf.filepath, pdf.pdf_name, pdf.page_number)
             outputfile= pdf.filepath + os.sep + os.path.splitext(os.path.basename(pdf.pdf_name))[0] + "_extracted_" + label + ".txt"
+
+            if isinstance(croppedfile,type(None)):
+                continue
+
             if label == 'title' or label == 'abstract' or label == 'author' or label == 'reference':
                 subprocess.call(["./pdfact/bin/pdfact", "--include-roles", label, pdfpath, outputfile])
                 os.remove(croppedfile)
@@ -110,7 +117,9 @@ def extract_label_pdfact(dir):
                 subprocess.call(["./pdfact/bin/pdfact", "--include-roles", label, croppedfile, outputfile])
                 os.remove(croppedfile)
 
-            if os.path.getsize(outputfile) == 0:
+            if isinstance(outputfile, type(None)):
+                continue
+            elif os.path.getsize(outputfile) == 0:
                 resultdata.append(['PdfAct', pdf.pdf_name, pdf.page_number, label, 0, 0])
                 os.remove(outputfile)
             else:
@@ -121,7 +130,7 @@ def extract_label_pdfact(dir):
     return resultdf
 
 def main():
-    resultdf=extract_label_pdfact("/home/apurv/Thesis/testd/docbank")
+    resultdf=extract_label_pdfact("/media/apurv/621A92EA14B499C3/docbank/docbank_1401")
     resultdf.to_csv('pdfact_extract.csv', index=False)
 
 

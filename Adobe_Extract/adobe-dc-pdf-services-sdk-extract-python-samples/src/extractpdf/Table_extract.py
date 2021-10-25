@@ -4,11 +4,13 @@ import subprocess
 from pathlib import Path
 import pandas as pd
 from tqdm import tqdm
-
 from PdfAct.pdfact_extract import  crop_pdf
 import zipfile
 from GROBID.evaluate import fix_hyphanated_tokens, similarity_index, eval_metrics
 from Tabula_Camelot.genrateGT import load_data
+from subprocess import Popen, PIPE
+from extract_txt_table_info_from_pdf import extract_table_adobe_src
+
 
 
 def sort_table_files(dir):
@@ -47,6 +49,8 @@ def csv_from_excel(outzip):
             if filename.startswith('tables'):
                 count=count + 1
         multi_tables=[]
+        if count == 0:
+            return pd.DataFrame()
         for c in range(count):
             tabledata=z.open("tables/fileoutpart" + str(c) + ".xlsx")
             table_df=pd.read_excel(tabledata, engine='openpyxl',sheet_name='Sheet1')
@@ -92,14 +96,21 @@ def extract_table_adobe(dir):
     for pdf in tqdm(PDFlist):
         croppedfile = crop_pdf(pdf.filepath, pdf.pdf_name, pdf.page_number)
 
-        outputfile = pdf.filepath + os.sep + "output" + os.sep + os.path.splitext(os.path.basename(pdf.pdf_name))[0]+ "_subset_" + pdf.page_number + "_extract.zip"
+        outputfile = pdf.filepath + os.sep + "output" + os.sep + os.path.splitext(os.path.basename(pdf.pdf_name))[0] + "_subset_" + pdf.page_number + "_extract.zip"
 
-        subprocess.call(["python3","/home/apurv/Thesis/PDF-Information-Extraction-Benchmark/Adobe_Extract/adobe-dc-pdf-services-sdk-extract-python-samples/src/extractpdf/extract_txt_table_info_from_pdf.py"
-                            , croppedfile])
+        if isinstance(croppedfile, type(None)):
+            continue
+
+        a =  extract_table_adobe_src(croppedfile)
         os.remove(croppedfile)
 
-        if os.path.getsize(outputfile) != 0:
+        if isinstance(outputfile, type(None)):
+            continue
+        elif os.path.isfile(outputfile) or a != 1 :
             extracted_df=csv_from_excel(outputfile)
+            if extracted_df.empty:
+                resultdata.append(['AdobeExtract', pdf.pdf_name, pdf.page_number, 'table', 0, 0])
+                continue
             os.remove(outputfile)
             groundt_df=get_gt_metadata(pdf, dir, False)
             final_df=process_df(extracted_df, groundt_df)
@@ -115,10 +126,10 @@ def extract_table_adobe(dir):
 
 
 def main():
-    tabledir = sort_table_files("/home/apurv/Thesis/PDF-Information-Extraction-Benchmark/Data/pdf")
+    tabledir = sort_table_files("/media/apurv/621A92EA14B499C3/docbank/docbank_1406")
     resultdf=extract_table_adobe(tabledir)
-    resultdf.to_csv('adobe_extract.csv', index=False)
-    shutil.rmtree(tabledir, ignore_errors=True)
+    resultdf.to_csv('adobe_extract_1406.csv', index=False)
+    #shutil.rmtree(tabledir, ignore_errors=True)
 
 if __name__ == "__main__":
     main()
