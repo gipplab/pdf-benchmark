@@ -6,7 +6,7 @@ import pandas as pd
 from tqdm import tqdm
 from PdfAct.pdfact_extract import  crop_pdf
 import zipfile
-from GROBID.evaluate import fix_hyphanated_tokens, similarity_index, eval_metrics
+from GROBID.evaluate import fix_hyphanated_tokens, compute_results
 from Tabula_Camelot.genrateGT import load_data
 from subprocess import Popen, PIPE
 from extract_txt_table_info_from_pdf import extract_table_adobe_src
@@ -114,7 +114,7 @@ def extract_table_adobe(dir):
             os.remove(outputfile)
             groundt_df=get_gt_metadata(pdf, dir, False)
             final_df=process_df(extracted_df, groundt_df)
-            similarity_df, no_of_gt_tok, no_of_ex_tok, df_ex, lavsim = similarity_index(final_df, 'table')
+            similarity_df, no_of_gt_tok, no_of_ex_tok, df_ex, lavsim = compute_results(final_df, 'table')
             f1, pre, recall = eval_metrics(similarity_df, no_of_gt_tok, no_of_ex_tok)
             resultdata.append(['AdobeExtract',pdf.pdf_name,pdf.page_number, 'table', f1, lavsim])
         else:
@@ -126,9 +126,9 @@ def extract_table_adobe(dir):
 
 
 def main():
-    tabledir = sort_table_files("/media/apurv/621A92EA14B499C3/docbank/docbank_1406")
+    tabledir = sort_table_files("/data/docbank/docbank_1407")
     resultdf=extract_table_adobe(tabledir)
-    resultdf.to_csv('adobe_extract_1406.csv', index=False)
+    resultdf.to_csv('adobe_extract_1407.csv', index=False)
     #shutil.rmtree(tabledir, ignore_errors=True)
 
 if __name__ == "__main__":

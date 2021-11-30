@@ -1,3 +1,5 @@
+import os
+
 import pandas as pd
 from bs4 import BeautifulSoup
 from dataclasses import dataclass
@@ -43,6 +45,7 @@ class TEIFile(object):
         """
         if not self._title:
             self._title = self.soup.title.getText()
+
         return self._title
 
     @property
@@ -104,8 +107,33 @@ class TEIFile(object):
         result = self.text
         return result
 
+    @property
+    def tabstring(self):
+        tag=self.soup.body.find('figure', type='table')
+        if hasattr(tag, 'text'):
+            result=tag.text
+            return result
+        else:
+            return ''
+
+    @property
+    def eqstring(self):
+        tag=self.soup.body.find('formula')
+        if hasattr(tag, 'text'):
+            result=tag.text
+            return result
+        else:
+            return ''
+
+    @property
+    def liststring(self):
+        tag=self.soup.find_all('list')
+        return tag
+
 
 def read_tei(tei_file):
+    # if isinstance(tei_file, type(None)):
+    #     pass
     with open(tei_file, 'r') as tei:
         soup = BeautifulSoup(tei, 'lxml')
         return soup
@@ -127,6 +155,7 @@ def basename_without_ext(path):
 
 def tei_to_csv_entry(tei_file):
     tei = TEIFile(tei_file)
+
     #print(f"Handled {tei_file}")
     base_name = basename_without_ext(tei_file)
     return base_name, tei.title, tei.abstract, tei.authors
@@ -140,6 +169,21 @@ def tei_to_csv_entry_para(tei_file):
     tei = TEIFile(tei_file)
     base_name = basename_without_ext(tei_file)
     return base_name, tei.parastring
+
+def tei_to_csv_entry_tabs(tei_file):
+    tei = TEIFile(tei_file)
+    base_name= basename_without_ext(tei_file)
+    return base_name, tei.tabstring
+
+def tei_to_csv_entry_eqs(tei_file):
+    tei = TEIFile(tei_file)
+    base_name=basename_without_ext(tei_file)
+    return base_name, tei.eqstring
+
+def tei_to_csv_entry_list(tei_file):
+    tei=TEIFile(tei_file)
+    base_name=basename_without_ext(tei_file)
+    return base_name, tei.liststring
 
 def parse_extracted_metadata(dir):
     papers = sorted(Path(dir).glob('*.tei.xml'))
@@ -161,3 +205,25 @@ def parse_extracted_paragraphs(dir):
     csv_entries = pool.map(tei_to_csv_entry_para, papers)
     result_csv = pd.DataFrame(csv_entries, columns=['ID','parastring'])
     return result_csv
+
+def parse_extracted_tabs(dir):
+    papers = sorted(Path(dir).glob('*.tei.xml'))
+    pool = Pool()
+    csv_entries = pool.map(tei_to_csv_entry_tabs, papers)
+    result_csv = pd.DataFrame(csv_entries, columns=['ID','tabstring'])
+    return result_csv
+
+def parse_extracted_equation(dir):
+    papers = sorted(Path(dir).glob('*.tei.xml'))
+    pool = Pool()
+    csv_entries = pool.map(tei_to_csv_entry_eqs, papers)
+    result_csv = pd.DataFrame(csv_entries, columns=['ID','eqstring'])
+    return result_csv
+
+def parse_extracted_list(dir):
+    papers = sorted(Path(dir).glob('*.tei.xml'))
+    pool = Pool()
+    csv_entries = pool.map(tei_to_csv_entry_list, papers)
+    result_csv = pd.DataFrame(csv_entries, columns=['ID','liststring'])
+    return result_csv
+

@@ -3,12 +3,15 @@ import shutil
 from pathlib import Path
 from shutil import copy
 from xml.dom.minidom import parseString
+import pandas as pd
 import tika
 from bs4 import BeautifulSoup
 from dicttoxml import dicttoxml
 from tika import parser
+from tqdm import tqdm
+
 from PdfAct.pdfact_extract import process_tokens, crop_pdf
-from GROBID.evaluate import  similarity_index, eval_metrics
+from GROBID.evaluate import  compute_results
 from Tabula_Camelot.genrateGT import load_data
 import fitz
 
@@ -59,9 +62,10 @@ def parse_tika_file(outputfile):
     authorlist, title= parse_author(outputfile)
     return authorlist, title
 
-def extract_tika_metadata(metadir, label):
+def extract_tika_metadata(metadir, label, dirkey):
     metaPDFlist=load_data(metadir)
-    for PDF in metaPDFlist:
+    resultdata=[]
+    for PDF in tqdm(metaPDFlist):
         filep=PDF.filepath + os.sep + PDF.pdf_name
         tika.initVM()
         if label == 'metadata':
@@ -79,7 +83,10 @@ def extract_tika_metadata(metadir, label):
             if len(authorlist) == 0 and title == None:
                 print ('cannot parse the metadata')
             else:
-                print(authorlist, title)
+                print(title, authorlist)
+                csv_entries=[PDF.pdf_name, title, authorlist]
+                result_csv = pd.DataFrame(csv_entries, columns=['ID', 'Title', 'Authors'])
+                print(result_csv)
         if label == 'paragraph':
             croppedfile = crop_pdf(PDF.filepath, PDF.pdf_name, PDF.page_number)
             parsed = parser.from_file(croppedfile)
@@ -93,6 +100,7 @@ def extract_tika_metadata(metadir, label):
 
             outfile = os.path.splitext(os.path.basename(PDF.pdf_name))[0]  +  '_tika' + '.txt'
             outfile1 = os.path.splitext(os.path.basename(PDF.pdf_name))[0] + '_pymupdf' + '.txt'
+
             outputf = PDF.filepath + os.sep + outfile
             outputf1 = PDF.filepath + os.sep + outfile1
 
@@ -105,19 +113,44 @@ def extract_tika_metadata(metadir, label):
             final_df = process_tokens(para_gt, outputf, label)
             final_df1 = process_tokens(para_gt, outputf1, label)
 
-            if len(para_gt) != 0:
-                similarity_df, no_of_gt_tok, no_of_ex_tok, df_ex, lavsim = similarity_index(final_df, label)
-                similarity_df1, no_of_gt_tok1, no_of_ex_tok1, df_ex1, lavsim1 = similarity_index(final_df1, label)
-                f1, pre, recall = eval_metrics(similarity_df, no_of_gt_tok, no_of_ex_tok)
-                f11, pre1, recall1 = eval_metrics(similarity_df1, no_of_gt_tok1, no_of_ex_tok1)
-                print(PDF.pdf_name, lavsim1, lavsim)
-            #print(parsed["content"].encode('ascii', errors='ignore'))
-    return
+
+            if isinstance(outputf, type(None)):
+                continue
+            if isinstance(PDF, type(None)):
+                continue
+            elif not os.path.isfile(outputf):
+                continue
+            elif os.path.getsize(outputf) == 0:
+                resultdata.append(['tika', PDF.pdf_name, PDF.page_number, label,0,0, 0, 0])
+                os.remove(outputf)
+            else:
+                f1, pre, recall, lavsim = compute_results(final_df, label)
+                resultdata.append(['Tika', PDF.pdf_name, PDF.page_number, label, pre, recall, f1, lavsim])
+
+            if isinstance(outputf1, type(None)):
+                continue
+            if isinstance(PDF, type(None)):
+                continue
+            elif not os.path.isfile(outputf1):
+                continue
+            elif os.path.getsize(outputf1) == 0:
+                resultdata.append(['pymupdf', PDF.pdf_name, PDF.page_number, label, 0, 0, 0, 0])
+                os.remove(outputf1)
+            else:
+                f11, pre1, recall1, lavsim1 = compute_results(final_df1, label)
+                resultdata.append(['PyMuPDF', PDF.pdf_name, PDF.page_number, label, pre1, recall1, f11, lavsim1])
+
+
+    resultdf = pd.DataFrame(resultdata,
+                            columns=['Tool', 'ID', 'Page', 'Label', 'Precision', 'Recall', 'F1', 'SpatialDist'])
+    return resultdf
 
 def main():
-    metadir = sort_metadata("/home/apurv/Thesis/DocBank/DocBank_samples/DocBank_samples", "paragraph")
-    extract_tika_metadata(metadir, 'paragraph')
-    shutil.rmtree(metadir)
+    dir_array = ['docbank_1401']
+    for dir in dir_array:
+        metadir = sort_metadata("/data/docbank/" + dir, "paragraph")
+        resultdf = extract_tika_metadata(metadir, 'paragraph', dir)
+        resultdf.to_csv('tika_extract_para_1401.csv', index=False)
 
 if __name__ == "__main__":
     main()

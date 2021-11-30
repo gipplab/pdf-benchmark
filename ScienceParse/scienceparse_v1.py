@@ -9,17 +9,20 @@ from PdfAct.pdfact_extract import load_data, crop_pdf, compute_metrics
 
 
 def get_refstring(reflist):
+    refs=[]
     if len(reflist) == 0:
-        return "NONE"
+        return refs
     else:
         for ref in reflist:
             if len(ref.get('authors')) != 0:
                 authors = ' '.join(ref.get('authors'))
-                refstring = authors + " " + ref.get('title') + " " + ref.get('venue') + " " + str(ref.get('year'))
-                return refstring
+                reststr=' '.join(list(map(str, list(ref.values())[1:])))
+                refstring = authors + reststr
+                refs.append(refstring)
             else:
-                refstring = ref.get('title') + " " + ref.get('venue') + " " + str(ref.get('year'))
-                return refstring
+                reststr=' '.join(list(map(str, list(ref.values())[0:])))
+                refs.append(reststr)
+        return refs
 def get_sectstr(sectlist, label):
     if len(sectlist) == 0:
         return "NONE"
@@ -40,34 +43,41 @@ def get_sectstr(sectlist, label):
 
 
 def extract_scienceparse(dir):
-    host = 'http://127.0.0.1'
-    port = '8080'
+    host = 'https://science-parser.pads.fim.uni-passau.de'
+    #port = '8080'
     #label_array=['author','title', 'abstract','section','reference', 'paragraph']
     label_array=['reference']
     resultdata=[]
     for label in label_array:
-        print(label)
         PDFlist=load_data(dir, label)
         for pdf in tqdm(PDFlist):
             pdfpath=pathlib.Path(pdf.filepath + os.sep + pdf.pdf_name)
             page = int(pdf.page_number) - 1
             croppedfile=crop_pdf(pdf.filepath, pdf.pdf_name, str(page))
+            if isinstance(croppedfile, type(None)):
+                continue
             croppedfilepath=pathlib.Path(croppedfile)
 
             outputfile = pdf.filepath + os.sep + os.path.splitext(os.path.basename(pdf.pdf_name))[0] + "_extracted_" + label + ".txt"
 
             if label == 'title':
-                output_dict = parse_pdf(host, pdfpath ,port=port)
+                output_dict = parse_pdf(host, pdfpath)
+                if isinstance(output_dict, type(None)):
+                    continue
                 with open(outputfile, "w") as text_file:
                     print(output_dict.get('title'), file=text_file)
                 os.remove(croppedfile)
             elif label == 'abstract':
-                output_dict = parse_pdf(host, pdfpath, port=port)
+                output_dict = parse_pdf(host, pdfpath)
+                if isinstance(output_dict, type(None)):
+                    continue
                 with open(outputfile, "w") as text_file:
                     print(output_dict.get('abstractText'), file=text_file)
                 os.remove(croppedfile)
             elif label == 'author':
-                output_dict = parse_pdf(host, pdfpath, port=port)
+                output_dict = parse_pdf(host, pdfpath)
+                if isinstance(output_dict, type(None)):
+                    continue
                 authlist=output_dict.get('authors')
                 if len(authlist) == 0:
                     break
@@ -76,7 +86,9 @@ def extract_scienceparse(dir):
                         print(auth.get('name'), file=text_file)
                 os.remove(croppedfile)
             elif label == 'reference':
-                output_dict = parse_pdf(host, croppedfilepath, port=port)
+                output_dict = parse_pdf(host, croppedfilepath)
+                if isinstance(output_dict, type(None)):
+                    continue
                 reflist=output_dict.get('references')
                 refstring=get_refstring(reflist)
                 with open(outputfile, "w") as text_file:
@@ -85,7 +97,9 @@ def extract_scienceparse(dir):
             elif label == 'section':
                 croppedfile = crop_pdf(pdf.filepath, pdf.pdf_name, pdf.page_number)
                 croppedfilepath = pathlib.Path(croppedfile)
-                output_dict = parse_pdf(host, croppedfilepath, port=port)
+                output_dict = parse_pdf(host, croppedfilepath)
+                if isinstance(output_dict, type(None)):
+                    continue
                 sectlist=output_dict.get('sections')
                 sectstr=get_sectstr(sectlist, 'heading')
                 if sectstr == "" or sectstr == " ":
@@ -97,7 +111,11 @@ def extract_scienceparse(dir):
             elif label == 'paragraph':
                 croppedfile = crop_pdf(pdf.filepath, pdf.pdf_name, pdf.page_number)
                 croppedfilepath = pathlib.Path(croppedfile)
-                output_dict = parse_pdf(host, croppedfilepath, port=port)
+                output_dict = parse_pdf(host, croppedfilepath)
+
+                if isinstance(output_dict, type(None)):
+                    continue
+
                 sectlist=output_dict.get('sections')
                 sectstr=get_sectstr(sectlist, 'text')
                 if sectstr == "" or sectstr == os.linesep:
@@ -109,15 +127,18 @@ def extract_scienceparse(dir):
             else:
                 print('cannot process the label')
 
+            if isinstance(outputfile, type(None)):
+                continue
             if os.path.getsize(outputfile) == 0 or not os.path.isfile(outputfile):
-                resultdata.append(['ScienceParse', pdf.pdf_name, pdf.page_number, label, 0, 0])
+                resultdata.append(['ScienceParse', pdf.pdf_name, pdf.page_number, label, 0,0,0, 0])
                 os.remove(outputfile)
             else:
                 f1,pre,recall, lavsim=compute_metrics(pdf, outputfile, label)
-                resultdata.append(['ScienceParse', pdf.pdf_name, pdf.page_number, label, f1, label])
+                resultdata.append(['ScienceParse', pdf.pdf_name, pdf.page_number, label, pre,recall,f1, lavsim])
                 os.remove(outputfile)
 
-    resultdf = pd.DataFrame(resultdata, columns=['Tool', 'ID', 'Page', 'Label', 'F1', 'SpatialDist'])
+    resultdf = pd.DataFrame(resultdata,
+                            columns=['Tool', 'ID', 'Page', 'Label', 'Precision', 'Recall', 'F1', 'SpatialDist'])
 
     return resultdf
 
@@ -125,8 +146,14 @@ def extract_scienceparse(dir):
 
 
 def main():
-    resultdf=extract_scienceparse("/home/apurv/Thesis/DocBank/DocBank_samples/DocBank_samples")
-    resultdf.to_csv('scienceparse_extract.csv', index=False)
+    dir_array = ['docbank_1701','docbank_1702','docbank_1703','docbank_1704','docbank_1705','docbank_1706','docbank_1707','docbank_1708','docbank_1709','docbank_1710','docbank_1711','docbank_1712',
+                 'docbank_1801','docbank_1802','docbank_1803','docbank_1804']
+    for dir in dir_array:
+        resultdf=extract_scienceparse("/data/docbank/" + dir)
+        key=dir.split('_')[1]
+        filename='scienceparse_extract_ref_' + key + '.csv'
+        outputf='/data/results/scienceparse/' + filename
+        resultdf.to_csv(outputf, index=False)
 
 if __name__ == "__main__":
     main()

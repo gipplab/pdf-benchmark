@@ -138,8 +138,35 @@ def compute_sim_matrix(ex_nump, gt_nump):
     df = pd.DataFrame(data=matrix, index=ex_nump, columns=gt_nump)
     return df
 
+def compute_tpfp(matrix):
+    tp=0
+    fp=0
+    rows=matrix.shape[0]
+    cols=matrix.shape[1]
+    for x in range(0,rows):
+        for y in range(0,cols):
+            if matrix.iloc[x,y] > 0.7:
+                flag=True
+                break
+            else:
+                flag=False
+        if flag is True:
+            tp=tp+1
+        else:
+            fp=fp+1
+    return tp,fp
 
-def similarity_index(dataf, field):
+def compute_scores(tp,fp, gttoken):
+    prec=tp/(tp+fp)
+    recall= tp/gttoken
+    if prec==0 and recall==0:
+        return 0,0,0
+    else:
+        f1_score= (2 * prec * recall)/ (prec + recall)
+        return f1_score, prec, recall
+
+
+def compute_results(dataf, field):
     """
     Function computes the similarity index and string distance for extracted and ground truth tokens.
     :param dataf: dataframe with one row of extracted and ground truth
@@ -157,11 +184,13 @@ def similarity_index(dataf, field):
     # Computing similarity not considering reading order.
     df_extractednp = dataf[extracted].to_numpy()
     df_groundtruthnp = dataf[groundtruth].to_numpy()
-    matrix=compute_sim_matrix(df_extractednp,df_groundtruthnp)
+    matrix = compute_sim_matrix(df_extractednp, df_groundtruthnp)
+
+    if field == 'paragraph':
+        return 0,0,0,matrix.iloc[0,0]
 
     # Computing the count of tokens before adding the NaN ! This is important to avoid false calculation of the metrics.
     no_of_gt_tokens=len(df_groundtruth.index)
-    no_of_ex_tokens=len(df_extracted.index)
     # Adding NaN to the dataframes if their length is not equal.
     if (len(df_extracted.index)-len(df_groundtruth.index)) < 0:
         diff=abs(len(df_extracted.index)-len(df_groundtruth.index))
@@ -172,38 +201,14 @@ def similarity_index(dataf, field):
         for i in range(diff):
             df_groundtruth.loc[len(df_groundtruth)] = 'NaN'
     if (len(df_extracted.index)-len(df_groundtruth.index)) == 0:
-        # Computing similarity index which also considers the token sequence !! as ZIP is used.
-        jarowinkler = JaroWinkler()
-        df_groundtruth['jarowinkler_sim'] = [jarowinkler.similarity(x.lower(), y.lower()) for x, y in zip(df_extracted[extracted], df_groundtruth[groundtruth])]
+        df_e = df_extracted.to_numpy()
+        df_g = df_groundtruth.to_numpy()
+        simmatrix = compute_sim_matrix(df_e, df_g)
 
-        jaccard = Jaccard(2)
-        df_groundtruth['jaccard_sim'] = [jaccard.similarity(x.lower(), y.lower()) for x, y in
-                                         zip(df_extracted[extracted], df_groundtruth[groundtruth])]
-        Dlavenstein = Damerau()
-        df_groundtruth["Dlavenstein_sim"] = [Dlavenstein.distance(i.lower(), j.lower()) for i, j in zip(df_extracted[extracted], df_groundtruth[groundtruth])]
-    return df_groundtruth, no_of_gt_tokens, no_of_ex_tokens, df_extracted, matrix.iloc[0,0]
+        tp,fp=compute_tpfp(simmatrix)
+        f1,prec,recal=compute_scores(tp,fp,no_of_gt_tokens)
 
-def eval_metrics(similarity_score, num_of_gt_tokens, num_of_extracted_tokens):
-    """
-    Function computes evaluation metrics based on the computed Similarity Scores.
-    :param similarity_score: Similarity Score Daatframe
-    :return: Evaluation metrics namely Precision, Recall and F1/0.5/2 Score.
-    """
-    # Setting the similarity index thresholds to 0.5, 0.3 and 4 based on the sample data.
-    precision_nr=len(similarity_score[(similarity_score['jarowinkler_sim']>0.5) & (similarity_score['jaccard_sim']>0.3) &
-                                      (similarity_score['Dlavenstein_sim']<=3)])
-    precision_dr=num_of_extracted_tokens
-    precision=precision_nr/precision_dr
-
-    recall_nr=precision_nr
-    recall_dr= num_of_gt_tokens
-    recall=recall_nr/recall_dr
-
-    if precision==0 and recall==0:
-        return 0,0,0
-    else:
-        f1_score= (2 * precision * recall)/ (precision + recall)
-        return f1_score, precision, recall
+    return f1,prec,recal, matrix.iloc[0,0]
 
 
 def sort_metadata_files(dir):
@@ -220,54 +225,52 @@ def sort_metadata_files(dir):
 
 
 def main():
-    metadir = sort_metadata_files("/home/apurv/Thesis/PDF-Information-Extraction-Benchmark/Data/pdf")
+    dir_array = [ 'docbank_1801', 'docbank_1802', 'docbank_1803','docbank_1804']
+    for dir in dir_array:
+        #metadir = sort_metadata_files("/data/docbank/" + dir)
 
-    # Run GROBID Metadata Extraction
-    #grobid_extract(metadir, 'processHeaderDocument')
-    extract_cermine_metadata(metadir)
+        # Run GROBID Metadata Extraction
+        #grobid_extract(metadir, 'processHeaderDocument')
+        #extract_cermine_metadata(metadir)
 
-    # Parse TEI XML file from GROBID
-    #resultdf = parse_metadata(metadir)
-    resultdf = parse_metadata_cermine(metadir)
+        # Parse TEI XML file from GROBID
+        #resultdf = parse_metadata(metadir)
+        resultdf = parse_metadata_cermine("/data/docbank/" + dir + "/metadata_pdfs/")
 
-    # Create PDFMetadata Objects
-    MetaObjList = create_pdfmetadata_obj(metadir, resultdf)
+        # Create PDFMetadata Objects
+        MetaObjList = create_pdfmetadata_obj("/data/docbank/" + dir + "/metadata_pdfs/", resultdf)
 
-    # Clean-up the sorted files directory
-    #shutil.rmtree(metadir, ignore_errors=True)
+        # Clean-up the sorted files directory
+        #shutil.rmtree(metadir, ignore_errors=True)
 
-    # Process Every extracted metadata field(Title, Abstract, Author) and compute the metrics.
-    resultdata=[]
-    for MetaObj in tqdm(MetaObjList):
-        # GT DFs
-        titlegt, absgt, autgt = get_gt_metadata(MetaObj,MetaObj.filepath, False)
-        # One Row Consolidation
-        finadf = process_tokens(MetaObj.abstract, MetaObj.authors, MetaObj.title, absgt[['token']], autgt[['token']],
-                                titlegt[['token']], MetaObj.pdf_name, 'CERMINE')
-        # Evaluate every metadata label.
-        if len(absgt) != 0:
-            similarity_df, no_of_gt_tok, no_of_ex_tok, df_ex, lavsim = similarity_index(finadf, 'abstract')
-            f1, pre, recall = eval_metrics(similarity_df, no_of_gt_tok, no_of_ex_tok)
-            #print('Abstract', f1, pre, recall, lavsim)
-            resultdata.append(['GROBID', MetaObj.pdf_name, MetaObj.page_number, 'abstract', f1, lavsim])
-            #lavsim is a cdist computed. Which gives both dataframe's similarity as a whole index. hence, there Reading order is not considered.
-            # This helps to distinguish when DocBank has hyphanated words in the ground truth.
-        if len(titlegt) != 0:
-            similarity_df, no_of_gt_tok, no_of_ex_tok, df_ex, lavsim = similarity_index(finadf, 'title')
-            f1, pre, recall = eval_metrics(similarity_df, no_of_gt_tok, no_of_ex_tok)
-            #print('Title', f1, pre, recall, lavsim)
-            resultdata.append(['GROBID', MetaObj.pdf_name, MetaObj.page_number, 'title', f1, lavsim])
-        if len(autgt) != 0:
-            similarity_df, no_of_gt_tok, no_of_ex_tok, ef_ex, lavsim = similarity_index(finadf, 'author')
-            f1, pre, recall = eval_metrics(similarity_df, no_of_gt_tok, no_of_ex_tok)
-            #print('Author', f1, pre, recall, lavsim)
-            resultdata.append(['GROBID', MetaObj.pdf_name, MetaObj.page_number, 'author', f1, lavsim])
-        if (len(absgt) == 0 and len(titlegt) == 0 and len(autgt) == 0) or (len(finadf) == 0):
-            resultdata.append(['GROBID', MetaObj.pdf_name, MetaObj.page_number, 'author', 0, 0])
+        # Process Every extracted metadata field(Title, Abstract, Author) and compute the metrics.
+        resultdata=[]
+        for MetaObj in tqdm(MetaObjList):
+            # GT DFs
+            titlegt, absgt, autgt = get_gt_metadata(MetaObj,MetaObj.filepath, False)
+            # One Row Consolidation
+            finadf = process_tokens(MetaObj.abstract, MetaObj.authors, MetaObj.title, absgt[['token']], autgt[['token']],
+                                    titlegt[['token']], MetaObj.pdf_name, 'CERMINE')
+            # Evaluate every metadata label.
+            if len(absgt) != 0:
+                f1, pre, recall, lavsim = compute_results(finadf, 'abstract')
+                resultdata.append(['CERMINE', MetaObj.pdf_name, MetaObj.page_number, 'abstract',pre,recall, f1, lavsim])
+            if len(titlegt) != 0:
+                f1, pre, recall, lavsim  = compute_results(finadf, 'title')
+                resultdata.append(['CERMINE', MetaObj.pdf_name, MetaObj.page_number, 'title', pre,recall, f1, lavsim])
+            if len(autgt) != 0:
+                f1, pre, recall, lavsim  = compute_results(finadf, 'author')
+                resultdata.append(['CERMINE', MetaObj.pdf_name, MetaObj.page_number, 'author', pre,recall,f1, lavsim])
+            if (len(absgt) == 0 and len(titlegt) == 0 and len(autgt) == 0) or (len(finadf) == 0):
+                resultdata.append(['CERMINE', MetaObj.pdf_name, MetaObj.page_number, 'author', 0,0,0, 0])
 
-    resultdf = pd.DataFrame(resultdata, columns=['Tool', 'ID', 'Page', 'Label', 'F1', 'SpatialDist'])
-    resultdf.to_csv('grobid_extract.csv', index=False)
-    shutil.rmtree(metadir)
+        resultdf = pd.DataFrame(resultdata, columns=['Tool', 'ID', 'Page', 'Label', 'Precision','Recall' ,'F1', 'SpatialDist'])
+
+        key = dir.split('_')[1]
+        filename = 'cermine_extract_meta_' + key + '.csv'
+        outputf = '/data/results/cermine/' + filename
+        resultdf.to_csv(outputf, index=False)
+        #shutil.rmtree(metadir)
 
 
 if __name__ == "__main__":

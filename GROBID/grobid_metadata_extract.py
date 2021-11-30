@@ -1,3 +1,4 @@
+import csv
 import os
 from glob import glob
 from os import path
@@ -42,7 +43,7 @@ def create_pdfmetadata_obj(dir, resultdf):
         if os.path.isfile(pdfn):
             pdf_name=os.path.basename(pdfn)
             txt_name=os.path.basename(txt)
-            txtdf=pd.read_csv(txt,sep='\t',usecols=[0,1,2,3,4,9], names=["token", "x0", "y0", "x1", "y1","label"])
+            txtdf=pd.read_csv(txt,sep='\t',quoting=csv.QUOTE_NONE, encoding='latin1',usecols=[0,1,2,3,4,9], names=["token", "x0", "y0", "x1", "y1","label"])
 
             filter=os.path.splitext(os.path.basename(pdf_name))[0]
             reser=resultdf.loc[resultdf['ID'] == filter]
@@ -60,5 +61,5 @@ def parse_metadata(dir):
 
 def grobid_extract(dir, extract_param):
     client = GrobidClient(config_path="config.json")
-    client.process(extract_param, dir, n=15)
+    client.process(extract_param, dir, n=100)
 

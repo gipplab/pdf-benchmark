@@ -6,7 +6,7 @@ import pandas as pd
 from refextract import extract_references_from_file
 from tqdm import tqdm
 
-from GROBID.evaluate import similarity_index, eval_metrics
+from GROBID.evaluate import compute_results
 from Tabula_Camelot.genrateGT import load_data
 
 
@@ -70,23 +70,33 @@ def process_for_spec_ref(gt_ref, ex_references):
     return final_df
 
 def main():
-    refdir=sort_ref_files("/home/apurv/Thesis/DocBank/DocBank_samples/DocBank_samples")
-    PDFlist=load_data(refdir)
-    resultdata=[]
-    for pdf in tqdm(PDFlist):
-        file=pdf.filepath + os.sep + pdf.pdf_name
-        ex_references = extract_references_from_file(file)
-        gt_ref = get_gt_ref(pdf, refdir, retflag=False)
-        if len(ex_references) != 0:
-            final_df=process_for_spec_ref(gt_ref, ex_references)
-            similarity_df, no_of_gt_tok, no_of_ex_tok, ef_ex, lavsim = similarity_index(final_df, 'ref')
-            f1, pre, recall = eval_metrics(similarity_df, no_of_gt_tok, no_of_ex_tok)
-            resultdata.append(['RefExtract', pdf.pdf_name, pdf.page_number, 'references', f1, lavsim])
-        else:
-            resultdata.append(['RefExtract', pdf.pdf_name, pdf.page_number, 'references', 0, 0])
-    resultdf = pd.DataFrame(resultdata, columns=['Tool', 'ID', 'Page', 'Label', 'F1', 'SpatialDist'])
-    resultdf.to_csv('refextract_extract.csv', index=False)
-    shutil.rmtree(refdir)
+    dir_array = ['docbank_1501','docbank_1502','docbank_1503','docbank_1504', 'docbank_1505', 'docbank_1506', 'docbank_1507', 'docbank_1508',
+                 'docbank_1509', 'docbank_1510', 'docbank_1511', 'docbank_1512']
+    for dir in dir_array:
+        refdir=sort_ref_files("/data/docbank/" + dir)
+        PDFlist=load_data(refdir)
+        resultdata=[]
+        for pdf in tqdm(PDFlist):
+            file=pdf.filepath + os.sep + pdf.pdf_name
+            if isinstance(file, type(None)):
+                continue
+            ex_references = extract_references_from_file(file)
+            gt_ref = get_gt_ref(pdf, refdir, retflag=False)
+            if len(ex_references) != 0:
+                final_df=process_for_spec_ref(gt_ref, ex_references)
+                f1, pre, recall, lavsim = compute_results(final_df, 'ref')
+                # similarity_df, no_of_gt_tok, no_of_ex_tok, ef_ex, lavsim = compute_results(final_df, 'ref')
+                # f1, pre, recall = eval_metrics(similarity_df, no_of_gt_tok, no_of_ex_tok)
+                resultdata.append(['RefExtract', pdf.pdf_name, pdf.page_number, 'references', pre,recall,f1, lavsim])
+            else:
+                resultdata.append(['RefExtract', pdf.pdf_name, pdf.page_number, 'references', 0,0,0, 0])
+
+        resultdf = pd.DataFrame(resultdata,columns=['Tool', 'ID', 'Page', 'Label', 'Precision', 'Recall', 'F1', 'SpatialDist'])
+        key=dir.split('_')[1]
+        filename='refextract_extract_ref_' + key + '.csv'
+        outputf='/data/results/refextract/' + filename
+        resultdf.to_csv(outputf, index=False)
+        shutil.rmtree(refdir)
 
 if __name__ == "__main__":
     main()

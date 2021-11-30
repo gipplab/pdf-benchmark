@@ -49,7 +49,7 @@ def get_coordinatedf(tables):
     return df2
 
 
-def camelot_extract_table(pdfname, pagenumber, dir, *coordinates):
+def camelot_extract_table(pdfname, dir, *coordinates):
     """
     Function extracts table from a PDF file using provided table region, page information in stream mode.
     :param pdfname: Name of the PDF
@@ -60,27 +60,29 @@ def camelot_extract_table(pdfname, pagenumber, dir, *coordinates):
     """
     # p = Path(dir + "/table_output/")
     # p.mkdir(parents=True, exist_ok=True)
-
-    if not coordinates:
-        fname = dir + os.sep + pdfname
-        camelottabs = camelot.read_pdf(fname, flavor='stream', pages=str(pagenumber))
-    else:
-        cordin=coordinates[0]
-        cor = [str(i) for i in cordin]
-        cor = ','.join(cor)
-        cordi = [cor] # Converting [58,176,280,71] into ['58,176,280,71']
-        fname=dir + os.sep + pdfname
-        camelottabs = camelot.read_pdf(fname, flavor='stream',table_regions=cordi, pages=str(pagenumber))
-    if (len(camelottabs) == 0) :
-        #print('No table found in file', pdfname)
-        pass
-    else:
-        #print(len(tabs), 'table found in file', pdfname)
-        return camelottabs
+    try:
+        if not coordinates:
+            fname = dir + os.sep + pdfname
+            camelottabs = camelot.read_pdf(fname, flavor='stream')
+        else:
+            cordin=coordinates[0]
+            cor = [str(i) for i in cordin]
+            cor = ','.join(cor)
+            cordi = [cor] # Converting [58,176,280,71] into ['58,176,280,71']
+            fname=dir + os.sep + pdfname
+            camelottabs = camelot.read_pdf(fname, flavor='stream',table_regions=cordi)
+        if (len(camelottabs) == 0) :
+            #print('No table found in file', pdfname)
+            pass
+        else:
+            #print(len(tabs), 'table found in file', pdfname)
+            return camelottabs
         #return tabs, get_coordinatedf(tabs)
+    except(ZeroDivisionError):
+        pass
 
 
-def tabula_extract_table(pdfname, pagenumber, dir, *coordinates):
+def tabula_extract_table(pdfname, dir, *coordinates):
     """
     Function extracts table from a PDF file using provided table region, page information in stream mode.
     :param pdfname: Name of the PDF
@@ -89,22 +91,25 @@ def tabula_extract_table(pdfname, pagenumber, dir, *coordinates):
     :param dir:
     :return:
     """
-    if not coordinates:
-        fname = dir + os.sep + pdfname
-        tabulatabs = tabula.read_pdf(fname,silent=True, stream=True, pages=str(pagenumber))
-    else:
-        cordin=coordinates[0]
-        cor = [str(i) for i in cordin]
-        cor = ','.join(cor)
-        #cordi = [cor] # Converting [58,176,280,71] into ['58,176,280,71']
-        fname=dir + os.sep + pdfname
-        tabulatabs =  tabula.read_pdf(fname, silent=True,stream=True, area=cor , pages=str(pagenumber))
-    if(len(tabulatabs) == 0) :
-        #print('No table found in file', pdfname)
+    try:
+        if not coordinates:
+            fname = dir + os.sep + pdfname
+            tabulatabs = tabula.read_pdf(fname,stream=True)
+        else:
+            cordin=coordinates[0]
+            cor = [str(i) for i in cordin]
+            cor = ','.join(cor)
+            #cordi = [cor] # Converting [58,176,280,71] into ['58,176,280,71']
+            fname=dir + os.sep + pdfname
+            tabulatabs =  tabula.read_pdf(fname, stream=True, area=cor)
+        if(len(tabulatabs) == 0) :
+            #print('No table found in file', pdfname)
+            pass
+        else:
+            #print(len(tabs), 'table found in file', pdfname)
+            return tabulatabs
+            #return tabs, get_coordinatedf(tabs)
+    except(Exception):
         pass
-    else:
-        #print(len(tabs), 'table found in file', pdfname)
-        return tabulatabs
-        #return tabs, get_coordinatedf(tabs)
 
 
