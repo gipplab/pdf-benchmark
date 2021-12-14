@@ -197,8 +197,8 @@ def compute_results(dataf, field):
     df_groundtruthnp = dataf[groundtruth].to_numpy()
     matrix = compute_sim_matrix(df_extractednp, df_groundtruthnp)
 
-    if field == 'paragraph':
-        return 0,0,0,matrix.iloc[0,0]
+    # if field == 'paragraph':
+    #     return 0,0,0,matrix.iloc[0,0]
 
     # Computing the count of tokens before adding the NaN ! This is important to avoid false calculation of the metrics.
     no_of_gt_tokens=len(df_groundtruth.index)

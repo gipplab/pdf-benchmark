@@ -124,7 +124,6 @@ def extract_label_pdfact(dir):
             elif not os.path.isfile(outputfile):
                 continue
             elif os.path.getsize(outputfile) == 0:
-                #resultdata.append(['GROBID', pdf.pdf_name, pdf.page_number, label,random.uniform(0.4,0.5), random.uniform(0.4,0.5), random.uniform(0.8,1.0), random.uniform(0.8,1.0)])
                 resultdata.append(['Pdfact', pdf.pdf_name, pdf.page_number, label, 0,0,0,0])
                 os.remove(outputfile)
             else:
