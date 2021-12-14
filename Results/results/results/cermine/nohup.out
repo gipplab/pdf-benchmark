@@ -1,0 +1,10 @@
+Exception in thread "main" java.lang.IllegalArgumentException: Parameter 'directory' is not a directory: ./docbank_1510
+	at org.apache.commons.io.FileUtils.validateListFilesParameters(FileUtils.java:536)
+	at org.apache.commons.io.FileUtils.listFiles(FileUtils.java:512)
+	at org.apache.commons.io.FileUtils.listFiles(FileUtils.java:684)
+	at pl.edu.icm.cermine.ContentExtractor.main(ContentExtractor.java:769)
+Exception in thread "main" java.lang.IllegalArgumentException: Parameter 'directory' is not a directory: ./docbank_1511
+	at org.apache.commons.io.FileUtils.validateListFilesParameters(FileUtils.java:536)
+	at org.apache.commons.io.FileUtils.listFiles(FileUtils.java:512)
+	at org.apache.commons.io.FileUtils.listFiles(FileUtils.java:684)
+	at pl.edu.icm.cermine.ContentExtractor.main(ContentExtractor.java:769)
