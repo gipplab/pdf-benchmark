@@ -10,7 +10,7 @@ from GROBID.evaluate import compute_sim_matrix
 from PdfAct.pdfact_extract import crop_pdf, compute_metrics
 from GROBID.grobid_metadata_extract import grobid_extract
 from GROBID.grobid_parse_xml import parse_extracted_paragraphs, parse_extracted_tabs, parse_extracted_equation, \
-     parse_extracted_list
+    parse_extracted_list, parse_extracted_section, parse_extracted_caption
 from Tabula_Camelot.genrateGT import load_data, locate_data, PDF
 
 
@@ -73,17 +73,17 @@ def create_gt_df(dir, label):
 
 def compute_matrix(dataf):
     resultdata=[]
-    df_extractednp = dataf['liststring'].to_numpy()
-    df_groundtruthnp = dataf['list_gt'].to_numpy()
+    df_extractednp = dataf['capstring'].to_numpy()
+    df_groundtruthnp = dataf['caption_gt'].to_numpy()
     matrix = compute_sim_matrix(df_extractednp, df_groundtruthnp)
     for index, row in dataf.iterrows():
-        resultdata.append(['GROBID', row['ID'], row['page'], 'table', 0, 0, 0, matrix.iloc[index,index]])
+        resultdata.append(['GROBID', row['ID'], row['page'], 'caption', 0, 0, 0, matrix.iloc[index,index]])
     return resultdata
 
 
 def sort_label_files(dir, label):
     PDFlist = load_data(dir)
-    p = Path(dir + "/list_pdfs/")
+    p = Path(dir + "/caption_pdfs/")
     p.mkdir(parents=True, exist_ok=True)
     for PDF in PDFlist:
         get_gt_metadata(PDF, p,label, True)
@@ -97,6 +97,7 @@ def delete_empty_tei(dir):
 
 
 def main():
+    #dir_array=['docbank_1401']
     dir_array = [ 'docbank_1402', 'docbank_1403', 'docbank_1404', 'docbank_1405', 'docbank_1406',
                  'docbank_1407', 'docbank_1408', 'docbank_1409',
                  'docbank_1410', 'docbank_1411', 'docbank_1412', 'docbank_1501', 'docbank_1502', 'docbank_1503',
@@ -112,17 +113,17 @@ def main():
         #dirp='/data/pdf'
         dirp = "/data/docbank/" + dir
 
-        refdir = sort_label_files(dirp, "list")
-
+        refdir = sort_label_files(dirp, "caption")
+        #refdir= "/data/pdf/section_pdfs/"
         #Run GROBID Metadata Extraction
         grobid_extract(refdir, 'processFulltextDocument')
 
         #Delete the empty result files
-        #delete_empty_tei(refdir)
+        delete_empty_tei(refdir)
 
         # # Parse TEI XML file from GROBID
-        resultdf = parse_extracted_list(refdir)
-        groundtdf= create_gt_df(refdir, 'list')
+        resultdf = parse_extracted_caption(refdir)
+        groundtdf= create_gt_df(refdir, 'caption')
         final_df=pd.merge(resultdf.astype(str), groundtdf.astype(str), on='ID')
         result=compute_matrix(final_df)
 
@@ -154,7 +155,7 @@ def main():
         resultdf = pd.DataFrame(result,
                                 columns=['Tool', 'ID', 'Page', 'Label', 'Precision', 'Recall', 'F1', 'SpatialDist'])
         key = dir.split('_')[1]
-        filename = 'grobid_extract_list_' + key + '.csv'
+        filename = 'grobid_extract_cap_' + key + '.csv'
         outputf = '/data/results/grobid/' + filename
         resultdf.to_csv(outputf, index=False)
         #shutil.rmtree(refdir)

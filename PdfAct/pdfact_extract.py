@@ -83,7 +83,7 @@ def crop_pdf(pdfpath,pdfname, pagenumber):
 
 def extract_label_pdfact(dir):
     #label_array=['caption','author','title', 'abstract','section', 'footer','table','reference', 'body']
-    label_array=['section']
+    label_array=['equation']
     resultdata=[]
     for label in label_array:
         PDFlist=load_data(dir, label)
@@ -105,7 +105,7 @@ def extract_label_pdfact(dir):
                 subprocess.call(["./pdfact/bin/pdfact", "--include-roles", 'formula', croppedfile, outputfile])
                 os.remove(croppedfile)
             elif label == 'paragraph':
-                #subprocess.call(["./pdfact/bin/pdfact", "--include-roles", 'body', croppedfile, outputfile])
+                subprocess.call(["./pdfact/bin/pdfact", "--include-roles", 'body', croppedfile, outputfile])
                 os.remove(croppedfile)
             elif label == 'list':
                 subprocess.call(["./pdfact/bin/pdfact", "--include-roles", 'itemize-item', croppedfile, outputfile])
@@ -124,8 +124,8 @@ def extract_label_pdfact(dir):
             elif not os.path.isfile(outputfile):
                 continue
             elif os.path.getsize(outputfile) == 0:
-                resultdata.append(['PdfAct', pdf.pdf_name, pdf.page_number, label,random.uniform(0.6,1.0),random.uniform(0.8,1.0), random.uniform(0.7,1.0), random.uniform(0.7,1.0)])
-                #resultdata.append(['PdfAct', pdf.pdf_name, pdf.page_number, label, 0])
+                #resultdata.append(['GROBID', pdf.pdf_name, pdf.page_number, label,random.uniform(0.4,0.5), random.uniform(0.4,0.5), random.uniform(0.8,1.0), random.uniform(0.8,1.0)])
+                resultdata.append(['Pdfact', pdf.pdf_name, pdf.page_number, label, 0,0,0,0])
                 os.remove(outputfile)
             else:
                 f1,pre,recall, lavsim=compute_metrics(pdf, outputfile, label)
@@ -133,10 +133,11 @@ def extract_label_pdfact(dir):
                 resultdata.append(['Pdfact', pdf.pdf_name, pdf.page_number, label, pre, recall, f1, lavsim])
                 os.remove(outputfile)
     resultdf = pd.DataFrame(resultdata,
-                            columns=['Tool', 'ID', 'Page', 'Label', 'Precision', 'Recall', 'F1', 'SpatialDist'])
+                            columns=['Tool', 'ID', 'Page', 'Label','Precision','Recall', 'F1', 'SpatialDist'])
     return resultdf
 
 def main():
+    #dir_array = ['docbank_1401', 'docbank_1402', 'docbank_1403', 'docbank_1404', 'docbank_1405', 'docbank_1406']
     dir_array = [  'docbank_1401', 'docbank_1402', 'docbank_1403', 'docbank_1404', 'docbank_1405', 'docbank_1406', 'docbank_1407', 'docbank_1408', 'docbank_1409',
                    'docbank_1410', 'docbank_1411', 'docbank_1412', 'docbank_1501', 'docbank_1502', 'docbank_1503', 'docbank_1504', 'docbank_1505','docbank_1506',
                    'docbank_1507', 'docbank_1508', 'docbank_1509', 'docbank_1510', 'docbank_1511', 'docbank_1512',
@@ -149,8 +150,8 @@ def main():
     for dir in dir_array:
         resultdf=extract_label_pdfact("/data/docbank/" + dir)
         key=dir.split('_')[1]
-        filename='scienceparse_extract_sec_' + key + '.csv'
-        outputf='/data/results/scienceparse/' + filename
+        filename='pdfact_extract_eq_' + key + '.csv'
+        outputf='/data/results/Pdfact/' + filename
         resultdf.to_csv(outputf, index=False)
 
     # resultdf = extract_label_pdfact('/data/ProjectDir/Data/pdf')

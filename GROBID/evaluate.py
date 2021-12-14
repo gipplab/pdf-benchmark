@@ -128,8 +128,7 @@ def get_gt_metadata(PDFObj, p, retflag):
 
 def compute_sim_matrix(ex_nump, gt_nump):
     """
-    This function computes the similarity matrix for each word from a numpy array. or it can also compare whole abstract.
-    Use of this function here is to compute the similarity without considering the reading order of the sentence.
+    This function computes the similarity matrix for each word from a numpy array. or it can also compare whole abstract as a collated tokens.
     :param ex_nump: Extracted paragraph as numpy array
     :param gt_nump: Ground truth paragraph as numpy array
     :return: Similarity Matrix with Lavensteins similarity index.
@@ -139,6 +138,11 @@ def compute_sim_matrix(ex_nump, gt_nump):
     return df
 
 def compute_tpfp(matrix):
+    """
+    This function considers Extracted token as Ground-truth token when its Levenshteins similarity index is > 0.7. Otherwise it is non-gt token.
+    :param matrix: Similarity Matrix
+    :return: Number of GT in ET, Number of Non GT
+    """
     tp=0
     fp=0
     rows=matrix.shape[0]
@@ -157,6 +161,13 @@ def compute_tpfp(matrix):
     return tp,fp
 
 def compute_scores(tp,fp, gttoken):
+    """
+    Function to compute the evaluation metrics.
+    :param tp: Number of GT in ET
+    :param fp: Number of Non-GT in ET
+    :param gttoken: Number of GT
+    :return: Precision, Recall and F1 Score
+    """
     prec=tp/(tp+fp)
     recall= tp/gttoken
     if prec==0 and recall==0:

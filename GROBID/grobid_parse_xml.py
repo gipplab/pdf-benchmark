@@ -1,4 +1,6 @@
 import os
+import re
+import subprocess
 
 import pandas as pd
 from bs4 import BeautifulSoup
@@ -8,8 +10,12 @@ import glob
 from pathlib import Path
 import multiprocessing
 from multiprocessing.pool import Pool
+import xml.etree.ElementTree as ET
 
 # Data structure for the Author from XML file.
+from tqdm import tqdm
+
+
 @dataclass
 class Person:
     firstname: str
@@ -130,6 +136,18 @@ class TEIFile(object):
         tag=self.soup.find_all('list')
         return tag
 
+    @property
+    def capstring(self):
+        if not isinstance(self.soup.find('figure'), type(None)):
+            if not isinstance(self.soup.find('figure').find('figdesc'), type(None)):
+                tag=self.soup.find('figure').find('figdesc').text
+                return tag
+            else:
+                return ''
+        else:
+            return ''
+
+
 
 def read_tei(tei_file):
     # if isinstance(tei_file, type(None)):
@@ -185,6 +203,11 @@ def tei_to_csv_entry_list(tei_file):
     base_name=basename_without_ext(tei_file)
     return base_name, tei.liststring
 
+def tei_to_csv_entry_caption(tei_file):
+    tei=TEIFile(tei_file)
+    base_name=basename_without_ext(tei_file)
+    return base_name, tei.capstring
+
 def parse_extracted_metadata(dir):
     papers = sorted(Path(dir).glob('*.tei.xml'))
     pool = Pool()
@@ -226,4 +249,25 @@ def parse_extracted_list(dir):
     csv_entries = pool.map(tei_to_csv_entry_list, papers)
     result_csv = pd.DataFrame(csv_entries, columns=['ID','liststring'])
     return result_csv
+
+def parse_extracted_caption(dir):
+    papers = sorted(Path(dir).glob('*.tei.xml'))
+    pool = Pool()
+    csv_entries = pool.map(tei_to_csv_entry_caption, papers)
+    result_csv = pd.DataFrame(csv_entries, columns=['ID','capstring'])
+    return result_csv
+
+def parse_extracted_section(dir):
+    papers = sorted(Path(dir).glob('*.tei.xml'))
+    resultdata=[]
+    for paper in tqdm(papers):
+        try:
+            result = subprocess.check_output(f"/bin/grep -oP '(?<=<head n=).*?(?=</head>)' {paper}", shell=True)
+            resultdata.append([basename_without_ext(paper), result])
+        except subprocess.CalledProcessError as e:
+            pass
+    result_csv = pd.DataFrame(resultdata, columns=['ID','secstring'])
+    return result_csv
+
+
 
