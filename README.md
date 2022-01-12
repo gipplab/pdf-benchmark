@@ -21,18 +21,18 @@
 ### Token-level Levenshtein ratio <img src="https://render.githubusercontent.com/render/math?math={\gamma\left( {t}_{e}, {t}_{g} \right) }"> and Similarity Matrix <img src="https://render.githubusercontent.com/render/math?math={\Delta}_{m \times n}^{D}">
 
 <p float="left" align="center">
-<img src="https://render.githubusercontent.com/render/math?math={\gamma\left( {t}_{e}, {t}_{g} \right) } = 1 -\frac{lev_{{t}_{e},{t}_{g}}(i,j)}{\left| {t}_{e} \right| + \left| {t}_{g} \right|}" width="400">
-<img src="https://render.githubusercontent.com/render/math?math={\Delta}_{m \times n}^{D} = {\gamma\left[ {E}_{i}^{s}, {G}_{j}^{s} \right] }_{i,j}^{m,n}" width="400">
+<img src="https://render.githubusercontent.com/render/math?math={\gamma\left( {t}_{e}, {t}_{g} \right) } = 1 -\frac{lev_{{t}_{e},{t}_{g}}(i,j)}{\left| {t}_{e} \right| + \left| {t}_{g} \right|}" width="300">
+<img src="https://render.githubusercontent.com/render/math?math={\Delta}_{m \times n}^{D} = {\gamma\left[ {E}_{i}^{s}, {G}_{j}^{s} \right] }_{i,j}^{m,n}" width="300">
 </p>
 
 <p float="left" align="center">
-<img src="https://render.githubusercontent.com/render/math?math={Precision}^{D} = \frac{Count({\Delta}_{i,j}^{D} \ge 0.7)}{m}">
- <img src="https://render.githubusercontent.com/render/math?math={Recall}^{D} = \frac{Count({\Delta}_{i,j}^{D} \ge 0.7)}{n}">
+<img src="https://render.githubusercontent.com/render/math?math={Precision}^{D} = \frac{Count({\Delta}_{i,j}^{D} \ge 0.7)}{m}" width="300">
+ <img src="https://render.githubusercontent.com/render/math?math={Recall}^{D} = \frac{Count({\Delta}_{i,j}^{D} \ge 0.7)}{n}" width="300">
  </p>
  
 <p float="left" align="center">
-<img src="https://render.githubusercontent.com/render/math?math={F1 Score}^{D} = \frac{2 \times {Precision}^{D} \times {Recall}^{D}}{ {Precision}^{D} +  {Recall}^{D}}" width="400">
-<img src="https://render.githubusercontent.com/render/math?math={Accuracy}^{D} = {\gamma\left[ {E}^{c}, {G}^{c} \right] }" width="400">
+<img src="https://render.githubusercontent.com/render/math?math={F1 Score}^{D} = \frac{2 \times {Precision}^{D} \times {Recall}^{D}}{ {Precision}^{D} +  {Recall}^{D}}" width="300">
+<img src="https://render.githubusercontent.com/render/math?math={Accuracy}^{D} = {\gamma\left[ {E}^{c}, {G}^{c} \right] }" width="300">
 </p>
 ## Results
 <p float="left" align="center">
