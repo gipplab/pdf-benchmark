@@ -26,3 +26,7 @@
 <img src="./images/meta (2).svg" width="400"/>
 </p>
 
+<p float="left" align="center">
+<img src="./images/res1.svg" width="700">
+</p>
+
