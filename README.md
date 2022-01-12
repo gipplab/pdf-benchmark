@@ -26,7 +26,7 @@
 </p>
 
 <p float="left" align="center">
-<img src="https://render.githubusercontent.com/render/math?math={Precision}^{D} = \frac{\# {\Delta}_{i,j}^{D} \ge 0.7}{m}" width=400>
+<img src="https://render.githubusercontent.com/render/math?math={Precision}^{D} = \frac{\# {\Delta}_{i,j}^{D} \ge 0.7}{m}" width="400">
 
  </p>
  
