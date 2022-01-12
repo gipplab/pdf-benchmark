@@ -18,15 +18,7 @@
 
 ## Evaluation Metrics
 <img src="https://render.githubusercontent.com/render/math?math={\gamma\left( {t}_{e}, {t}_{g} \right) } = 1 -\frac{lev_{{t}_{e},{t}_{g}}(i,j)}{\left| {t}_{e} \right| + \left| {t}_{g} \right|}" width="400">
-<img src="https://render.githubusercontent.com/render/math?math=lev_{{t}_{e},{t}_{g}}(i,j)=
-\begin{cases} 
-    max(i,j), & \text{if $min(i,j)=0$},\\ 
-    min \begin{cases}
-        lev_{{t}_{e},{t}_{g}}(i-1,j)+1\\
-        lev_{{t}_{e},{t}_{g}}(i,j-1)+1\\
-        lev_{{t}_{e},{t}_{g}}(i-1,j-1)+1_{({t}_{ei}\neq {t}_{ej})}
-    \end{cases}& \text{otherwise}.
-\end{cases}" width="400">
+<img src="https://render.githubusercontent.com/render/math?math=lev_{{t}_{e},{t}_{g}}(i,j)=\begin{cases} max(i,j), & \text{if $min(i,j)=0$},\\ min \begin{cases} lev_{{t}_{e},{t}_{g}}(i-1,j)+1\\ lev_{{t}_{e},{t}_{g}}(i,j-1)+1\\ lev_{{t}_{e},{t}_{g}}(i-1,j-1)+1_{({t}_{ei}\neq {t}_{ej})} \end{cases}& \text{otherwise}. \end{cases}" width="400">
 
 ## Results
 <p float="left" align="center">
