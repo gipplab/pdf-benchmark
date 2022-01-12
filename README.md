@@ -13,8 +13,8 @@
 <img src="./images/EvaluationModel (1).jpg">
 
 ## Results
-![Alt text](./images/ref (2).svg)
+<img src="./images/ref (2).svg">
 <img src="./images/table (2).svg">
-![Alt text](./images/general (2).svg)
+<img src="./images/general (2).svg">
 <img src="./images/meta (2).svg">
 
