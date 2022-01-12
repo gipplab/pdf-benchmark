@@ -13,11 +13,11 @@
 <img src="./images/EvaluationModel (1).jpg">
 
 ## Results
-<p float="left">
+<p float="left" align="center">
           <img src="./images/ref (2).svg", width="400"/>
           <img src="./images/table (2).svg" width="400"/>
 </p>
-<p float="left">
+<p float="left" align="center">
 <img src="./images/general (2).svg" width="400"/>
 <img src="./images/meta (2).svg" width="400"/>
 </p>
