@@ -14,10 +14,11 @@
 
 ## Results
 <p float="left">
-<img src="./images/ref (2).svg", width="100"/>
-<img src="./images/table (2).svg" width="100"/>
-<img src="./images/general (2).svg" width="100"/>
-<img src="./images/meta (2).svg" width="100"/>
+<img src="./images/ref (2).svg", width="300"/>
+<img src="./images/table (2).svg" width="300"/>
 </p>
-
+<p float="left">
+<img src="./images/general (2).svg" width="300"/>
+<img src="./images/meta (2).svg" width="300"/>
+</p>
 
