@@ -27,7 +27,7 @@
 
 <p float="left" align="center">
 <img src="https://render.githubusercontent.com/render/math?math={Precision}^{D} = \frac{\# {\Delta}_{i,j}^{D} \ge 0.7}{m}">
- <img src="https://render.githubusercontent.com/render/math?math={Recall}^{D} = \frac{\# {\Delta}_{i,j}^{D} \ge 0.7}{n}">
+ <img src="https://render.githubusercontent.com/render/math?math={Recall}^{D} = \frac{{\Delta}_{i,j}^{D} \ge 0.7}{n}">
  </p>
  
 <p float="left" align="center">
