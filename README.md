@@ -7,10 +7,10 @@
 -->
 
 ##
-<img src="./images/tools.svg">
+<img src="./images/tools.svg", width="700">
 
 ## Evaluation Framework
-<img src="./images/EvaluationModel (1).jpg">
+<img src="./images/EvaluationModel (1).jpg" width="700">
 
 ## Results
 <p float="left" align="center">
