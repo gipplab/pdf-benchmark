@@ -22,8 +22,8 @@
 <img src="https://render.githubusercontent.com/render/math?math={\Delta}_{m \times n}^{D} = {\gamma\left[ {E}_{i}^{s}, {G}_{j}^{s} \right] }_{i,j}^{m,n}" width="400">
 </p>
 <p float="left" align="center">
- <img src="https://render.githubusercontent.com/render/math?math={Precision}^{D} = \frac{\# {\Delta}_{i,j}^{D} \ge 0.7}{m}" width="400">
-<img src="https://render.githubusercontent.com/render/math?math={Recall}^{D} = \frac{\# {\Delta}_{i,j}^{D} \ge 0.7}{n}" width="400">
+<img src="https://render.githubusercontent.com/render/math?math={Precision}^{D} = \frac{\# {\Delta}_{i,j}^{D} \ge 0.7}{m}" width=400>
+
  </p>
  <p float="left" align="center">
 <img src="https://render.githubusercontent.com/render/math?math={F1 Score}^{D} = \frac{2 \times {Precision}^{D} \times {Recall}^{D}}{ {Precision}^{D} +  {Recall}^{D}}" width="400">
