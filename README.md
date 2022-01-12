@@ -10,5 +10,4 @@
 <img src="./images/tools.svg">
 
 ## Evaluation Framework
-<img src="./images/EvaluationModel (1).jpg">
-[embed]http://example.com/file.pdf[/embed]
+[embed]https://github.com/Media-Bias-Group/PDF-Information-Extraction-Benchmark/blob/main/images/EvaluationModel%20(1).pdf[/embed]
