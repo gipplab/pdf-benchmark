@@ -17,9 +17,18 @@
 </p>
 
 ## Evaluation Metrics
+<p float="left" align="center">
 <img src="https://render.githubusercontent.com/render/math?math={\gamma\left( {t}_{e}, {t}_{g} \right) } = 1 -\frac{lev_{{t}_{e},{t}_{g}}(i,j)}{\left| {t}_{e} \right| + \left| {t}_{g} \right|}" width="400">
-<img src="https://render.githubusercontent.com/render/math?math=lev_{{t}_{e},{t}_{g}}(i,j)=\begin{cases} max(i,j), & \text{if $min(i,j)=0$},\\ min \begin{cases} lev_{{t}_{e},{t}_{g}}(i-1,j)+1\\ lev_{{t}_{e},{t}_{g}}(i,j-1)+1\\ lev_{{t}_{e},{t}_{g}}(i-1,j-1)+1_{({t}_{ei}\neq {t}_{ej})} \end{cases}& \text{otherwise}. \end{cases}" width="400">
-
+<img src="https://render.githubusercontent.com/render/math?math={\Delta}_{m \times n}^{D} = {\gamma\left[ {E}_{i}^{s}, {G}_{j}^{s} \right] }_{i,j}^{m,n}" width="400">
+</p>
+<p float="left" align="center">
+ <img src="https://render.githubusercontent.com/render/math?math={Precision}^{D} = \frac{\# {\Delta}_{i,j}^{D} \ge 0.7}{m}" width="400">
+<img src="https://render.githubusercontent.com/render/math?math={Recall}^{D} = \frac{\# {\Delta}_{i,j}^{D} \ge 0.7}{n}" width="400">
+ </p>
+ <p float="left" align="center">
+<img src="https://render.githubusercontent.com/render/math?math={F1 Score}^{D} = \frac{2 \times {Precision}^{D} \times {Recall}^{D}}{ {Precision}^{D} +  {Recall}^{D}}" width="400">
+<img src="https://render.githubusercontent.com/render/math?math={Accuracy}^{D} = {\gamma\left[ {E}^{c}, {G}^{c} \right] }" width="400">
+</p>
 ## Results
 <p float="left" align="center">
           <img src="./images/ref (2).svg" width="400"/>
