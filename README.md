@@ -34,6 +34,7 @@
 <img src="https://render.githubusercontent.com/render/math?math={F1 Score}^{D} = \frac{2 \times {Precision}^{D} \times {Recall}^{D}}{ {Precision}^{D} +  {Recall}^{D}}" width="300">
 <img src="https://render.githubusercontent.com/render/math?math={Accuracy}^{D} = {\gamma\left[ {E}^{c}, {G}^{c} \right] }" width="300">
 </p>
+
 ## Results
 <p float="left" align="center">
           <img src="./images/ref (2).svg" width="400"/>
