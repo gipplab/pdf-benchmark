@@ -4,7 +4,7 @@
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/venv/Neural-ParsCit" />
     </content>
-    <orderEntry type="jdk" jdkName="Remote Python 3.8.5 (sftp://root@viserion.dimis.fim.uni-passau.de:10604/usr/bin/python3)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.8" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="PyDocumentationSettings">

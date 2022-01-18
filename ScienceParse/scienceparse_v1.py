@@ -146,13 +146,9 @@ def extract_scienceparse(dir):
 
 
 def main():
-    dir_array = ['docbank_1701','docbank_1702','docbank_1703','docbank_1704','docbank_1705','docbank_1706','docbank_1707','docbank_1708','docbank_1709','docbank_1710','docbank_1711','docbank_1712',
-                 'docbank_1801','docbank_1802','docbank_1803','docbank_1804']
-    for dir in dir_array:
-        resultdf=extract_scienceparse("/data/docbank/" + dir)
-        key=dir.split('_')[1]
-        filename='scienceparse_extract_ref_' + key + '.csv'
-        outputf='/data/results/scienceparse/' + filename
+        resultdf=extract_scienceparse("/home/apurv/Thesis/PDF-Information-Extraction-Benchmark/Data/Docbank_sample")
+        filename='scienceparse_extract_ref.csv'
+        outputf='/home/apurv/Thesis/PDF-Information-Extraction-Benchmark/Results' + filename
         resultdf.to_csv(outputf, index=False)
 
 if __name__ == "__main__":
