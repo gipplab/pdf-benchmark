@@ -198,7 +198,7 @@ def get_gt_wcrop(PDFObj, p, retflag, label):
             return ref_frame_labled
 ```
 
-## Create Ground-truth DataFrame
+## Create Ground-truth DataFrame for a component
 ```
 def create_gt_df(dir, label):
     # Load data based on cropped or non-cropped
@@ -221,7 +221,7 @@ def create_gt_df(dir, label):
     return data_gt_df
 ```
 
-## Computing similarity matrix and evaluation metrics
+## Computing similarity matrix
 ```
 def compute_sim_matrix(ex_nump, gt_nump):
     """
@@ -233,7 +233,9 @@ def compute_sim_matrix(ex_nump, gt_nump):
     matrix = cdist(ex_nump.reshape(-1, 1), gt_nump.reshape(-1, 1), lambda x, y: ratio(x[0], y[0]))
     df = pd.DataFrame(data=matrix, index=ex_nump, columns=gt_nump)
     return df
-
+```
+## Compute evaluation metrics
+```
 def compute_tpfp(matrix):
     """
     This function considers Extracted token as Ground-truth token when its Levenshteins similarity index is > 0.7. Otherwise it is non-gt token.
@@ -272,7 +274,9 @@ def compute_scores(tp,fp, gttoken):
     else:
         f1_score= (2 * prec * recall)/ (prec + recall)
         return f1_score, prec, recall
-
+```
+## Assemble Data (Separated Tokens, Collated Tokens)
+```
 def compute_results(dataf, field):
     """
     Function computes the similarity index and string distance for extracted and ground truth tokens.
@@ -307,11 +311,15 @@ def compute_results(dataf, field):
 ```
 
 ## Tool specific implementation
+
+### label Extraction
 ```
 def extraction_function(paradir):
     # Here goes the implementation for the component extract
     return 0
-
+```
+### label parsing 
+```
 def parse_extracted_component(paradir):
     # After extracted of the components they are parsed into DataFrame
     # ID field must be PDF filename
