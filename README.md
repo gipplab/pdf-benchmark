@@ -51,7 +51,7 @@
 
 # Workflow Template
 To use the evalution pipeline proposed below methods can be reused.
-Basic template file is placed here. 
+Basic template file is placed [here](https://github.com/Media-Bias-Group/PDF-Information-Extraction-Benchmark/blob/main/usability_template.py). 
 ## PDF Class
 ```
 class PDF:
