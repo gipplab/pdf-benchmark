@@ -10,15 +10,15 @@ from GROBID.evaluate import compute_results
 from Tabula_Camelot.genrateGT import load_data
 
 
-def sort_ref_files(dir):
+def sort_files(dir, label):
     PDFlist = load_data(dir)
-    p = Path(dir + "/ref_pdfs/")
+    p = Path(dir + "/sort_pdfs/")
     p.mkdir(parents=True, exist_ok=True)
     for PDF in PDFlist:
-       get_gt_ref(PDF,  p, True)
+       get_gt_ref(PDF,  p, True, label)
     return str(p)
 
-def get_gt_ref(PDFObj, p, retflag):
+def get_gt_ref(PDFObj, p, retflag, label):
     """
     Function has two purpose controlled by retflag parameter.
     1. retflag==True : find the GT files in DocBank containing metadata labels and copy them into seperate directory in tree called "metadata_pdfs"
@@ -28,7 +28,7 @@ def get_gt_ref(PDFObj, p, retflag):
     :return: Ground truth reference dataframe.
     """
     txt_data = PDFObj.txt_data
-    ref_frame_labled = txt_data.loc[(txt_data['label'] == 'reference')]
+    ref_frame_labled = txt_data.loc[(txt_data['label'] == label)]
     if len(ref_frame_labled) != 0:
         if retflag == True:
             filename = PDFObj.filepath + os.sep + PDFObj.pdf_name
@@ -73,7 +73,7 @@ def main():
     dir_array = ['docbank_1501','docbank_1502','docbank_1503','docbank_1504', 'docbank_1505', 'docbank_1506', 'docbank_1507', 'docbank_1508',
                  'docbank_1509', 'docbank_1510', 'docbank_1511', 'docbank_1512']
     for dir in dir_array:
-        refdir=sort_ref_files("/data/docbank/" + dir)
+        refdir=sort_files("/data/docbank/" + dir, 'reference')
         PDFlist=load_data(refdir)
         resultdata=[]
         for pdf in tqdm(PDFlist):
@@ -100,4 +100,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

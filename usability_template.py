@@ -1,59 +1,17 @@
-# PDF-Information-Extraction-Benchmark
+import os
+from pathlib import Path
+from shutil import copy
+from Levenshtein import ratio
+from PyPDF2 import PdfFileReader, PdfFileWriter
+from scipy.spatial.distance import cdist
+from tqdm import tqdm
+import csv
+import os.path
+from glob import glob
+from os import path
+import pandas as pd
+pd.options.mode.chained_assignment = None
 
-<!---
-## Related Work
-![Alt text](./images/rel2.svg)
-<img src="./images/rel1.svg">
--->
-
-##
-<p float="left" align="center">
-<img src="./images/tools.svg" width="700">
- </p>
-
-## Evaluation Framework
-<p float="left" align="center">
-<img src="./images/EvaluationModel (1).jpg" width="700">
-</p>
-
-## Evaluation Metrics
-
-### Token-level Levenshtein ratio <img src="https://render.githubusercontent.com/render/math?math={\gamma\left( {t}_{e}, {t}_{g} \right) }"> and Similarity Matrix <img src="https://render.githubusercontent.com/render/math?math={\Delta}_{m \times n}^{D}">
-
-<p float="left" align="center">
-<img src="https://render.githubusercontent.com/render/math?math={\gamma\left( {t}_{e}, {t}_{g} \right) } = 1 -\frac{lev_{{t}_{e},{t}_{g}}(i,j)}{\left| {t}_{e} \right| + \left| {t}_{g} \right|}" width="300">
-<img src="https://render.githubusercontent.com/render/math?math={\Delta}_{m \times n}^{D} = {\gamma\left[ {E}_{i}^{s}, {G}_{j}^{s} \right] }_{i,j}^{m,n}" width="300">
-</p>
-
-<p float="left" align="center">
-<img src="https://render.githubusercontent.com/render/math?math={Precision}^{D} = \frac{Count({\Delta}_{i,j}^{D} \ge 0.7)}{m}" width="300">
- <img src="https://render.githubusercontent.com/render/math?math={Recall}^{D} = \frac{Count({\Delta}_{i,j}^{D} \ge 0.7)}{n}" width="300">
- </p>
- 
-<p float="left" align="center">
-<img src="https://render.githubusercontent.com/render/math?math={F1 Score}^{D} = \frac{2 \times {Precision}^{D} \times {Recall}^{D}}{ {Precision}^{D} +  {Recall}^{D}}" width="300">
-<img src="https://render.githubusercontent.com/render/math?math={Accuracy}^{D} = {\gamma\left[ {E}^{c}, {G}^{c} \right] }" width="300">
-</p>
-
-## Results
-<p float="left" align="center">
-          <img src="./images/ref (2).svg" width="400"/>
-          <img src="./images/table (2).svg" width="400"/>
-</p>
-<p float="left" align="center">
-<img src="./images/general (2).svg" width="400"/>
-<img src="./images/meta (2).svg" width="400"/>
-</p>
-
-<p float="left" align="center">
-<img src="./images/res1.svg" width="700">
-</p>
-
-# Workflow Template
-To use the evalution pipeline proposed below methods can be reused.
-Basic template file is placed here. 
-## PDF Class
-```
 class PDF:
     def __init__(self, page_number=None, pdf_name=None, filepath=None, txt_name=None, txt_data=None):
         self.page_number = page_number
@@ -61,9 +19,7 @@ class PDF:
         self.filepath=filepath
         self.txt_name=txt_name
         self.txt_data=txt_data
-```
-## Utility Functions
-```
+
 def crop_pdf(pdfpath,pdfname, pagenumber):
     #pages = [pagenumber] # page 1, 3, 5
     try:
@@ -80,7 +36,7 @@ def crop_pdf(pdfpath,pdfname, pagenumber):
         return cropped_file
     except Exception:
         pass
-        
+
 def locate_data(dir):
     """
     Function to find Text their respective PDF files from DocBank dataset.
@@ -90,12 +46,10 @@ def locate_data(dir):
     pdffiles=glob(path.join(dir,"*.{}".format('pdf')))
     txtfiles=glob(path.join(dir,"*.{}".format('txt')))
     return pdffiles, txtfiles
- ```
 
-## Creating PDF Objects
-This block of code is used to create the PDF Objects. 
-### Type I (Without cropped page)
-```
+# Creating PDF Objects
+
+## Type I (Without cropped page)
 def load_data(dir):
     """
     Function creates the PDF objects for the gives base directory of DocBank dataset.
@@ -116,9 +70,8 @@ def load_data(dir):
             txtdf=pd.read_csv(txt,sep='\t',quoting=csv.QUOTE_NONE,encoding='latin1',usecols=[0,1,2,3,4,9], names=["token", "x0", "y0", "x1", "y1","label"])
             PDFlist.append(PDF(page_number,pdf_name,dir,txt_name,txtdf))
     return PDFlist
-```
-### Type II (With cropped page)
-```
+
+## Type II (With cropped page)
 def load_data_subset(dir):
     """
     Function creates the PDF objects for the gives base directory of DocBank dataset.
@@ -139,11 +92,9 @@ def load_data_subset(dir):
             txtdf=pd.read_csv(txt,sep='\t',quoting=csv.QUOTE_NONE,encoding='latin1',usecols=[0,9], names=["token","label"])
             PDFlist.append(PDF(page_number,pdf_name,dir,txt_name,txtdf))
     return PDFlist
- ```
 
-## Sorting the files as per component under evaluation
-To only use the files which contains respective component under evaluation. 
-```
+# Sorting the files as per component under evaluation
+
 def sort_files(dir, label):
     PDFlist = load_data(dir)
     p = Path(dir + "/sort_pdfs/")
@@ -152,10 +103,8 @@ def sort_files(dir, label):
         ## Here can go either of below 2 methods
        get_gt_wcrop(PDF,  p, True, label)
     return str(p)
-```
 
-### TYPE I (with cropping the PDF file)
-```
+## TYPE I (with cropping the PDF file)
 def get_gt_crop(PDFObj, p, label, retflag):
     txt_data = PDFObj.txt_data
     gt_frame_labled = txt_data.loc[(txt_data['label'] == label)]
@@ -172,10 +121,8 @@ def get_gt_crop(PDFObj, p, label, retflag):
             return
         else:
             return gt_frame_labled
-```
 
-### TYPE II (without cropping the PDF file)
-```
+## TYPE II (without cropping the PDF file)
 def get_gt_wcrop(PDFObj, p, retflag, label):
     """
     Function has two purpose controlled by retflag parameter.
@@ -196,10 +143,8 @@ def get_gt_wcrop(PDFObj, p, retflag, label):
             return
         else:
             return ref_frame_labled
-```
 
-## Create Ground-truth DataFrame
-```
+# Create Ground-truth DataFrame
 def create_gt_df(dir, label):
     # Load data based on cropped or non-cropped
     PDFlist=load_data(dir)
@@ -219,10 +164,9 @@ def create_gt_df(dir, label):
     gt= label + '_gt'
     data_gt_df=pd.DataFrame({'ID':IDs, gt:values, 'page':pageno})
     return data_gt_df
-```
 
-## Computing similarity matrix and evaluation metrics
-```
+# Computing similarity matrix and evaluation metrics
+
 def compute_sim_matrix(ex_nump, gt_nump):
     """
     This function computes the similarity matrix for each word from a numpy array. or it can also compare whole abstract as a collated tokens.
@@ -304,10 +248,8 @@ def compute_results(dataf, field):
     f1,prec,recal=compute_scores(tp,fp,no_of_gt_tokens)
 
     return f1,prec,recal, matrix.iloc[0,0]
-```
 
-## Tool specific implementation
-```
+# Below two methods changes as per tool
 def extraction_function(paradir):
     # Here goes the implementation for the component extract
     return 0
@@ -318,10 +260,7 @@ def parse_extracted_component(paradir):
     # For example for title parsing DF columns would be (columns=['ID', 'title_ex'])
     EX_DF= "Extracted DF"
     return EX_DF
-```
 
-## Flow of execution
-```
 def main():
     # Create PDF Object for the files with that particular component
     paradir = sort_files("/home/apurv/Thesis/PDF-Information-Extraction-Benchmark/Data/Docbank_sample", 'reference')
@@ -351,8 +290,6 @@ def main():
     resultdf.to_csv(outputf, index=False)
     #shutil.rmtree(paradir)
 
+
 if __name__ == "__main__":
     main()
-```
-
-

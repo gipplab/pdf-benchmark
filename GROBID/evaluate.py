@@ -72,14 +72,12 @@ def process_tokens(abs_ex, auth_ex, title_ex, abs_gt, auth_gt, title_gt, pdf_nam
         auth_ex=auth_ex.to_frame()
         auth_ex = auth_ex.rename(columns={'Authors': 'Author'})
 
-    # DocBank has hyphanated words which are treated as seperate tokens. Affects the evaluation metrics hence fixing the hyphanated word problem in GT.
-
-    if len(title_gt) != 0:
-        title_gt=fix_hyphanated_tokens(title_gt)
-    if len(abs_gt) != 0:
-        abs_gt=fix_hyphanated_tokens(abs_gt)
-    if len(auth_gt) != 0:
-        auth_gt=fix_hyphanated_tokens(auth_gt)
+    # if len(title_gt) != 0:
+    #     title_gt=fix_hyphanated_tokens(title_gt)
+    # if len(abs_gt) != 0:
+    #     abs_gt=fix_hyphanated_tokens(abs_gt)
+    # if len(auth_gt) != 0:
+    #     auth_gt=fix_hyphanated_tokens(auth_gt)
 
     # Merge all the tokens and create a sentence
     auth_ex = auth_ex['Author'].str.cat(sep=' ')

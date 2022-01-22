@@ -1,10 +1,8 @@
 import os
 import pathlib
-
 import pandas as pd
 from science_parse_api.api import parse_pdf
 from tqdm import tqdm
-
 from PdfAct.pdfact_extract import load_data, crop_pdf, compute_metrics
 
 

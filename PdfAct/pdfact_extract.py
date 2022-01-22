@@ -153,7 +153,5 @@ def main():
         outputf='/data/results/Pdfact/' + filename
         resultdf.to_csv(outputf, index=False)
 
-    # resultdf = extract_label_pdfact('/data/ProjectDir/Data/pdf')
-    # resultdf.to_csv('/data/results/Pdfact/output_Result.csv', index=False)
 if __name__ == "__main__":
     main()
