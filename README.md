@@ -7,9 +7,18 @@
 -->
 
 ##
-<p float="left" align="center">
-<img src="./images/tools.jpg" width="700">
- </p>
+| Tool          | Version | Task(s)    | Technology                   | Output         |
+|---------------|---------|------------|------------------------------|----------------|
+| Adobe Extract | 1.0     | T, G       | Adobe Sensei AI Framework    | JSON, XLSX     |
+| Apache Tika   | 2.0.0   | G          | Apache PDFBox                | TXT            |
+| Camelot       | 0.10.1  | T          | PDFMiner, OpenCV             | CSV, Dataframe |
+| CERMINE       | 1.13    | M, R, G    | SVM, CRF, Rule-based, iText  | NLM JATS       |
+| GROBID        | 0.7.0   | M, R, T, G | CRF, Deep Learning, Pdfalto  | TEI XML        |
+| PdfAct        | n/a     | M, R, T, G | Rule-based, pdftotext        | TXT, XML, JSON |
+| PyMuPDF       | 1.19.1  | G          | OCR, tesseract               | TXT            |
+| RefExtract    | 0.2.5   | R          | Rule-based, pdftotext        | TXT            |
+| ScienceParse  | 1.0     | M, R, G    | CRF, Rule-based, pdffigures2 | JSON           |
+| Tabula        | 1.2.1   | T          | Rule-based, PDFBox           | Dataframe, CSV |
 
 ## Evaluation Framework
 <p float="left" align="center">
