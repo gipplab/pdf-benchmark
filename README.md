@@ -7,7 +7,7 @@
 -->
 
 ##
-| Tool          | Version | Task(s)    | Technology                   | Output         |
+| Tool          | Version | Task(s)<sup>1</sup>   | Technology                   | Output         |
 |---------------|---------|------------|------------------------------|----------------|
 | Adobe Extract | 1.0     | T, G       | Adobe Sensei AI Framework    | JSON, XLSX     |
 | Apache Tika   | 2.0.0   | G          | Apache PDFBox                | TXT            |
@@ -19,6 +19,8 @@
 | RefExtract    | 0.2.5   | R          | Rule-based, pdftotext        | TXT            |
 | ScienceParse  | 1.0     | M, R, G    | CRF, Rule-based, pdffigures2 | JSON           |
 | Tabula        | 1.2.1   | T          | Rule-based, PDFBox           | Dataframe, CSV |
+
+<sup>1</sup> **M**etadata, **R**eferences, **T**able, **G**eneral
 
 ## Evaluation Framework
 <p float="left" align="center">
