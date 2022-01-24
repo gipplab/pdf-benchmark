@@ -8,45 +8,45 @@
 
 ##
 <p float="left" align="center">
-<img src="./images/tools.svg" width="700">
+<img src="./images/tools.jpg" width="700">
  </p>
 
 ## Evaluation Framework
 <p float="left" align="center">
-<img src="./images/EvaluationModel (1).jpg" width="700">
+<img src="./images/EvaluationModel-1.jpg" width="700">
 </p>
 
 ## Evaluation Metrics
 
-### Token-level Levenshtein ratio <img src="https://render.githubusercontent.com/render/math?math={\gamma\left( {t}_{e}, {t}_{g} \right) }"> and Similarity Matrix <img src="https://render.githubusercontent.com/render/math?math={\Delta}_{m \times n}^{D}">
+### Token-level Levenshtein ratio <img src="https://render.githubusercontent.com/render/math?math={\gamma\left( {t}_{e}, {t}_{g} \right) }"> and Similarity Matrix <img src="https://render.githubusercontent.com/render/math?math={\Delta}_{m \times n}^{d}">
 
 <p float="left" align="center">
-<img src="https://render.githubusercontent.com/render/math?math={\gamma\left( {t}_{e}, {t}_{g} \right) } = 1 -\frac{lev_{{t}_{e},{t}_{g}}(i,j)}{\left| {t}_{e} \right| + \left| {t}_{g} \right|}" width="300">
-<img src="https://render.githubusercontent.com/render/math?math={\Delta}_{m \times n}^{D} = {\gamma\left[ {E}_{i}^{s}, {G}_{j}^{s} \right] }_{i,j}^{m,n}" width="300">
+<img src="https://render.githubusercontent.com/render/math?math={\gamma\left( {t}_{e}, {t}_{g} \right) } = 1 -\frac{lev_{{t}_{e},{t}_{g}}(i,j)}{\left| {t}_{e} \right| %2b \left| {t}_{g} \right|}" width="200">
+<img src="https://render.githubusercontent.com/render/math?math={\Delta}_{m \times n}^{d} = {\gamma\left[ {E}_{i}^{s}, {G}_{j}^{s} \right] }_{i,j}^{m,n}" width="200">
 </p>
 
 <p float="left" align="center">
-<img src="https://render.githubusercontent.com/render/math?math={Precision}^{D} = \frac{Count({\Delta}_{i,j}^{D} \ge 0.7)}{m}" width="300">
- <img src="https://render.githubusercontent.com/render/math?math={Recall}^{D} = \frac{Count({\Delta}_{i,j}^{D} \ge 0.7)}{n}" width="300">
+<img src="https://render.githubusercontent.com/render/math?math={P}^{d} = \frac{%23{\Delta}_{i,j}^{d} \ge 0.7}{m}" width="200">
+ <img src="https://render.githubusercontent.com/render/math?math={R}^{d} = \frac{%23{\Delta}_{i,j}^{d} \ge 0.7}{n}" width="200">
  </p>
  
 <p float="left" align="center">
-<img src="https://render.githubusercontent.com/render/math?math={F1 Score}^{D} = \frac{2 \times {Precision}^{D} \times {Recall}^{D}}{ {Precision}^{D} +  {Recall}^{D}}" width="300">
-<img src="https://render.githubusercontent.com/render/math?math={Accuracy}^{D} = {\gamma\left[ {E}^{c}, {G}^{c} \right] }" width="300">
+<img src="https://render.githubusercontent.com/render/math?math={F1}^{d} = \frac{2 \times {P}^{d} \times {R}^{d}}{ {P}^{d} %2b  {R}^{d}}" width="200">
+<img src="https://render.githubusercontent.com/render/math?math={A}^{d} = {\gamma\left[ {E}^{c}, {G}^{c} \right] }" width="200">
 </p>
 
 ## Results
 <p float="left" align="center">
-          <img src="./images/ref (2).svg" width="400"/>
-          <img src="./images/table (2).svg" width="400"/>
+          <img src="./images/ref-1.jpg" width="400"/>
+          <img src="./images/table-1.jpg" width="400"/>
 </p>
 <p float="left" align="center">
-<img src="./images/general (2).svg" width="400"/>
-<img src="./images/meta (2).svg" width="400"/>
+<img src="./images/general-1.jpg" width="400"/>
+<img src="./images/meta-1.jpg" width="400"/>
 </p>
 
 <p float="left" align="center">
-<img src="./images/res1.svg" width="700">
+<img src="./images/results.jpg" width="700">
 </p>
 
 # Workflow Template
