@@ -1,4 +1,4 @@
-# PDF-Information-Extraction-Benchmark
+# A Benchmark of PDF Information Extraction Tools using a Multi-Task and Multi-Domain Evaluation Framework
 
 <!---
 ## Related Work
