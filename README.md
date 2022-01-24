@@ -6,7 +6,7 @@
 <img src="./images/rel1.svg">
 -->
 
-##
+## Overview of Evaluated Tools
 | Tool          | Version | Task(s)<sup>1</sup>   | Technology                   | Output         |
 |---------------|---------|------------|------------------------------|----------------|
 | Adobe Extract | 1.0     | T, G       | Adobe Sensei AI Framework    | JSON, XLSX     |
