@@ -83,7 +83,7 @@ def get_bbox(pdfname, pdfdir, pagenumber):
     :return: Dataframe with "token",'x0','y0','x1','y1', "xx0", "yy0", "xx1", "yy1"
 
     """
-    cdf =worker(pdfname, pdfdir, pdfdir, int(pagenumber)) # To get the basic bbox from coordinates script
+    cdf =worker(pdfname, pdfdir, pdfdir, 0) # To get the basic bbox from coordinates script
     return cdf
 
 
@@ -113,7 +113,7 @@ def get_table_coordinates(PDF, table_frame_labled):
     """
     token_list ,topc, botc = calc_tokens(table_frame_labled)
     cordinates_data = get_bbox(PDF.pdf_name, PDF.filepath,
-                               PDF.page_number)  # Extra base coordinates for table_regions field.
+                               0)  # Extra base coordinates for table_regions field.
     tablestart, tableend = match_dfs(cordinates_data, token_list, topc, botc)
 
     if tablestart.empty:
