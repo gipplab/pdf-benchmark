@@ -11,7 +11,7 @@ figures, captions, equations, lists, or footers).
 ## Token-level evaluation metrics
 ### Token-level Levenshtein ratio <img src="https://render.githubusercontent.com/render/math?math={\gamma\left( {t}_{e}, {t}_{g} \right) }"> and Similarity Matrix <img src="https://render.githubusercontent.com/render/math?math={\Delta}_{m \times n}^{d}">
 
-<img src="https://render.githubusercontent.com/render/math?math={ {t}_{e} }"> : Extracted Token <br />
+<img src="https://render.githubusercontent.com/render/math?math={ \left( {t}_{e}, {t}_{g} \right) }"> : Extracted Token <br />
 <img src="https://render.githubusercontent.com/render/math?math={ {t}_{g} }"> : Ground-Truth Token <br />
 
 <p float="left">
