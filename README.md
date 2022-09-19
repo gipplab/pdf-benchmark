@@ -47,4 +47,4 @@ Token-level Levenshtein ratio is computed on Ground-truth DataFrame (G) and Extr
 
 ## Analysis of the Results
 GROBID achieves the best results for the metadata and reference extraction tasks, followed by CERMINE and Science Parse. For table extraction, Adobe Extract outperforms other tools, even though the performance is much lower than for other content elements. All tools struggle to extract lists, footers, and equations. We conclude that more research on improving and combining tools is necessary to achieve satisfactory extraction quality for most content elements. 
-More detailed results are presented [here](https://github.com/Media-Bias-Group/PDF-Information-Extraction-Benchmark/tree/main/Results).
+More detailed numbers are presented [here](https://github.com/Media-Bias-Group/PDF-Information-Extraction-Benchmark/tree/main/Results).
