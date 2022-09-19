@@ -4,11 +4,14 @@ Framework provides, (1) Multi-task and Multi-Domain evaluation capability (2) To
 (3) In-hand benchmark of ten actively maintained non-commercial open-source tools (4) In-dept analysis of the results.
 
 ## Multi-task and Multi-Domain evaluation framework
-* Framework is able to evaluate 4 task categories, Metadata Extraction (title, authors, abstract), Reference Extraction, Table Extraction, General Extraction (paragraphs, sections,
-figures, captions, equations, lists, or footers).
-* PDF Object consolidates the ground-truth file and a source file which ultimately results into a ground-truth DataFrame and Extracted DataFrame for a tool under evaluation.
-* Detailed framwork flow is 
+* Framework is able to evaluate 4 (MRTG) task categories, (M)etadata Extraction (title, authors, abstract), (R)eference Extraction, (T)able Extraction, (G)eneral Extraction (paragraphs, sections, figures, captions, equations, lists, or footers).
+* Framework builds upon [DocBank](https://doc-analysis.github.io/docbank-page/index.html), a multi-domain dataset of 1.5M annotated content elements.
+* PDF Object consolidates the ground-truth file and a source file along with page number and the path.
+* Groud-truth (CSV) file is converted into a Ground-truth DataFrame.
+* Extracted (JSON, XML, TXT, CSV etc.) is parsed into a Extracted DataFrame.
+* Detailed flow is here
 ## Token-level evaluation metrics
+Token-level Levenshtein ratio is computed on Ground-truth DataFrame (G) and Extracted DataFrame (E) to obtain the Similarity Matrix. Based on the threshold similarity value (0.7) we computed Precision, Recall, Accuracy and F1 Score.
 ### Token-level Levenshtein ratio <img src="https://render.githubusercontent.com/render/math?math={\gamma\left( {t}_{e}, {t}_{g} \right) }"> and Similarity Matrix <img src="https://render.githubusercontent.com/render/math?math={\Delta}_{m \times n}^{d}">
 
 <p float="left">
