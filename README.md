@@ -11,9 +11,9 @@ figures, captions, equations, lists, or footers).
 ## Token-level evaluation metrics
 ### Token-level Levenshtein ratio <img src="https://render.githubusercontent.com/render/math?math={\gamma\left( {t}_{e}, {t}_{g} \right) }"> and Similarity Matrix <img src="https://render.githubusercontent.com/render/math?math={\Delta}_{m \times n}^{d}">
 
-<img src="https://render.githubusercontent.com/render/math?math={\gamma}"> : Levenshtein ratio
-<img src="https://render.githubusercontent.com/render/math?math={\{t}_{e}"> : Extracted Token
-<img src="https://render.githubusercontent.com/render/math?math={\{t}_{g}"> : Ground-Truth Token
+*<img src="https://render.githubusercontent.com/render/math?math={\gamma}"> : Levenshtein ratio
+*<img src="https://render.githubusercontent.com/render/math?math={\{t}_{e}"> : Extracted Token
+*<img src="https://render.githubusercontent.com/render/math?math={\{t}_{g}"> : Ground-Truth Token
 
 <p float="left">
 <img src="https://render.githubusercontent.com/render/math?math={\gamma\left( {t}_{e}, {t}_{g} \right) } = 1 -\frac{lev_{{t}_{e},{t}_{g}}(i,j)}{\left| {t}_{e} \right| %2b \left| {t}_{g} \right|}" width="250">
