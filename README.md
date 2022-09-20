@@ -12,7 +12,6 @@ The framework provides (1) Multi-task and Multi-Domain evaluation capability (2)
 * Detailed flow and how to use wiki is [here](https://github.com/Media-Bias-Group/PDF-Information-Extraction-Benchmark/wiki)
 ## Token-level evaluation metrics
 Token-level Levenshtein ratio is computed on Ground-truth DataFrame (G) and Extracted DataFrame (E) to obtain the Similarity Matrix. Based on the threshold similarity value (0.7) we computed Precision, Recall, Accuracy and F1 Score.
-### Levenshtein ratio <img src="https://render.githubusercontent.com/render/math?math={\gamma\left( {t}_{e}, {t}_{g} \right) }"> and Similarity Matrix <img src="https://render.githubusercontent.com/render/math?math={\Delta}_{m \times n}^{d}">
 
 <p float="left">
 <img src="https://render.githubusercontent.com/render/math?math={\gamma\left( {t}_{e}, {t}_{g} \right) } = 1 -\frac{lev_{{t}_{e},{t}_{g}}(i,j)}{\left| {t}_{e} \right| %2b \left| {t}_{g} \right|}" width="250">
