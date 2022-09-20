@@ -1,17 +1,17 @@
 # A Benchmark of PDF Information Extraction Tools using a Multi-Task and Multi-Domain Evaluation Framework
-This project presents an evaluation framework which generates a benchmark of PDF (scientific articles) Information Extraction tools.
-The framework provides (1) Multi-task and Multi-Domain evaluation capability (2) Token-level evaluation metrics
-(3) In-hand benchmark of ten actively maintained non-commercial open-source tools (4) In-dept analysis of the results.
+This project presents an evaluation framework that generates a benchmark of PDF (scientific articles) Information Extraction tools.
+The framework provides (1) Multi-task and Multi-Domain evaluation capability and (2) Token-level evaluation metrics
+(3) In-hand benchmark of ten actively maintained non-commercial open-source tools (4) In-depth analysis of the results.
 
 ## Multi-task and Multi-Domain evaluation framework
-* The Framework is able to benchmark 4 (MRTG) task categories, (M)etadata Extraction (title, authors, abstract), (R)eference Extraction, (T)able Extraction, (G)eneral Extraction (paragraphs, sections, figures, captions, equations, lists, or footers).
+* The Framework can benchmark 4 (MRTG) task categories, (M)etadata Extraction (title, authors, abstract), (R)eference Extraction, (T)able Extraction, (G)eneral Extraction (paragraphs, sections, figures, captions, equations, lists, or footers).
 * The Framework builds upon [DocBank](https://doc-analysis.github.io/docbank-page/index.html), a multi-domain dataset of 1.5M annotated content elements.
-* PDF Object consolidates the ground-truth file and a source file along with page number and the path.
+* PDF Object consolidates the ground-truth file and a source file along with the page number and the path.
 * Ground-truth (CSV) file is converted into a Ground-truth DataFrame.
 * Extracted (JSON, XML, TXT, CSV etc.) is parsed into a Extracted DataFrame.
 * If you want to read more about the usage and specifics, check [here](https://github.com/Media-Bias-Group/PDF-Information-Extraction-Benchmark/wiki)
 ## Token-level evaluation metrics
-Token-level Levenshtein ratio is computed on Ground-truth DataFrame (G) and Extracted DataFrame (E) to obtain the Similarity Matrix. Based on the threshold similarity value (0.7) we computed Precision, Recall, Accuracy and F1 Score.
+Token-level Levenshtein ratio is computed on Ground-truth DataFrame (G) and Extracted DataFrame (E) to obtain the Similarity Matrix. Based on the threshold similarity value (0.7) we computed Precision, Recall, Accuracy, and F1 Score.
 
 ## Evaluated Tools
 | Tool          | Version | Task(s)<sup>1</sup>   | Technology                   | Output         |
@@ -30,5 +30,5 @@ Token-level Levenshtein ratio is computed on Ground-truth DataFrame (G) and Extr
 <sup>1</sup> **M**etadata, **R**eferences, **T**able, **G**eneral
 
 ## Analysis of the Results
-GROBID achieves the best results for the metadata and reference extraction tasks, followed by CERMINE and Science Parse. For table extraction, Adobe Extract outperforms other tools, even though the performance is much lower than for other content elements. All tools struggle to extract lists, footers, and equations. We conclude that more research on improving and combining tools is necessary to achieve satisfactory extraction quality for most content elements. 
+GROBID achieves the best results for the metadata and reference extraction tasks, followed by CERMINE and Science Parse. For table extraction, Adobe Extract outperforms other tools, even though the performance is much lower than other content elements. All tools struggle to extract lists, footers, and equations. We conclude that more research on improving and combining tools is necessary to achieve satisfactory extraction quality for most content elements. 
 More detailed numbers are presented [here](https://github.com/Media-Bias-Group/PDF-Information-Extraction-Benchmark/tree/main/Results).
