@@ -4,12 +4,12 @@ The framework provides (1) Multi-task and Multi-Domain evaluation capability (2)
 (3) In-hand benchmark of ten actively maintained non-commercial open-source tools (4) In-dept analysis of the results.
 
 ## Multi-task and Multi-Domain evaluation framework
-* Framework is able to benchmark 4 (MRTG) task categories, (M)etadata Extraction (title, authors, abstract), (R)eference Extraction, (T)able Extraction, (G)eneral Extraction (paragraphs, sections, figures, captions, equations, lists, or footers).
-* Framework builds upon [DocBank](https://doc-analysis.github.io/docbank-page/index.html), a multi-domain dataset of 1.5M annotated content elements.
+* The Framework is able to benchmark 4 (MRTG) task categories, (M)etadata Extraction (title, authors, abstract), (R)eference Extraction, (T)able Extraction, (G)eneral Extraction (paragraphs, sections, figures, captions, equations, lists, or footers).
+* The Framework builds upon [DocBank](https://doc-analysis.github.io/docbank-page/index.html), a multi-domain dataset of 1.5M annotated content elements.
 * PDF Object consolidates the ground-truth file and a source file along with page number and the path.
 * Ground-truth (CSV) file is converted into a Ground-truth DataFrame.
 * Extracted (JSON, XML, TXT, CSV etc.) is parsed into a Extracted DataFrame.
-* Detailed flow and how to use wiki is [here](https://github.com/Media-Bias-Group/PDF-Information-Extraction-Benchmark/wiki)
+* If you want to read more about the usage and specifics, check [here](https://github.com/Media-Bias-Group/PDF-Information-Extraction-Benchmark/wiki)
 ## Token-level evaluation metrics
 Token-level Levenshtein ratio is computed on Ground-truth DataFrame (G) and Extracted DataFrame (E) to obtain the Similarity Matrix. Based on the threshold similarity value (0.7) we computed Precision, Recall, Accuracy and F1 Score.
 
