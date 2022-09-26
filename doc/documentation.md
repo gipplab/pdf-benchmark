@@ -1,6 +1,6 @@
 # Evaluation Framework
 <p float="left" align="center">
-<img src="/images/EvaluationModel.jpg" width="700">
+<img src="../images/EvaluationModel.jpg" width="700">
 </p>
 
 # Workflow Template
