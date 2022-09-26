@@ -4,7 +4,7 @@ The framework offers (1) multi-task and multi-domain evaluation capabilities, (2
 (3) a benchmark of ten actively maintained non-commercial open-source tools, (4) an in-depth analysis of the results.
 
 ## Multi-task and multi-domain evaluation framework
-* The framework covers four extraction task categories, (**M**)etadata Extraction (title, authors, abstract), (**R**)rence Extraction, (**T**)able Extraction, (**G**)eneral Extraction (paragraphs, sections, figures, captions, equations, lists, or footers).
+* The framework covers four extraction task categories, (**M**)etadata Extraction (title, authors, abstract), (**R**)eference Extraction, (**T**)able Extraction, (**G**)eneral Extraction (paragraphs, sections, figures, captions, equations, lists, or footers).
 * The framework builds upon [DocBank](https://doc-analysis.github.io/docbank-page/index.html), a multi-domain dataset of 1.5M annotated content elements.
 * To learn more about the framework and its usage, check [here](doc/documentation.md).
 
