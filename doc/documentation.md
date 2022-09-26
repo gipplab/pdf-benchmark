@@ -1,11 +1,11 @@
 # Evaluation Framework
 <p float="left" align="center">
-<img src="https://github.com/Media-Bias-Group/PDF-Information-Extraction-Benchmark/blob/main/images/EvaluationModel%20.jpg" width="700">
+<img src="/images/EvaluationModel.jpg" width="700">
 </p>
 
 # Workflow Template
 To use the evalution pipeline proposed below methods can be reused.
-Basic template file is placed [here](https://github.com/Media-Bias-Group/PDF-Information-Extraction-Benchmark/blob/main/usability_template.py). 
+Basic template file is placed [here](/usability_template.py). 
 
 ## PDF Class
 ```
