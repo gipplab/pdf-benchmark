@@ -9,6 +9,7 @@ The framework provides (1) Multi-task and Multi-Domain evaluation capability and
 * PDF Object consolidates the ground-truth file and a source file along with the page number and the path.
 * Ground-truth (CSV) file is converted into a Ground-truth DataFrame.
 * Extracted (JSON, XML, TXT, CSV etc.) is parsed into a Extracted DataFrame.
+If you want to read more about the usage and specifics, check [here](https://github.com/Media-Bias-Group/PDF-Information-Extraction-Benchmark/blob/main/doc/home.md).
 ## Token-level evaluation metrics
 Token-level Levenshtein ratio is computed on Ground-truth DataFrame (G) and Extracted DataFrame (E) to obtain the Similarity Matrix. Based on the threshold similarity value (0.7) we computed Precision, Recall, Accuracy, and F1 Score.
 
