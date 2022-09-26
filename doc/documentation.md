@@ -4,8 +4,7 @@
 </p>
 
 # Workflow Template
-To use the evalution pipeline proposed below methods can be reused.
-Basic template file is placed [here](/usability_template.py). 
+To use the evalution pipeline proposed below, adjust the basic template file [here](/usability_template.py). 
 
 ## PDF Class
 ```
@@ -48,12 +47,12 @@ def locate_data(dir):
  ```
 
 ## Creating PDF Objects
-This block of code is used to create the PDF Objects. 
-### Type I (Without cropped page)
+This block of code creates the PDF Objects. 
+### Type I (without cropping the PDF file)
 ```
 def load_data(dir):
     """
-    Function creates the PDF objects for the gives base directory of DocBank dataset.
+    Function creates the PDF objects for the given base directory of the DocBank dataset.
     :param dir: Base location of DocBank dataset.
     :return: List of PDF Objects.
     """
@@ -72,12 +71,12 @@ def load_data(dir):
             PDFlist.append(PDF(page_number,pdf_name,dir,txt_name,txtdf))
     return PDFlist
 ```
-### Type II (With cropped page)
-Some tools are processing the PDF file without any provision of page specific extraction. In such cases we need Cropping of the page from the PDF.
+### Type II (with cropping the PDF file)
+Some tools process the PDF file as a whole, i.e., do not perform page-wise extraction. In such cases we need t crop the page from the PDF.
 ```
 def load_data_subset(dir):
     """
-    Function creates the PDF objects for the gives base directory of DocBank dataset.
+    Function creates the PDF objects for the given base directory of the DocBank dataset.
     :param dir: Base location of DocBank dataset.
     :return: List of PDF Objects.
     """
@@ -97,8 +96,8 @@ def load_data_subset(dir):
     return PDFlist
  ```
 
-## Sorting the files as per element under evaluation
-To use the files which contains respective element (semantic label) under evaluation. For example, we sort the files containing table elements when evaluating tools like Tabula and Camelot.
+## Sorting the files as per the evaluated element
+Select the files that contain the elements (semantic label) whose extraction is to be evaulated. For example, we sort the files containing table elements when evaluating tools like Tabula and Camelot.
 
 ```
 def sort_files(dir, label):
@@ -135,8 +134,8 @@ def get_gt_crop(PDFObj, p, label, retflag):
 ```
 def get_gt_wcrop(PDFObj, p, retflag, label):
     """
-    Function has two purpose controlled by retflag parameter.
-    1. retflag==True : find the GT files in DocBank containing metadata labels and copy them into seperate directory in tree called "metadata_pdfs"
+    Function has two purposes controlled by the retflag parameter.
+    1. retflag==True : find the GT files in DocBank containing metadata labels and copy them into a seperate directory called "metadata_pdfs"
     2. retflag==False: return the reference dataframes
     :param PDF: PDF Object
     :param retflag: flag to control the role of the function.
@@ -182,7 +181,7 @@ def create_gt_df(dir, label):
 ```
 def compute_sim_matrix(ex_nump, gt_nump):
     """
-    This function computes the similarity matrix for each word from a numpy array. or it can also compare whole abstract as a collated tokens.
+    This function computes the similarity matrix for each word from a numpy array. It can also compare abstracts as a collated tokens.
     :param ex_nump: Extracted paragraph as numpy array
     :param gt_nump: Ground truth paragraph as numpy array
     :return: Similarity Matrix with Lavensteins similarity index.
