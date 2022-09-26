@@ -27,5 +27,5 @@ The framework computes the token-level Levenshtein ratio between the ground-trut
 
 <sup>1</sup> **M**etadata, **R**eferences, **T**able, **G**eneral
 
-## Analysis of the Results
+## Analysis of the results
 GROBID achieves the best results for the metadata and reference extraction tasks, followed by CERMINE and Science Parse. For table extraction, Adobe Extract outperforms other tools, even though the performance is much lower than for other content elements. All tools struggle to extract lists, footers, and equations. We conclude that more research on improving and combining tools is necessary to achieve satisfactory extraction quality for most content elements.
