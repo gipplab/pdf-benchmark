@@ -9,7 +9,7 @@ The framework provides (1) Multi-task and Multi-Domain evaluation capability and
 * PDF Object consolidates the ground-truth file and a source file along with the page number and the path.
 * Ground-truth (CSV) file is converted into a Ground-truth DataFrame.
 * Extracted (JSON, XML, TXT, CSV etc.) is parsed into a Extracted DataFrame.
-* If you want to read more about the usage and specifics, check [here](https://github.com/Media-Bias-Group/PDF-Information-Extraction-Benchmark/wiki)
+* If you want to read more about the usage and specifics, more information will be made in case of acceptance (it cannot be anonymized)
 ## Token-level evaluation metrics
 Token-level Levenshtein ratio is computed on Ground-truth DataFrame (G) and Extracted DataFrame (E) to obtain the Similarity Matrix. Based on the threshold similarity value (0.7) we computed Precision, Recall, Accuracy, and F1 Score.
 
@@ -31,4 +31,4 @@ Token-level Levenshtein ratio is computed on Ground-truth DataFrame (G) and Extr
 
 ## Analysis of the Results
 GROBID achieves the best results for the metadata and reference extraction tasks, followed by CERMINE and Science Parse. For table extraction, Adobe Extract outperforms other tools, even though the performance is much lower than other content elements. All tools struggle to extract lists, footers, and equations. We conclude that more research on improving and combining tools is necessary to achieve satisfactory extraction quality for most content elements. 
-More detailed numbers are presented [here](https://github.com/Media-Bias-Group/PDF-Information-Extraction-Benchmark/tree/main/Results).
+More detailed numbers are presented in case of paper acceptance.
