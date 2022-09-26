@@ -6,7 +6,7 @@ The framework offers (1) multi-task and multi-domain evaluation capabilities, (2
 ## Multi-task and multi-domain evaluation framework
 * The framework covers four extraction task categories, (**M**)etadata Extraction (title, authors, abstract), (**R**)rence Extraction, (**T**)able Extraction, (**G**)eneral Extraction (paragraphs, sections, figures, captions, equations, lists, or footers).
 * The framework builds upon [DocBank](https://doc-analysis.github.io/docbank-page/index.html), a multi-domain dataset of 1.5M annotated content elements.
-* To learn more about the framework and its usage, check [here](doc/home.md).
+* To learn more about the framework and its usage, check [here](doc/documentation.md).
 
 ## Token-level evaluation metrics
 The framework computes the token-level Levenshtein ratio between the ground-truth data frame (G) and the extracted data frame (E) to obtain the similarity matrix. Based on the threshold similarity value (0.7) we compute Precision, Recall, Accuracy, and F1-Score.
