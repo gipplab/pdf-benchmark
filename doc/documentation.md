@@ -4,7 +4,7 @@
 </p>
 
 # Workflow Template
-To use the evalution pipeline proposed below, adjust the basic template file [here](/usability_template.py). 
+To use the evalution pipeline proposed below, adjust the basic template file [here](../usability_template.py). 
 
 ## PDF Class
 ```
