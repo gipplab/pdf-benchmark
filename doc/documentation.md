@@ -72,7 +72,7 @@ def load_data(dir):
     return PDFlist
 ```
 ### Type II (with cropping the PDF file)
-Some tools process the PDF file as a whole, i.e., do not perform page-wise extraction. In such cases we need t crop the page from the PDF.
+Some tools process the entire PDF file, i.e., do not perform page-wise extraction. In such cases we need to crop the pages from the PDF.
 ```
 def load_data_subset(dir):
     """
@@ -97,7 +97,7 @@ def load_data_subset(dir):
  ```
 
 ## Sorting the files as per the evaluated element
-Select the files that contain the elements (semantic label) whose extraction is to be evaulated. For example, we sort the files containing table elements when evaluating tools like Tabula and Camelot.
+Select the files that contain the elements (semantic label) whose extraction is to be evaluated. For example, we sort the files containing table elements when evaluating tools like Tabula and Camelot.
 
 ```
 def sort_files(dir, label):
