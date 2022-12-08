@@ -1,4 +1,4 @@
-# A Benchmark of PDF Information Extraction Tools using a Multi-Task and Multi-Domain Evaluation Framework
+# A Benchmark of PDF Information Extraction Tools using a Multi-Task and Multi-Domain Evaluation Framework for Academic Documents
 This project provides a framework for evaluating tools to extract information from scientific PDF documents.
 The framework offers (1) multi-task and multi-domain evaluation capabilities, (2) token-level evaluation metrics,
 (3) a benchmark of ten actively maintained non-commercial open-source tools, (4) an in-depth analysis of the results.
